@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="role_buttons" type="id">@id/role_buttons</item>
+    <item name="btn_student" type="id">@id/btn_student</item>
+    <item name="btn_teacher" type="id">@id/btn_teacher</item>
+    <item name="loginIdentifier" type="id">@id/loginIdentifier</item>
+    <item name="loginPassword" type="id">@id/loginPassword</item>
+    <item name="passwordToggle" type="id">@id/passwordToggle</item>
+    <item name="forgotPasswordText" type="id">@id/forgotPasswordText</item>
+    <item name="loginButton" type="id">@id/loginButton</item>
+</resources>

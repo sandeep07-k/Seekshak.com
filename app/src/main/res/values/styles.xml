@@ -1,0 +1,20 @@
+<resources>
+    <style name="RoleButton">
+        <item name="android:background">@drawable/role_button_selector</item>
+        <item name="android:textColor">@color/gold</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="seekshak_co">
+        <item name="android:textSize">48sp</item>
+        <item name="android:shadowColor">#FF9500</item>
+        <item name="android:shadowDx">5</item>
+        <item name="android:shadowDy">5</item>
+        <item name="android:shadowRadius">5</item>
+    </style>
+
+
+
+
+
+</resources>

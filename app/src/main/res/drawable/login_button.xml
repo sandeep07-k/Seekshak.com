@@ -1,0 +1,6 @@
+<!-- Example background in login_button.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="#2D4AF0" /> <!-- Darker blue -->
+    <corners android:radius="12dp" />
+</shape>

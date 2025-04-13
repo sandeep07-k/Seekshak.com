@@ -1,0 +1,33 @@
+*.iml
+.gradle
+/local.properties
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
+
+# Android specific
+*.apk
+*.ap_
+*.log
+
+# Firebase & Google Services
+google-services.json
+firebase-debug.log
+
+# Keystore files
+*.jks
+*.keystore
+
+# Node modules if you have frontend web dashboard inside
+node_modules/
+.env
+
