@@ -55,6 +55,7 @@ class LoginActivity : AppCompatActivity() {
 
 
         // Password toggle logic
+        passwordToggle.setImageResource(R.drawable.ic_visibility_off)
         passwordToggle.setOnClickListener { togglePasswordVisibility() }
         setInitialRoleUI()
 
