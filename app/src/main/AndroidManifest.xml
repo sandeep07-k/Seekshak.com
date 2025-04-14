@@ -35,6 +35,9 @@
         <activity android:name=".InstituteHomeActivity" />
         <activity android:name=".ForgotPasswordActivity" />
         <activity android:name=".ResetPasswordActivity" />
+        <activity android:name=".SignupActivity2"/>
+        <activity android:name=".SignupActivity3"/>
+
 
 
 

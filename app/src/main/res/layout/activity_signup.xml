@@ -3,141 +3,69 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="20dp"
-    android:background="#FFFFFF">
+    android:padding="16dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center_horizontal">
-
-        <TextView
-            android:id="@+id/textView_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/register"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="24dp" />
+        android:orientation="vertical">
 
         <Spinner
             android:id="@+id/spinner_role"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:entries="@array/roles_array"
-            android:minHeight="48dp" />
+            android:minHeight="48dp"
+            android:prompt="@string/select_role"/>
+
 
         <EditText
             android:id="@+id/editText_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:autofillHints=""
             android:hint="@string/name"
-            android:inputType="textPersonName"
-            android:minHeight="48dp"
-            tools:ignore="VisualLintTextFieldSize" />
+            android:minHeight="48dp" />
 
         <EditText
             android:id="@+id/editText_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:autofillHints=""
             android:hint="@string/email_optional"
             android:inputType="textEmailAddress"
-            android:minHeight="48dp"
-            tools:ignore="VisualLintTextFieldSize" />
+            android:minHeight="48dp" />
 
         <EditText
             android:id="@+id/editText_phone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            android:autofillHints=""
-            android:hint="@string/mobile_number_10_digits"
+            android:hint="@string/phone_number"
             android:inputType="phone"
-            android:maxLength="10"
-            android:minHeight="48dp"
-            tools:ignore="VisualLintTextFieldSize" />
+            android:minHeight="48dp" />
 
         <Button
             android:id="@+id/button_send_otp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/send_otp"
-            android:layout_marginBottom="12dp"
-            tools:ignore="VisualLintButtonSize" />
+            android:text="@string/send_otp" />
 
-        <EditText
-            android:id="@+id/editText_otp"
-            android:layout_width="match_parent"
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            android:autofillHints=""
-            android:hint="@string/enter_otp"
-            android:inputType="number"
-            android:minHeight="48dp"
-            tools:ignore="VisualLintTextFieldSize" />
-
-        <Button
-            android:id="@+id/button_verify_otp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/verify_otp"
-            android:layout_marginBottom="20dp"
-            tools:ignore="VisualLintButtonSize" />
-
-        <EditText
-            android:id="@+id/editText_password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:autofillHints=""
-            android:hint="@string/password"
-            android:inputType="textPassword"
-            android:minHeight="48dp"
-            tools:ignore="VisualLintTextFieldSize" />
-
-        <EditText
-            android:id="@+id/editText_confirm_password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:autofillHints=""
-            android:hint="@string/confirm_password"
-            android:inputType="textPassword"
-            android:minHeight="48dp"
-            tools:ignore="VisualLintTextFieldSize" />
-
-        <Button
-            android:id="@+id/button_register"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Register"
-            android:layout_marginBottom="24dp"
-            tools:ignore="VisualLintButtonSize" />
+            android:visibility="gone"
+            android:layout_gravity="center" />
 
         <TextView
             android:id="@+id/textView_login_redirect"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/already_have_an_account_login_login"
-            android:textColor="@color/purple_500"
-            android:textStyle="bold"
-            android:textSize="14sp"
-            android:layout_marginTop="8dp" />
-
-        <!-- Fixed: Added style for ProgressBar -->
-        <ProgressBar
-            android:id="@+id/progressBar"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:layout_marginTop="16dp" />
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:minHeight="48dp"
+            android:text="Already have an account? LOGIN"
+            android:textColor="@color/purple_700"
+            android:textStyle="bold" />
 
     </LinearLayout>
 </ScrollView>
