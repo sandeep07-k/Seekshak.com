@@ -3,6 +3,7 @@ package com.example.seekshakcom
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Patterns
 import android.view.View
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
@@ -18,7 +19,6 @@ import java.util.concurrent.TimeUnit
 
 class SignupActivity : AppCompatActivity() {
 
-    private lateinit var roleSpinner: Spinner
     private lateinit var nameEditText: EditText
     private lateinit var emailEditText: EditText
     private lateinit var phoneEditText: EditText
@@ -26,13 +26,17 @@ class SignupActivity : AppCompatActivity() {
     private lateinit var loginRedirectText: TextView
     private lateinit var progressBar: ProgressBar
 
+    private lateinit var btnStudent: Button
+    private lateinit var btnTeacher: Button
+    private lateinit var btnInstitute: Button
+
     private lateinit var auth: FirebaseAuth
     private var role = ""
     private var name = ""
     private var email = ""
     private var phone = ""
+    private var selectedRole: String = "Null"
 
-    // ✅ Modern way to handle activity result
     private val otpResultLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
@@ -48,25 +52,27 @@ class SignupActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signup)
 
-        roleSpinner = findViewById(R.id.spinner_role)
-        nameEditText = findViewById(R.id.editText_name)
-        emailEditText = findViewById(R.id.editText_email)
-        phoneEditText = findViewById(R.id.editText_phone)
+
+        nameEditText = findViewById(R.id.editTextName)
+        emailEditText = findViewById(R.id.editTextEmail)
+        phoneEditText = findViewById(R.id.editTextMobile)
         sendOtpButton = findViewById(R.id.button_send_otp)
         loginRedirectText = findViewById(R.id.textView_login_redirect)
-        progressBar = findViewById(R.id.progressBar)
+
+
+        btnStudent = findViewById(R.id.btnStudent)
+        btnTeacher = findViewById(R.id.btnTeacher)
+        btnInstitute = findViewById(R.id.btnInstitute)
 
         auth = FirebaseAuth.getInstance()
 
-        val roles = arrayOf("Select Role", "Student", "Tutor", "Institute")
-        roleSpinner.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, roles).apply {
-            setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        }
+
+        btnStudent.setOnClickListener { updateRole("Student") }
+        btnTeacher.setOnClickListener { updateRole("Teacher") }
+        btnInstitute.setOnClickListener { updateRole("Institute") }
 
         sendOtpButton.setOnClickListener {
-            role = roleSpinner.selectedItem?.toString() ?: ""
-
-            if (role == "Select Role") {
+            if (role.isEmpty()) {
                 Toast.makeText(this, "Please select a role", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
@@ -76,9 +82,13 @@ class SignupActivity : AppCompatActivity() {
             val rawPhone = phoneEditText.text.toString().trim()
             phone = if (rawPhone.startsWith("+91")) rawPhone else "+91$rawPhone"
 
-
             if (name.isEmpty()) {
                 Toast.makeText(this, "Please fill the name", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (email.isNotEmpty() && !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                Toast.makeText(this, "Invalid email format", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
@@ -87,6 +97,7 @@ class SignupActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            sendOtpButton.isEnabled = false // disable while processing
             checkUserExists(phone, email)
         }
 
@@ -95,38 +106,54 @@ class SignupActivity : AppCompatActivity() {
             finish()
         }
     }
+    private fun updateRole(role: String) {
+        selectedRole = role
+
+        fun setButtonState(button: Button, isSelected: Boolean) {
+            button.backgroundTintList = getColorStateList(if (isSelected) R.color.darkorange else R.color.azureblue)
+            button.setTextColor(getColor(if (isSelected) R.color.black else R.color.white))
+        }
+
+        setButtonState(btnStudent, role == "Student")
+        setButtonState(btnTeacher, role == "Teacher")
+        setButtonState(btnInstitute, role == "Institute")
+    }
+
 
     private fun checkUserExists(phone: String, email: String) {
         progressBar.visibility = View.VISIBLE
 
         ApiClient.instance.checkUserExists(phone, email).enqueue(object : Callback<UserExistsResponse> {
             override fun onResponse(call: Call<UserExistsResponse>, response: Response<UserExistsResponse>) {
-                progressBar.visibility = View.GONE
+                sendOtpButton.isEnabled = true
 
-                if (response.isSuccessful) {
-                    val userExists = response.body()?.exists ?: false
-                    val message = response.body()?.message ?: "No response"
+                val body = response.body()
+                if (body == null) {
+                    Toast.makeText(this@SignupActivity, "Unexpected server response", Toast.LENGTH_SHORT).show()
+                    return
+                }
 
-                    if (userExists) {
-                        Toast.makeText(this@SignupActivity, message, Toast.LENGTH_LONG).show()
-                        loginRedirectText.visibility = View.VISIBLE
-                    } else {
-                        sendOtpToPhone()
-                    }
+                val userExists = body.exists
+                val message = body.message ?: "No response"
+
+                if (userExists) {
+                    Toast.makeText(this@SignupActivity, message, Toast.LENGTH_LONG).show()
+                    loginRedirectText.visibility = View.VISIBLE
                 } else {
-                    Toast.makeText(this@SignupActivity, "Server error. Try again.", Toast.LENGTH_SHORT).show()
+                    sendOtpToPhone()
                 }
             }
 
             override fun onFailure(call: Call<UserExistsResponse>, t: Throwable) {
                 progressBar.visibility = View.GONE
+                sendOtpButton.isEnabled = true
                 Toast.makeText(this@SignupActivity, "Network error: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
     }
 
     private fun sendOtpToPhone() {
-        progressBar.visibility = View.VISIBLE
+
 
         val options = PhoneAuthOptions.newBuilder(auth)
             .setPhoneNumber(phone)
@@ -139,11 +166,13 @@ class SignupActivity : AppCompatActivity() {
 
                 override fun onVerificationFailed(e: FirebaseException) {
                     progressBar.visibility = View.GONE
+                    sendOtpButton.isEnabled = true
                     Toast.makeText(this@SignupActivity, "OTP sending failed: ${e.message}", Toast.LENGTH_LONG).show()
                 }
 
                 override fun onCodeSent(id: String, token: PhoneAuthProvider.ForceResendingToken) {
-                    progressBar.visibility = View.GONE
+
+                    sendOtpButton.isEnabled = true
                     Toast.makeText(this@SignupActivity, "OTP Sent", Toast.LENGTH_SHORT).show()
 
                     val intent = Intent(this@SignupActivity, SignupActivity2::class.java)
@@ -152,7 +181,7 @@ class SignupActivity : AppCompatActivity() {
                     intent.putExtra("email", email)
                     intent.putExtra("phone", phone)
                     intent.putExtra("verificationId", id)
-                    otpResultLauncher.launch(intent) // ✅ modern method
+                    otpResultLauncher.launch(intent)
                 }
             })
             .build()

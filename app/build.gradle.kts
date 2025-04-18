@@ -54,7 +54,8 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.appcompat)
     implementation(libs.firebase.auth)
-    implementation(libs.androidx.cardview) // Ensure this is defined in your libs.versions.toml
+    implementation(libs.androidx.cardview)
+    implementation(libs.androidx.constraintlayout) // Ensure this is defined in your libs.versions.toml
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

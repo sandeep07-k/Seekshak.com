@@ -120,7 +120,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
         setButtonState(btnStudent, role == "Student")
-        setButtonState(btnTutor, role == "Tutor")
+        setButtonState(btnTutor, role == "Teacher")
         setButtonState(btnInstitute, role == "Institute")
     }
 
