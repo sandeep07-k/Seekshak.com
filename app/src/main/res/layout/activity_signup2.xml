@@ -3,39 +3,149 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FAF7F7"
     android:orientation="vertical"
     android:padding="16dp">
 
+    <!-- Logo Section -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="167dp">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="96dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/title"
+            android:contentDescription="@string/todo" />
+
+    </RelativeLayout>
+
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="46dp"
+        android:layout_marginBottom="8dp"
         android:autofillHints=""
-        android:text="Enter OTP"
-        android:textSize="18sp"
-        android:layout_marginBottom="8dp" />
+        android:text="@string/enter_otp"
+        android:textColor="@color/black"
+        android:textSize="28sp"
+        android:textStyle="bold" />
 
-    <EditText
-        android:id="@+id/editText_otp"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="OTP"
-        android:inputType="number"
-        android:minHeight="48dp"
-        tools:ignore="VisualLintTextFieldSize" />
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_margin="10dp">
 
-    <Button
-        android:id="@+id/button_resend_otp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Resend OTP"
-        android:layout_marginTop="16dp"/>
+        <EditText
+            android:id="@+id/otp1"
+            style="@style/OtpEditText"
+            android:autofillHints=""
+            android:hint="@string/space"
+            tools:ignore="ContentDescription,LabelFor" />
+
+        <EditText
+            android:id="@+id/otp2"
+            style="@style/OtpEditText"
+            android:autofillHints=""
+            android:hint="@string/space"
+            tools:ignore="ContentDescription" />
+
+        <EditText
+            android:id="@+id/otp3"
+            style="@style/OtpEditText"
+            android:autofillHints=""
+            android:hint="@string/space"
+            tools:ignore="SpeakableTextPresentCheck" />
+        <EditText
+            android:id="@+id/otp4"
+            android:autofillHints=""
+            android:hint="@string/space"
+            style="@style/OtpEditText" />
+        <EditText
+            android:id="@+id/otp5"
+            android:autofillHints=""
+            android:hint="@string/space"
+            style="@style/OtpEditText" />
+        <EditText
+            android:id="@+id/otp6"
+            android:autofillHints=""
+            android:hint="@string/space"
+            style="@style/OtpEditText" />
+    </LinearLayout>
 
 
     <Button
         android:id="@+id/button_verify_otp"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Verify OTP"
-        android:layout_marginTop="12dp"
+        android:text="@string/verify"
+        android:textColor="@color/white"
+        android:layout_gravity="center"
+        android:layout_marginTop="18dp"
+        android:background="@drawable/button_bg"
         tools:ignore="VisualLintButtonSize" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:layout_marginTop="12dp" />
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:layout_marginBottom="8dp">
+
+        <TextView
+            android:id="@+id/otp_not_rec"
+            android:layout_width="wrap_content"
+            android:layout_height="26dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="52dp"
+            android:layout_marginTop="36dp"
+            android:fontFamily="@font/alatsi"
+            android:gravity="top"
+            android:text="@string/otp_not_rec"
+            android:textAppearance="@style/otp_not_rec" />
+
+        <TextView
+            android:id="@+id/button_resend_otp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="37dp"
+            android:layout_toEndOf="@+id/otp_not_rec"
+            android:clickable="true"
+            android:focusable="true"
+            android:fontFamily="@font/alatsi"
+            android:text="@string/resend_otp"
+            android:textAppearance="@style/otp_not_rec"
+            android:textColor="#0000FF"
+            tools:ignore="RelativeOverlap,TouchTargetSizeCheck" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/goToBackPage"
+        android:layout_width="63dp"
+        android:layout_height="25dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="200dp"
+        android:background="@drawable/rectangle_1"
+        android:text="@string/back"
+        android:textColor="#0000FF"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        tools:ignore="TextSizeCheck" />
+
+
+
+
 </LinearLayout>

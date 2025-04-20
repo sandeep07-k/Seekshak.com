@@ -2,9 +2,11 @@ package com.example.seekshakcom
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.InputType
+import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.auth.*
+import com.google.firebase.auth.FirebaseAuth
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -13,68 +15,108 @@ import java.io.IOException
 
 class ResetPasswordActivity : AppCompatActivity() {
 
-    private lateinit var otpEditText: EditText
     private lateinit var newPasswordEditText: EditText
+    private lateinit var confirmPasswordEditText: EditText
+    private lateinit var toggleNewPasswordVisibility: ImageView
+    private lateinit var toggleConfirmPasswordVisibility: ImageView
+    private var isNewPasswordVisible = false
+    private var isConfirmPasswordVisible = false
+
+    private lateinit var goToBackPage: TextView
     private lateinit var confirmButton: Button
     private lateinit var progressBar: ProgressBar
+    private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var phoneNumber: String
 
-    private lateinit var verificationId: String
-
-    private lateinit var mAuth: FirebaseAuth
     private val client = OkHttpClient()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reset_password)
 
-        otpEditText = findViewById(R.id.otpEditText)
         newPasswordEditText = findViewById(R.id.newPasswordEditText)
+        confirmPasswordEditText = findViewById(R.id.editText_confirm_password)
+        toggleNewPasswordVisibility = findViewById(R.id.toggleNewPasswordVisibility)
+        toggleConfirmPasswordVisibility = findViewById(R.id.toggleNewPasswordVisibility1)
         confirmButton = findViewById(R.id.confirmButton)
         progressBar = findViewById(R.id.progressBar)
+        goToBackPage = findViewById(R.id.goToBackPage)
+        firebaseAuth = FirebaseAuth.getInstance()
 
-        mAuth = FirebaseAuth.getInstance()
+        phoneNumber = intent.getStringExtra("phone") ?: ""
 
-        // Retrieve verification ID from intent
-        verificationId = intent.getStringExtra("verificationId") ?: ""
+        goToBackPage.setOnClickListener {
+            startActivity(Intent(this, ForgotPasswordActivity::class.java))
+        }
 
-        // Handle confirm button click
+        toggleNewPasswordVisibility.setOnClickListener {
+            isNewPasswordVisible = !isNewPasswordVisible
+            newPasswordEditText.inputType = if (isNewPasswordVisible)
+                InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+            else
+                InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+
+            newPasswordEditText.setSelection(newPasswordEditText.text.length)
+            toggleNewPasswordVisibility.setImageResource(
+                if (isNewPasswordVisible) R.drawable.ic_visibility else R.drawable.ic_visibility_off
+            )
+        }
+
+        toggleConfirmPasswordVisibility.setOnClickListener {
+            isConfirmPasswordVisible = !isConfirmPasswordVisible
+            confirmPasswordEditText.inputType = if (isConfirmPasswordVisible)
+                InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+            else
+                InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+
+            confirmPasswordEditText.setSelection(confirmPasswordEditText.text.length)
+            toggleConfirmPasswordVisibility.setImageResource(
+                if (isConfirmPasswordVisible) R.drawable.ic_visibility else R.drawable.ic_visibility_off
+            )
+        }
+
         confirmButton.setOnClickListener {
-            val otp = otpEditText.text.toString().trim()
-            val newPassword = newPasswordEditText.text.toString().trim()
+            val password = newPasswordEditText.text.toString().trim()
+            val confirmPassword = confirmPasswordEditText.text.toString().trim()
 
-            // Check if OTP and password are valid
-            if (otp.length < 6 || newPassword.length < 6) {
-                Toast.makeText(this, "Invalid OTP or password", Toast.LENGTH_SHORT).show()
+            if (password.isEmpty() || confirmPassword.isEmpty()) {
+                Toast.makeText(this, "Please fill both fields", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            // Create PhoneAuthCredential and sign in
-            val credential = PhoneAuthProvider.getCredential(verificationId, otp)
-            signInWithPhoneAuthCredential(credential, newPassword)
-        }
-    }
-
-    private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential, newPassword: String) {
-        progressBar.visibility = android.view.View.VISIBLE
-
-        mAuth.signInWithCredential(credential)
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    // Get Firebase ID Token and update password on backend
-                    mAuth.currentUser?.getIdToken(true)
-                        ?.addOnSuccessListener { result ->
-                            val firebaseToken = result.token
-                            updatePasswordOnBackend(newPassword, firebaseToken ?: "")
-                        }
-                        ?.addOnFailureListener {
-                            progressBar.visibility = android.view.View.GONE
-                            Toast.makeText(this, "Token error: ${it.message}", Toast.LENGTH_SHORT).show()
-                        }
-                } else {
-                    progressBar.visibility = android.view.View.GONE
-                    Toast.makeText(this, "OTP verification failed", Toast.LENGTH_SHORT).show()
-                }
+            if (password != confirmPassword) {
+                Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
             }
+
+            val strongPasswordPattern = Regex("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{6,}")
+            if (!password.matches(strongPasswordPattern)) {
+                Toast.makeText(
+                    this,
+                    "Password must be at least 6 characters with upper, lower, and a digit",
+                    Toast.LENGTH_LONG
+                ).show()
+                return@setOnClickListener
+            }
+
+            progressBar.visibility = View.VISIBLE
+
+            firebaseAuth.currentUser?.getIdToken(true)
+                ?.addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val idToken = task.result?.token
+                        if (idToken != null) {
+                            updatePasswordOnBackend(password, idToken)
+                        } else {
+                            progressBar.visibility = View.GONE
+                            Toast.makeText(this, "Failed to get Firebase token", Toast.LENGTH_SHORT).show()
+                        }
+                    } else {
+                        progressBar.visibility = View.GONE
+                        Toast.makeText(this, "Token fetch failed: ${task.exception?.message}", Toast.LENGTH_LONG).show()
+                    }
+                }
+        }
     }
 
     private fun updatePasswordOnBackend(password: String, firebaseToken: String) {
@@ -87,27 +129,32 @@ class ResetPasswordActivity : AppCompatActivity() {
         val requestBody = json.toString().toRequestBody(mediaType)
 
         val request = Request.Builder()
-            .url("https://seekshak-backend.onrender.com/api/auth/reset-password") // Replace with your actual backend URL
+            .url("https://seekshak-backend.onrender.com/api/auth/reset-password")
             .post(requestBody)
             .build()
 
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 runOnUiThread {
-                    progressBar.visibility = android.view.View.GONE
+                    progressBar.visibility = View.GONE
                     Toast.makeText(this@ResetPasswordActivity, "Failed: ${e.message}", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onResponse(call: Call, response: Response) {
                 runOnUiThread {
-                    progressBar.visibility = android.view.View.GONE
+                    progressBar.visibility = View.GONE
                     if (response.isSuccessful) {
-                        Toast.makeText(this@ResetPasswordActivity, "Password updated!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@ResetPasswordActivity, "Password updated successfully", Toast.LENGTH_SHORT).show()
                         startActivity(Intent(this@ResetPasswordActivity, LoginActivity::class.java))
                         finish()
                     } else {
-                        Toast.makeText(this@ResetPasswordActivity, "Error: ${response.message}", Toast.LENGTH_SHORT).show()
+                        val errorBody = response.body?.string() ?: "No error body"
+                        Toast.makeText(
+                            this@ResetPasswordActivity,
+                            "Error: ${response.code} - $errorBody",
+                            Toast.LENGTH_LONG
+                        ).show()
                     }
                 }
             }

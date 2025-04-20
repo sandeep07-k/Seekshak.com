@@ -18,7 +18,7 @@ import retrofit2.Response
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var btnStudent: Button
-    private lateinit var btnTutor: Button
+    private lateinit var btnTeacher: Button
     private lateinit var btnInstitute: Button
     private lateinit var loginIdentifier: EditText
     private lateinit var loginPassword: EditText
@@ -37,7 +37,7 @@ class LoginActivity : AppCompatActivity() {
 
         // Initialize views
         btnStudent = findViewById(R.id.btn_student)
-        btnTutor = findViewById(R.id.btn_teacher)
+        btnTeacher = findViewById(R.id.btn_teacher)
         btnInstitute = findViewById(R.id.btn_institute)
         loginIdentifier = findViewById(R.id.loginIdentifier)
         loginPassword = findViewById(R.id.loginPassword)
@@ -49,15 +49,15 @@ class LoginActivity : AppCompatActivity() {
 
 
         // Role button click handlers
-        btnStudent.setOnClickListener { updateRole("Student") }
-        btnTutor.setOnClickListener { updateRole("Tutor") }
-        btnInstitute.setOnClickListener { updateRole("Institute") }
+        btnStudent.setOnClickListener { updateRole("student") }
+        btnTeacher.setOnClickListener { updateRole("educator") }
+        btnInstitute.setOnClickListener { updateRole("institute") }
 
 
         // Password toggle logic
         passwordToggle.setImageResource(R.drawable.ic_visibility_off)
         passwordToggle.setOnClickListener { togglePasswordVisibility() }
-        setInitialRoleUI()
+//        setInitialRoleUI()
 
 
         // Login
@@ -100,28 +100,18 @@ class LoginActivity : AppCompatActivity() {
         }
 
     }
-    private fun setInitialRoleUI() {
-        fun setButtonNeutral(button: Button) {
-            button.backgroundTintList = getColorStateList(R.color.primaryBlue)
-            button.setTextColor(getColor(R.color.white))
-        }
-
-        setButtonNeutral(btnStudent)
-        setButtonNeutral(btnTutor)
-        setButtonNeutral(btnInstitute)
-    }
 
     private fun updateRole(role: String) {
         selectedRole = role
 
         fun setButtonState(button: Button, isSelected: Boolean) {
-            button.backgroundTintList = getColorStateList(if (isSelected) R.color.orange else R.color.primaryBlue)
+            button.backgroundTintList = getColorStateList(if (isSelected) R.color.orange else R.color.azureblue)
             button.setTextColor(getColor(if (isSelected) R.color.black else R.color.white))
         }
 
-        setButtonState(btnStudent, role == "Student")
-        setButtonState(btnTutor, role == "Teacher")
-        setButtonState(btnInstitute, role == "Institute")
+        setButtonState(btnStudent, role == "student")
+        setButtonState(btnTeacher, role == "educator")
+        setButtonState(btnInstitute, role == "institute")
     }
 
 
@@ -200,9 +190,9 @@ class LoginActivity : AppCompatActivity() {
 
     private fun redirectBasedOnRole(role: String) {
         val intent = when (role) {
-            "Student" -> Intent(this, StudentHomeActivity::class.java)
-            "Tutor" -> Intent(this, TutorHomeActivity::class.java)
-            "Institute" -> Intent(this, InstituteHomeActivity::class.java)
+            "student" -> Intent(this, StudentHomeActivity::class.java)
+            "educator" -> Intent(this, TutorHomeActivity::class.java)
+            "institute" -> Intent(this, InstituteHomeActivity::class.java)
             else -> Intent(this, StudentHomeActivity::class.java)
         }
 

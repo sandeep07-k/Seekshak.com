@@ -22,17 +22,17 @@
     <string name="enter_your_registered_email">Enter your registered email</string>
     <string name="send_reset_link">Send Reset Link</string>
     <string name="back_to_login">← Back to Login</string>
-    <string name="forgot_password">Forgot Password</string>
+    <string name="forgot_password">Forgot Password ?</string>
     <string name="enter_your_phone_number">Enter your phone number</string>
     <string name="name">Name</string>
     <string name="log_in">LOG IN</string>
     <string name="seekshak_com">Seekshak.com</string>
     <string name="enter_password">Enter Password</string>
-    <string name="enter_mobile_number_or_e_mail_or_userid">Enter Mobile Number or E-mail or Userid</string>
+    <string name="enter_mobile_number_or_e_mail">Enter Mobile Number or E-mail</string>
     <string name="Institute">Institute</string>
     <string name="Teacher">Teacher</string>
     <string name="Student">Student</string>
-    <string name="new_user">New User ?</string>
+    <string name="new_user">New User ? Sign up</string>
     <string name="sign_up">Sign Up</string>
     <string name="login_as">Login As</string>
     <string name="mobile_number_10_digits">Mobile Number (10 digits)</string>
@@ -58,6 +58,18 @@
     <string name="enter_name">Enter Name</string>
     <string name="enter_e_mail_optional">Enter E-mail (Optional)</string>
     <string name="enter_mobile_number">Enter Mobile Number</string>
+    <string name="login_button">Login button</string>
+    <string name="verify">Verify</string>
+    <string name="otp_not_rec">OTP not Received ?</string>
+    <string name="resend_otp">Resend</string>
+    <string name="space">" "</string>
+    <string name="otp_field_1">OTP field 1</string>
+    <string name="otp_field_2">otp field 2</string>
+    <string name="back"><![CDATA[<< Back]]></string>
+    <string name="enter_new_password">Enter new password</string>
+    <string name="submit">Submit</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="educator">Educator</string>
 
 
 </resources>

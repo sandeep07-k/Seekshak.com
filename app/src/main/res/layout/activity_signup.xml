@@ -4,8 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    android:background="@android:color/white"
-    android:padding="16dp">
+    android:background="#FAF7F7"
+    android:padding="12dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -31,9 +31,9 @@
         <!-- SignUp Card -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="420dp"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/sign_card_bg"
+            android:layout_height="450dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/login_card_bg"
             android:elevation="4dp"
             android:orientation="vertical"
             android:padding="16dp">
@@ -45,7 +45,7 @@
                 android:layout_marginBottom="12dp"
                 android:text="@string/signup_as"
                 android:textColor="#000000"
-                android:textSize="24sp"
+                android:textSize="26sp"
                 android:textStyle="bold" />
 
             <!-- Role Buttons -->
@@ -54,6 +54,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="42dp"
                 android:layout_marginBottom="16dp"
+                android:layout_marginEnd="15dp"
                 android:autofillHints=""
                 android:gravity="center"
                 android:orientation="horizontal"
@@ -69,7 +70,8 @@
                     android:background="@drawable/role_btn_bg"
                     android:text="@string/Student"
                     android:textColor="#FFFFFF"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    tools:ignore="VisualLintButtonSize,TouchTargetSizeCheck" />
 
                 <Button
                     android:id="@+id/btnTeacher"
@@ -79,9 +81,10 @@
                     android:layout_marginEnd="16dp"
                     android:layout_weight="1"
                     android:background="@drawable/role_btn_bg"
-                    android:text="@string/Teacher"
+                    android:text="@string/educator"
                     android:textColor="#FFFFFF"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    tools:ignore="VisualLintButtonSize,TouchTargetSizeCheck" />
 
                 <Button
                     android:id="@+id/btnInstitute"
@@ -93,17 +96,19 @@
                     android:background="@drawable/role_btn_bg"
                     android:text="@string/Institute"
                     android:textColor="#FFFFFF"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    tools:ignore="VisualLintButtonSize,TouchTargetSizeCheck" />
             </LinearLayout>
 
             <!-- Name -->
             <EditText
                 android:id="@+id/editTextName"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="62dp"
+                android:layout_marginEnd="15dp"
                 android:layout_marginBottom="12dp"
                 android:autofillHints="name"
-                android:background="@drawable/bg_edittext"
+                android:background="@drawable/edittext_bg"
                 android:hint="@string/enter_name"
                 android:inputType="textPersonName"
                 android:padding="10dp"
@@ -113,10 +118,11 @@
             <EditText
                 android:id="@+id/editTextEmail"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="62dp"
+                android:layout_marginEnd="15dp"
                 android:layout_marginBottom="12dp"
                 android:autofillHints="emailAddress"
-                android:background="@drawable/bg_edittext"
+                android:background="@drawable/edittext_bg"
                 android:hint="@string/enter_e_mail_optional"
                 android:inputType="textEmailAddress"
                 android:padding="10dp"
@@ -125,35 +131,40 @@
             <!-- Mobile -->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="62dp"
                 android:layout_marginBottom="16dp"
+                android:layout_marginEnd="15dp"
+                android:background="@drawable/edittext_bg"
                 android:orientation="horizontal"
-                android:background="@drawable/bg_edittext"
                 android:padding="10dp">
 
                 <TextView
                     android:id="@+id/textViewPrefix"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="7dp"
                     android:gravity="center"
                     android:paddingEnd="10dp"
-                    android:layout_marginTop="7dp"
                     android:text="@string/_91"
                     android:textColor="#000"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    tools:ignore="RtlSymmetry" />
 
                 <EditText
                     android:id="@+id/editTextMobile"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_height="21dp"
                     android:layout_marginTop="7dp"
+                    android:layout_weight="1"
+                    android:autofillHints=""
+                    android:background="@android:color/transparent"
                     android:hint="@string/enter_mobile_number"
                     android:inputType="phone"
+                    android:maxLength="10"
+                    android:minHeight="48dp"
                     android:textColor="#000"
                     android:textSize="16sp"
-                    android:background="@android:color/transparent"
-                    android:maxLength="10" />
+                    tools:ignore="VisualLintTextFieldSize" />
             </LinearLayout>
 
 
@@ -162,8 +173,8 @@
                 android:id="@+id/frame_8"
                 android:layout_width="164dp"
                 android:layout_height="48dp"
-                android:layout_marginTop="8dp"
                 android:layout_gravity="center_horizontal"
+                android:layout_marginTop="8dp"
                 android:background="@drawable/frame_8">
 
 
@@ -178,6 +189,14 @@
                     android:textSize="18sp"
                     android:textStyle="bold" />
             </RelativeLayout>
+            <!-- ProgressBar -->
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Large"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="gone" />
         </LinearLayout>
 
         <!-- Login Text -->
@@ -191,17 +210,10 @@
             android:text="@string/already_have_an_account_log_in"
             android:textColor="#0000FF"
             android:textSize="16sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            tools:ignore="TextSizeCheck" />
 
 
-        <!-- ProgressBar -->
-        <ProgressBar
-            android:id="@+id/progressBar"
-            style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Large"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:visibility="gone"/>
 
     </LinearLayout>
 </ScrollView>

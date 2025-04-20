@@ -31,7 +31,6 @@ class SignupActivity : AppCompatActivity() {
     private lateinit var btnInstitute: Button
 
     private lateinit var auth: FirebaseAuth
-    private var role = ""
     private var name = ""
     private var email = ""
     private var phone = ""
@@ -57,6 +56,7 @@ class SignupActivity : AppCompatActivity() {
         emailEditText = findViewById(R.id.editTextEmail)
         phoneEditText = findViewById(R.id.editTextMobile)
         sendOtpButton = findViewById(R.id.button_send_otp)
+        progressBar = findViewById(R.id.progressBar)
         loginRedirectText = findViewById(R.id.textView_login_redirect)
 
 
@@ -67,12 +67,12 @@ class SignupActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
 
 
-        btnStudent.setOnClickListener { updateRole("Student") }
-        btnTeacher.setOnClickListener { updateRole("Teacher") }
-        btnInstitute.setOnClickListener { updateRole("Institute") }
+        btnStudent.setOnClickListener { updateRole("student") }
+        btnTeacher.setOnClickListener { updateRole("educator") }
+        btnInstitute.setOnClickListener { updateRole("institute") }
 
         sendOtpButton.setOnClickListener {
-            if (role.isEmpty()) {
+            if (selectedRole.isEmpty()) {
                 Toast.makeText(this, "Please select a role", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
@@ -114,9 +114,9 @@ class SignupActivity : AppCompatActivity() {
             button.setTextColor(getColor(if (isSelected) R.color.black else R.color.white))
         }
 
-        setButtonState(btnStudent, role == "Student")
-        setButtonState(btnTeacher, role == "Teacher")
-        setButtonState(btnInstitute, role == "Institute")
+        setButtonState(btnStudent, role == "student")
+        setButtonState(btnTeacher, role == "educator")
+        setButtonState(btnInstitute, role == "institute")
     }
 
 
@@ -129,7 +129,9 @@ class SignupActivity : AppCompatActivity() {
 
                 val body = response.body()
                 if (body == null) {
+                    progressBar.visibility = View.GONE
                     Toast.makeText(this@SignupActivity, "Unexpected server response", Toast.LENGTH_SHORT).show()
+
                     return
                 }
 
@@ -137,8 +139,10 @@ class SignupActivity : AppCompatActivity() {
                 val message = body.message ?: "No response"
 
                 if (userExists) {
+                    progressBar.visibility = View.GONE
                     Toast.makeText(this@SignupActivity, message, Toast.LENGTH_LONG).show()
                     loginRedirectText.visibility = View.VISIBLE
+
                 } else {
                     sendOtpToPhone()
                 }
@@ -173,10 +177,11 @@ class SignupActivity : AppCompatActivity() {
                 override fun onCodeSent(id: String, token: PhoneAuthProvider.ForceResendingToken) {
 
                     sendOtpButton.isEnabled = true
+                    progressBar.visibility = View.GONE
                     Toast.makeText(this@SignupActivity, "OTP Sent", Toast.LENGTH_SHORT).show()
 
                     val intent = Intent(this@SignupActivity, SignupActivity2::class.java)
-                    intent.putExtra("role", role)
+                    intent.putExtra("role", selectedRole)
                     intent.putExtra("name", name)
                     intent.putExtra("email", email)
                     intent.putExtra("phone", phone)
