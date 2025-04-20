@@ -10,37 +10,99 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/editText_password"
+        <!-- Logo Section -->
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Password"
-            android:inputType="textPassword"
-            android:minHeight="48dp"
-            tools:ignore="VisualLintTextFieldSize" />
+            android:layout_height="160dp">
 
-        <EditText
-            android:id="@+id/editText_confirm_password"
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="96dp"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/title"
+                android:contentDescription="@string/todo" />
+
+        </RelativeLayout>
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Confirm Password"
-            android:inputType="textPassword"
-            android:minHeight="48dp"
-            tools:ignore="VisualLintTextFieldSize" />
+            android:text="@string/create_password"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginBottom="24dp"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp">
+
+            <EditText
+                android:id="@+id/editText_password"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:autofillHints=""
+                android:background="@drawable/edittext_bg"
+                android:hint="@string/new_password"
+                android:inputType="textPassword"
+                android:padding="12dp" />
+
+            <ImageView
+                android:id="@+id/toggleNewPasswordVisibility"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="20dp"
+                android:src="@drawable/ic_visibility_off"
+                android:contentDescription="@string/toggle_password_visibility" />
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp">
+
+            <EditText
+                android:id="@+id/editText_confirm_password"
+                android:autofillHints=""
+                android:hint="@string/confirm_password"
+                android:inputType="textPassword"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@drawable/edittext_bg"
+                android:padding="12dp"
+                android:layout_marginTop="12dp"/>
+
+            <ImageView
+                android:id="@+id/toggleNewPasswordVisibility1"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="20dp"
+                android:src="@drawable/ic_visibility_off"
+                android:contentDescription="@string/toggle_password_visibility" />
+        </RelativeLayout>
 
         <CheckBox
             android:id="@+id/checkbox_terms"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="@color/black"
             android:minHeight="48dp"
-            android:text="I agree to the Terms and Conditions" />
+            android:text="@string/i_agree_to_the_terms_and_conditions" />
 
         <Button
             android:id="@+id/button_register"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Register"
-            tools:ignore="VisualLintButtonSize" />
+            android:layout_marginTop="35dp"
+            android:background="@drawable/button_bg"
+            android:gravity="center"
+            android:text="@string/sign_up"
+            android:textColor="@color/white"
+            android:layout_gravity="center" />
 
         <ProgressBar
             android:id="@+id/progressBar"
@@ -48,5 +110,17 @@
             android:layout_height="wrap_content"
             android:visibility="gone"
             android:layout_gravity="center" />
+
+        <TextView
+            android:id="@+id/goToBackPage"
+            android:layout_width="63dp"
+            android:layout_height="25dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="170dp"
+            android:background="@drawable/rectangle_1"
+            android:text="@string/back"
+            android:textColor="#0000FF"
+            android:textSize="16sp"
+            android:textStyle="bold" />
     </LinearLayout>
 </ScrollView>

@@ -20,6 +20,7 @@ class SignupActivity3 : AppCompatActivity() {
     private lateinit var termsCheckBox: CheckBox
     private lateinit var registerButton: Button
     private lateinit var progressBar: ProgressBar
+    private lateinit var goToBackPage: TextView
 
     private lateinit var role: String
     private lateinit var name: String
@@ -35,11 +36,17 @@ class SignupActivity3 : AppCompatActivity() {
         termsCheckBox = findViewById(R.id.checkbox_terms)
         registerButton = findViewById(R.id.button_register)
         progressBar = findViewById(R.id.progressBar)
+        goToBackPage = findViewById(R.id.goToBackPage)
 
         role = intent.getStringExtra("role") ?: ""
         name = intent.getStringExtra("name") ?: ""
         email = intent.getStringExtra("email") ?: ""
         phone = intent.getStringExtra("phone") ?: ""
+
+        goToBackPage.setOnClickListener {
+            startActivity(Intent(this, SignupActivity2::class.java))
+        }
+
 
         registerButton.setOnClickListener {
             val password = passwordEditText.text.toString()
