@@ -2,6 +2,7 @@ package com.example.seekshakcom
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.InputType
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -17,6 +18,10 @@ class SignupActivity3 : AppCompatActivity() {
 
     private lateinit var passwordEditText: EditText
     private lateinit var confirmPasswordEditText: EditText
+    private lateinit var toggleNewPasswordVisibility: ImageView
+    private lateinit var toggleConfirmPasswordVisibility: ImageView
+    private var isNewPasswordVisible = false
+    private var isConfirmPasswordVisible = false
     private lateinit var termsCheckBox: CheckBox
     private lateinit var registerButton: Button
     private lateinit var progressBar: ProgressBar
@@ -33,6 +38,8 @@ class SignupActivity3 : AppCompatActivity() {
 
         passwordEditText = findViewById(R.id.editText_password)
         confirmPasswordEditText = findViewById(R.id.editText_confirm_password)
+        toggleNewPasswordVisibility = findViewById(R.id.toggleNewPasswordVisibility)
+        toggleConfirmPasswordVisibility = findViewById(R.id.toggleNewPasswordVisibility1)
         termsCheckBox = findViewById(R.id.checkbox_terms)
         registerButton = findViewById(R.id.button_register)
         progressBar = findViewById(R.id.progressBar)
@@ -45,6 +52,31 @@ class SignupActivity3 : AppCompatActivity() {
 
         goToBackPage.setOnClickListener {
             startActivity(Intent(this, SignupActivity2::class.java))
+        }
+
+        toggleNewPasswordVisibility.setOnClickListener {
+            isNewPasswordVisible = !isNewPasswordVisible
+            passwordEditText.inputType = if (isNewPasswordVisible)
+                InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+            else
+                InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+
+            passwordEditText.setSelection(passwordEditText.text.length)
+            toggleNewPasswordVisibility.setImageResource(
+                if (isNewPasswordVisible) R.drawable.ic_visibility else R.drawable.ic_visibility_off
+            )
+        }
+        toggleConfirmPasswordVisibility.setOnClickListener {
+            isConfirmPasswordVisible = !isConfirmPasswordVisible
+            confirmPasswordEditText.inputType = if (isConfirmPasswordVisible)
+                InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+            else
+                InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+
+            confirmPasswordEditText.setSelection(confirmPasswordEditText.text.length)
+            toggleConfirmPasswordVisibility.setImageResource(
+                if (isConfirmPasswordVisible) R.drawable.ic_visibility else R.drawable.ic_visibility_off
+            )
         }
 
 

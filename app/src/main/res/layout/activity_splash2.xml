@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Videos first, so they stay behind -->
+    <ImageView
+        android:id="@+id/bgImage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/bg_splash2" />
+
+
+
+    <!-- Foreground image overlay (your full design with text etc.) -->
+
+
+    <VideoView
+        android:id="@+id/video3"
+        android:layout_width="169dp"
+        android:layout_height="143dp"
+        android:layout_gravity="end"
+        android:layout_marginTop="242dp"
+        android:background="@android:color/transparent" />
+
+    <VideoView
+        android:id="@+id/video4"
+        android:layout_width="match_parent"
+        android:layout_height="419dp"
+        android:layout_marginTop="370dp"
+        android:background="@android:color/transparent" />
+
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="477dp"
+        android:layout_gravity="bottom"
+        android:scaleType="centerCrop"
+        android:src="@drawable/bg2_splash2" />
+
+
+</FrameLayout>
+
+

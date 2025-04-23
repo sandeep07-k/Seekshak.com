@@ -1,24 +1,660 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:padding="24dp">
+    android:fillViewport="true"
+    android:background="#FFFFFF"
+    android:padding="0dp">
 
-    <TextView
-        android:text="@string/welcome_student"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        android:id="@+id/studentWelcomeText"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"/>
-
-    <!-- Logout Button -->
-    <Button
-        android:id="@+id/logoutButton"
+    <ScrollView
         android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:background="#FFFFFF"
+        android:paddingBottom="80dp"
+        android:clipToPadding="false">
+
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="0dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="10dp"
+                android:background="@drawable/rectangle_2"
+                android:paddingStart="8dp"
+                android:paddingEnd="0dp">
+
+                <ImageButton
+                    android:id="@id/menu_bar"
+                    android:layout_width="25dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginTop="12dp"
+                    android:src="@drawable/ic_menu"
+                    android:background="@null"
+                    android:clickable="true"
+                    android:contentDescription="@string/menu_bar"
+                    android:focusable="true"
+                    tools:ignore="TouchTargetSizeCheck" />
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="175dp"
+                    android:layout_height="32dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="177dp"
+                    android:contentDescription="@string/seekshak_com"
+                    android:src="@drawable/seekshak_com" />
+
+                <LinearLayout
+                    android:id="@+id/locationSelector"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="10dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="8dp"
+                    tools:ignore="TouchTargetSizeCheck">
+
+                    <ImageView
+                        android:id="@+id/dropdownArrow"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginStart="4dp"
+                        android:contentDescription="dropdown"
+                        android:src="@drawable/ic_dropdown_arrow" />
+
+                    <TextView
+                        android:id="@+id/locationText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="0dp"
+                        android:text="Bakarganj, Patna"
+                        android:textColor="#003320"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:id="@+id/locationIcon"
+                        android:layout_width="20dp"
+                        android:layout_height="22dp"
+                        android:layout_marginStart="2dp"
+                        android:contentDescription="Location icon"
+                        android:src="@drawable/logo_map" />
+
+
+                </LinearLayout>
+
+
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp">
+
+                <LinearLayout
+                    android:layout_width="185dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/bg_search_rounded"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="8dp">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:contentDescription="@string/search_icon"
+                        android:src="@drawable/ic_search"
+                        app:tint="#999999" />
+
+                    <EditText
+                        android:id="@+id/searchEditText"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="8dp"
+                        android:layout_weight="1"
+                        android:autofillHints="city"
+                        android:background="@android:color/transparent"
+                        android:hint="@string/search"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:textColor="#000000"
+                        android:textColorHint="#999999" />
+                </LinearLayout>
+
+
+                <ImageButton
+                    android:id="@+id/notification_Btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@null"
+                    android:clickable="true"
+                    android:contentDescription="@string/notification"
+                    android:focusable="true"
+                    android:src="@drawable/ic_notification"
+                    tools:ignore="TouchTargetSizeCheck" />
+
+
+                <LinearLayout
+                    android:id="@+id/creditContainer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="7dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginEnd="16dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:id="@+id/credit_coin"
+                        android:layout_width="34dp"
+                        android:layout_height="34dp"
+                        android:src="@drawable/credit_coin"
+                        android:layout_marginEnd="6dp" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/credit_label"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Balance"
+                            android:textColor="@android:color/black"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/credit_balance"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="7.08"
+                            android:textColor="@android:color/black"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </LinearLayout>
+
+
+
+
+
+
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="248dp"
+                android:layout_marginTop="40dp"
+                android:background="@drawable/poster_std_home"
+                android:contentDescription="@string/poster" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rectangle_2"
+                android:paddingVertical="10dp"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp">
+
+                <TextView
+                    android:id="@+id/label_teachers_near"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/teachers_near_you"
+                    android:textSize="20sp"
+                    android:textColor="#0A2540"
+                    android:textStyle="bold"
+                    android:layout_centerVertical="true" />
+
+                <TextView
+                    android:id="@+id/view_all_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:text="View All >>"
+                    android:textColor="@color/orange"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    tools:ignore="TouchTargetSizeCheck" />
+            </RelativeLayout>
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/teacher_card1"
+                        android:layout_width="291dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="15dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        app:cardCornerRadius="35dp"
+                        app:cardElevation="4dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="#0A2540"
+                            android:orientation="vertical"
+                            android:padding="12dp">
+
+                            <!-- Header Row -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:layout_width="50dp"
+                                    android:layout_height="50dp"
+                                    android:layout_marginEnd="8dp"
+                                    android:background="@drawable/circle_bg"
+                                    android:contentDescription="@string/todo"
+                                    android:padding="4dp"
+                                    android:src="@drawable/ic_user" />
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Edu-XXXX"
+                                        android:textColor="#A4FFA3"
+                                        android:textSize="12sp"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Tutor Name"
+                                        android:textColor="#FFFFFF"
+                                        android:textSize="16sp"
+                                        android:textStyle="bold" />
+
+                                    <RatingBar
+                                        style="@style/Widget.AppCompat.RatingBar.Small"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="2dp"
+                                        android:isIndicator="true"
+                                        android:numStars="5"
+                                        android:rating="4"
+                                        android:scaleX="0.8"
+                                        android:scaleY="0.8"
+                                        android:stepSize="1" />
+                                </LinearLayout>
+
+                                <ImageButton
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:background="@null"
+                                    android:contentDescription="@string/space"
+                                    android:src="@drawable/ic_favorite"
+                                    app:tint="#ffffff" />
+                            </LinearLayout>
+
+                            <!-- Experience -->
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:background="@drawable/rectangle_p"
+                                android:gravity="center"
+                                android:text="Teaching Experience: XXXXX"
+                                android:textColor="#00213D"
+                                android:textSize="13sp"
+                                android:textStyle="bold" />
+
+                            <!-- Info Section -->
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp"
+                                android:lineSpacingExtra="2dp"
+                                android:text="Gender: XXXX\nHighest Qualification: XXXXXXX\nExpertise Subject: XXX, XXX\nFee: XXX rs/hr"
+                                android:textColor="#FFFFFF"
+                                android:textSize="12sp" />
+
+                            <!-- View Button -->
+                            <Button
+                                android:layout_width="wrap_content"
+                                android:layout_height="38dp"
+                                android:layout_gravity="center"
+                                android:layout_marginTop="0dp"
+                                android:backgroundTint="#F2A007"
+                                android:paddingHorizontal="0dp"
+                                android:text="View >>"
+                                android:textColor="#000000"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/teacher_card"
+                        android:layout_width="291dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="15dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        app:cardCornerRadius="35dp"
+                        app:cardElevation="4dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:background="#0A2540"
+                            android:padding="12dp">
+
+                            <!-- Header Row -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:gravity="center_vertical">
+
+                                <ImageView
+                                    android:layout_width="50dp"
+                                    android:layout_height="50dp"
+                                    android:src="@drawable/ic_user"
+                                    android:layout_marginEnd="8dp"
+                                    android:background="@drawable/circle_bg"
+                                    android:padding="4dp" />
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Edu-XXXX"
+                                        android:textColor="#A4FFA3"
+                                        android:textSize="12sp"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Tutor Name"
+                                        android:textColor="#FFFFFF"
+                                        android:textSize="16sp"
+                                        android:textStyle="bold" />
+
+                                    <RatingBar
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:numStars="5"
+                                        android:rating="4"
+                                        android:stepSize="1"
+                                        android:isIndicator="true"
+                                        android:layout_marginTop="2dp"
+                                        android:scaleX="0.8"
+                                        android:scaleY="0.8"
+                                        style="@style/Widget.AppCompat.RatingBar.Small" />
+                                </LinearLayout>
+
+                                <ImageButton
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:background="@null"
+                                    android:src="@drawable/ic_favorite"
+                                    app:tint="#ffffff" />
+                            </LinearLayout>
+
+                            <!-- Experience -->
+                            <TextView
+                                android:layout_marginTop="8dp"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/rectangle_p"
+                                android:text="Teaching Experience: XXXXX"
+                                android:textColor="#00213D"
+                                android:textSize="13sp"
+                                android:textStyle="bold"
+                                android:gravity="center" />
+
+                            <!-- Info Section -->
+                            <TextView
+                                android:layout_marginTop="6dp"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Gender: XXXX\nHighest Qualification: XXXXXXX\nExpertise Subject: XXX, XXX\nFee: XXX rs/hr"
+                                android:textColor="#FFFFFF"
+                                android:textSize="12sp"
+                                android:lineSpacingExtra="2dp" />
+
+                            <!-- View Button -->
+                            <Button
+                                android:layout_width="wrap_content"
+                                android:layout_height="38dp"
+                                android:layout_gravity="center"
+                                android:layout_marginTop="0dp"
+                                android:backgroundTint="#F2A007"
+                                android:paddingHorizontal="0dp"
+                                android:text="View >>"
+                                android:textColor="#000000"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+
+                </LinearLayout>
+            </HorizontalScrollView>
+
+
+
+
+        </LinearLayout>
+
+
+    </ScrollView>
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/logout"
-        android:layout_marginTop="16dp"/>
-</LinearLayout>
+        android:layout_alignParentBottom="true">
+
+        <LinearLayout
+            android:id="@+id/bottom_nav"
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:orientation="horizontal"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/rectangle_3"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:gravity="center"
+            android:weightSum="5">
+
+            <!-- Home -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_marginTop="2dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <ImageButton
+                    android:id="@+id/home_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:contentDescription="Home"
+                    android:src="@drawable/ic_home"
+                    app:tint="@android:color/black"
+                    tools:ignore="TouchTargetSizeCheck" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="Home"
+                    android:textSize="12sp"
+                    android:textColor="@android:color/black"/>
+            </LinearLayout>
+
+            <!-- My Post -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_marginTop="2dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <ImageButton
+                    android:id="@+id/my_post"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:contentDescription="My Post"
+                    android:src="@drawable/ic_post"
+                    tools:ignore="TouchTargetSizeCheck" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="My Post"
+                    android:textSize="12sp"
+                    android:textColor="@android:color/black"/>
+            </LinearLayout>
+
+            <!-- Add Post placeholder -->
+            <View
+                android:layout_width="0dp"
+                android:layout_height="79dp"
+                android:layout_gravity="center"
+                android:layout_weight="1" />
+
+            <!-- Chats -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_marginTop="2dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <ImageButton
+                    android:id="@+id/chats"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:contentDescription="Chat"
+                    android:src="@drawable/ic_chat"
+                    tools:ignore="TouchTargetSizeCheck" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="Chats"
+                    android:textSize="12sp"
+                    android:textColor="@android:color/black"/>
+            </LinearLayout>
+
+            <!-- My Account -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_marginTop="2dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <ImageButton
+                    android:id="@+id/my_account"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:contentDescription="My Account"
+                    android:src="@drawable/ic_account"
+                    tools:ignore="TouchTargetSizeCheck" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="My Account"
+                    android:textSize="12sp"
+                    android:textColor="@android:color/black"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/add_post"
+            android:layout_width="50dp"
+            android:layout_height="102dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="15dp"
+            android:layout_alignParentBottom="true"
+            android:background="@null"
+            android:src="@drawable/ic_add_post"
+            android:contentDescription="@string/add_post"
+            android:elevation="4dp"
+            android:scaleType="centerInside" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="23dp"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:text="Add Post"
+            android:textSize="12sp"
+            android:textColor="@android:color/black"
+            android:scaleType="centerInside" />
+
+    </RelativeLayout>
+
+
+
+
+
+
+
+</RelativeLayout>

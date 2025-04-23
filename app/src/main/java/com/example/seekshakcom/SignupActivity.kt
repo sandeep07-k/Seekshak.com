@@ -34,7 +34,7 @@ class SignupActivity : AppCompatActivity() {
     private var name = ""
     private var email = ""
     private var phone = ""
-    private var selectedRole: String = "Null"
+    private var selectedRole: String = ""
 
     private val otpResultLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -72,7 +72,7 @@ class SignupActivity : AppCompatActivity() {
         btnInstitute.setOnClickListener { updateRole("institute") }
 
         sendOtpButton.setOnClickListener {
-            if (selectedRole.isEmpty()) {
+            if (selectedRole.isEmpty() ) {
                 Toast.makeText(this, "Please select a role", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }

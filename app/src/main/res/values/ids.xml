@@ -8,4 +8,5 @@
     <item name="passwordToggle" type="id">@id/passwordToggle</item>
     <item name="forgotPasswordText" type="id">@id/forgotPasswordText</item>
     <item name="loginButton" type="id">@id/loginButton</item>
+    <item name="menu_bar" type="id">@id/menu_bar</item>
 </resources>

@@ -19,7 +19,7 @@
 
         <!-- LoginActivity is now the launcher activity with proper theme -->
         <activity
-            android:name=".LoginActivity"
+            android:name=".SplashActivity1"
             android:exported="true"
             android:theme="@style/Theme.Seekshakcom">
             <intent-filter>
@@ -29,14 +29,20 @@
         </activity>
 
         <!-- Other activities -->
+        <activity android:name=".SplashActivity2" />
+        <activity android:name=".LoginActivity" />
         <activity android:name=".SignupActivity" />
-        <activity android:name=".StudentHomeActivity" />
+        <activity android:name=".StudentHomeActivity"
+            android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".TutorHomeActivity" />
         <activity android:name=".InstituteHomeActivity" />
         <activity android:name=".ForgotPasswordActivity" />
         <activity android:name=".ResetPasswordActivity" />
         <activity android:name=".SignupActivity2"/>
         <activity android:name=".SignupActivity3"/>
+
+
+
 
 
 
