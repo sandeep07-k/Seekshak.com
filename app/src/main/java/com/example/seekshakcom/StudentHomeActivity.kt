@@ -1,66 +1,92 @@
 package com.example.seekshakcom
 
+
+import android.graphics.Typeface
 import android.os.Bundle
-import android.widget.EditText
+import android.view.View
+import android.widget.FrameLayout
 import android.widget.ImageButton
-import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import com.example.seekshakcom.ui.myaccount.MyAccountFragment
 
 class StudentHomeActivity : AppCompatActivity() {
 
-    private lateinit var menuBar: ImageButton
-    private lateinit var searchEditText: EditText
-    private lateinit var notificationButton: ImageButton
-    private lateinit var creditBalance: TextView
-    private lateinit var creditCoin: ImageView
 
     private lateinit var homeBtn: ImageButton
     private lateinit var myPostBtn: ImageButton
     private lateinit var addPostBtn: ImageButton
     private lateinit var chatsBtn: ImageButton
     private lateinit var myAccountBtn: ImageButton
+    private lateinit var myAccountText: TextView
+    private lateinit var homeText: TextView
+    private lateinit var myPostText:TextView
+    private lateinit var chatsText: TextView
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_student_home)
 
-        // Top Section
-        menuBar = findViewById(R.id.menu_bar)
-        searchEditText = findViewById(R.id.searchEditText)
-        notificationButton = findViewById(R.id.notification_Btn)
-        creditBalance = findViewById(R.id.credit_balance)
-        creditCoin = findViewById(R.id.credit_coin)
 
         // Bottom Navigation
         homeBtn = findViewById(R.id.home_btn)
+        homeText = findViewById(R.id.home_text)
         myPostBtn = findViewById(R.id.my_post)
         addPostBtn = findViewById(R.id.add_post)
         chatsBtn = findViewById(R.id.chats)
         myAccountBtn = findViewById(R.id.my_account)
+        myAccountText = findViewById(R.id.my_account_text)
+        myPostText = findViewById(R.id.myPostText)
+        chatsText = findViewById(R.id.chatsText)
+
+        // Set HomeFragment as default screen on launch
+        val fragment = HomeFragment()
+        val fragmentContainer = findViewById<FrameLayout>(R.id.student_home_fragment_container)
+        fragmentContainer.visibility = View.VISIBLE // Show fragment container
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.student_home_fragment_container, fragment)
+            .commit()
+
+
+
+
 
         // Listeners
-        menuBar.setOnClickListener {
-            Toast.makeText(this, "Menu clicked", Toast.LENGTH_SHORT).show()
-        }
-
-
-        notificationButton.setOnClickListener {
-            Toast.makeText(this, "Notifications", Toast.LENGTH_SHORT).show()
-            // startActivity(Intent(this, NotificationActivity::class.java))
-        }
-
-        creditCoin.setOnClickListener {
-            Toast.makeText(this, "Credits: ${creditBalance.text}", Toast.LENGTH_SHORT).show()
-        }
 
         homeBtn.setOnClickListener {
-            Toast.makeText(this, "Home", Toast.LENGTH_SHORT).show()
+            resetAllTabs()
+            homeBtn.isSelected = true
+            homeBtn.setImageResource(R.drawable.ic_home_filled) // use filled icon
+            homeText.setTypeface(null, Typeface.BOLD)
+            homeText.setTextColor(
+                ContextCompat.getColor(
+                    this,
+                    R.color.darkest_blue
+                )
+            ) // or your highlight color
+
+            fragmentContainer.visibility = View.VISIBLE // Show fragment
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.student_home_fragment_container, fragment)
+                .addToBackStack(null)
+                .commit()
         }
 
         myPostBtn.setOnClickListener {
-            Toast.makeText(this, "My Posts", Toast.LENGTH_SHORT).show()
+            resetAllTabs()
+            myPostBtn.isSelected = true
+            myPostBtn.setImageResource(R.drawable.ic_mypost_filled) // use filled icon
+            myPostText.setTypeface(null, Typeface.BOLD)
+            myPostText.setTextColor(
+                ContextCompat.getColor(
+                    this,
+                    R.color.darkest_blue
+                )
+            )
             // startActivity(Intent(this, MyPostsActivity::class.java))
         }
 
@@ -70,13 +96,74 @@ class StudentHomeActivity : AppCompatActivity() {
         }
 
         chatsBtn.setOnClickListener {
-            Toast.makeText(this, "Chats", Toast.LENGTH_SHORT).show()
+            resetAllTabs()
+            chatsBtn.isSelected = true
+            chatsBtn.setImageResource(R.drawable.ic_chats_filled) // use filled icon
+            chatsText.setTypeface(null, Typeface.BOLD)
+            chatsText.setTextColor(
+                ContextCompat.getColor(
+                    this,
+                    R.color.darkest_blue
+                )
+            )
             // startActivity(Intent(this, ChatActivity::class.java))
         }
 
         myAccountBtn.setOnClickListener {
-            Toast.makeText(this, "My Account", Toast.LENGTH_SHORT).show()
-            // startActivity(Intent(this, AccountActivity::class.java))
+            resetAllTabs()
+            myAccountBtn.isSelected = true
+            myAccountBtn.setImageResource(R.drawable.ic_account_filled) // use filled icon
+            myAccountText.setTypeface(null, Typeface.BOLD)
+            myAccountText.setTextColor(
+                ContextCompat.getColor(
+                    this,
+                    R.color.darkest_blue
+                )
+            ) // or your highlight color
+
+            val myAccountfragment = MyAccountFragment()
+            fragmentContainer.visibility = View.VISIBLE // Show fragment
+
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.student_home_fragment_container, myAccountfragment)
+                .addToBackStack(null)
+                .commit()
         }
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val fm = supportFragmentManager
+                if (fm.backStackEntryCount > 0) {
+                    fm.popBackStack()
+                } else {
+                    isEnabled = false
+                    onBackPressedDispatcher.onBackPressed()
+                }
+            }
+        })
+
+
     }
+
+    private fun resetTab(icon: ImageButton, label: TextView, defaultIconRes: Int) {
+        icon.setImageResource(defaultIconRes)
+        icon.isSelected = false
+        label.setTypeface(null, Typeface.NORMAL)
+        label.setTextColor(ContextCompat.getColor(this, R.color.darkest_blue))
+    }
+
+    private fun resetAllTabs() {
+        resetTab(myAccountBtn, myAccountText, R.drawable.ic_account)
+        resetTab(homeBtn, homeText, R.drawable.ic_home)
+        resetTab(chatsBtn, chatsText, R.drawable.ic_chats)
+        resetTab(myPostBtn, myPostText, R.drawable.ic_mypost)
+
+
+    }
+
+
+
+
+
+
+
 }
