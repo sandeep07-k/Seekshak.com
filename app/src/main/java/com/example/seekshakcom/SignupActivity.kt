@@ -2,12 +2,15 @@ package com.example.seekshakcom
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Patterns
 import android.view.View
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import com.example.seekshakcom.model.UserExistsResponse
 import com.example.seekshakcom.network.ApiClient
 import com.google.firebase.FirebaseException
@@ -50,6 +53,14 @@ class SignupActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signup)
+
+        // 1. Allow layout to draw behind system bars
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        // 2. Make status bar transparent
+        Color.TRANSPARENT.also { window.statusBarColor = it }
+        // 3. Optional: Change status bar icon color (dark icons = true)
+        val insetsController = WindowInsetsControllerCompat(window, window.decorView)
+        insetsController.isAppearanceLightStatusBars = true
 
 
         nameEditText = findViewById(R.id.editTextName)

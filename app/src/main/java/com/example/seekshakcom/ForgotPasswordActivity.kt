@@ -1,12 +1,15 @@
 package com.example.seekshakcom
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.*
 import java.util.concurrent.TimeUnit
@@ -29,7 +32,15 @@ class ForgotPasswordActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_forgot_password) // change this to actual layout name if different
+        setContentView(R.layout.activity_forgot_password)
+
+        // 1. Allow layout to draw behind system bars
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        // 2. Make status bar transparent
+        Color.TRANSPARENT.also { window.statusBarColor = it }
+        // 3. Optional: Change status bar icon color (dark icons = true)
+        val insetsController = WindowInsetsControllerCompat(window, window.decorView)
+        insetsController.isAppearanceLightStatusBars = true
 
         auth = FirebaseAuth.getInstance()
 

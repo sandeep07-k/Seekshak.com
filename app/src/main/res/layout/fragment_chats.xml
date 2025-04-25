@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#B3E5FC"
+    android:paddingTop="36dp"
+    android:orientation="vertical">
+
+    <!-- Toolbar -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbarChats"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:title="@string/chats"
+        android:titleTextColor="@color/black"
+        app:titleTextAppearance="@style/TextAppearance.AppCompat.Large" />
+
+    <!-- Search Bar -->
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:cardElevation="2dp"
+        app:cardCornerRadius="12dp">
+
+        <EditText
+            android:id="@+id/etSearchChat"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="1dp"
+            android:background="@drawable/bg_search_rounded"
+            android:drawableStart="@drawable/ic_search"
+            android:hint="Search a chat"
+            android:inputType="text"
+            android:padding="12dp" />
+
+
+    </androidx.cardview.widget.CardView>
+
+
+    <!-- Tabs -->
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayoutChats"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:tabIndicatorColor="@color/primaryBlue"
+        app:tabSelectedTextColor="@color/primaryBlue"
+        app:tabTextColor="@android:color/darker_gray" />
+
+    <!-- RecyclerView -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewChats"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="8dp"
+        android:background="@color/white"
+        android:clipToPadding="false" />
+
+</LinearLayout>

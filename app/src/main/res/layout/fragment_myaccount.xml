@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#B3E5FC"
+    android:paddingTop="36dp">
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/white">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/rectangle_2"
+            android:background="#B3E5FC"
             android:padding="12dp">
 
             <ImageView
@@ -33,7 +36,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_marginTop="8dp"
                 android:layout_toEndOf="@+id/back_arrow"
-                android:text="My Account"
+                android:text="Account"
                 android:textColor="#0F427C"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -49,7 +52,7 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             android:layout_weight="1"
             android:paddingBottom="80dp">
 
@@ -57,21 +60,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="0dp">
+                android:paddingHorizontal="16dp">
 
                 <RelativeLayout
-                    android:layout_width="280dp"
-                    android:layout_height="195dp"
-                    android:layout_marginTop="15dp"
-                    android:background="@drawable/profile_card_bg"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:padding="0dp">
+                    android:layout_marginTop="30dp"
+                    android:background="@drawable/profile_card_bg"
+                    android:paddingStart="16dp">
 
                     <TextView
                         android:layout_width="117dp"
                         android:layout_height="35dp"
                         android:layout_alignParentEnd="true"
-                        android:layout_marginEnd="8dp"
+                        android:layout_marginEnd="10dp"
                         android:background="@drawable/bg_viewprofile"
                         android:clickable="true"
                         android:focusable="true"
@@ -82,35 +85,41 @@
                         android:textSize="12sp"
                         android:textStyle="bold" />
 
-                    <ImageButton
-                        android:id="@+id/ic_camera"
+                    <FrameLayout
+                        android:id="@+id/profile_frame"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginTop="76dp"
-                        android:layout_marginEnd="-2dp"
-                        android:background="@drawable/ic_camera"
-                        android:foregroundGravity="center_vertical" />
-
-                    <ImageView
-                        android:id="@+id/profile_icon"
-                        android:layout_width="65dp"
-                        android:layout_height="65dp"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentTop="true"
                         android:layout_marginStart="16dp"
-                        android:layout_marginTop="16dp"
-                        android:background="@drawable/bg_profilecicle"
-                        android:contentDescription="profile"
-                        android:padding="8dp"
-                        android:src="@drawable/ic_user" />
+                        android:layout_marginTop="16dp">
+
+                        <!-- Profile Picture -->
+
+                        <!-- Camera Icon Overlay -->
+                        <ImageView
+                            android:id="@+id/profile_icon"
+                            android:layout_width="65dp"
+                            android:layout_height="65dp"
+                            android:background="@drawable/bg_profilecicle"
+                            android:contentDescription="Profile"
+                            android:padding="8dp"
+                            android:src="@drawable/ic_user" />
+
+                        <ImageButton
+                            android:id="@+id/ic_camera"
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:layout_gravity="bottom|end"
+                            android:layout_margin="2dp"
+                            android:background="@drawable/ic_camera"
+                            android:contentDescription="Edit Profile Picture" />
+                    </FrameLayout>
+
 
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:layout_toEndOf="@id/profile_icon"
+                        android:layout_marginStart="16dp"
+                        android:layout_toEndOf="@id/profile_frame"
                         android:orientation="vertical">
 
                         <TextView
@@ -136,12 +145,11 @@
                         android:id="@+id/user_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/profile_icon"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginTop="3dp"
+                        android:layout_below="@+id/profile_frame"
+                        android:layout_marginTop="8dp"
                         android:text="Sandeep Kumar"
                         android:textColor="#000000"
-                        android:textSize="16sp"
+                        android:textSize="18sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -149,8 +157,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/user_name"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="2dp"
+                        android:layout_marginTop="3dp"
                         android:text="Mobile No. : "
                         android:textColor="#000000"
                         android:textSize="14sp"
@@ -162,7 +169,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/user_name"
                         android:layout_marginStart="1dp"
-                        android:layout_marginTop="2dp"
+                        android:layout_marginTop="3dp"
                         android:layout_toEndOf="@+id/text_mobile"
                         android:text="+91 XXXXXXXXXX"
                         android:textColor="#00213D"
@@ -174,8 +181,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/text_mobile"
-                        android:layout_marginStart="18dp"
-                        android:layout_marginTop="0dp"
+
+                        android:layout_marginTop="3dp"
                         android:text="Email : "
                         android:textColor="#000000"
                         android:textSize="14sp"
@@ -185,127 +192,237 @@
                         android:id="@+id/user_email"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/text_email"
-                        android:layout_marginStart="22dp"
+                        android:layout_below="@+id/mobile_no"
+                        android:layout_marginStart="2dp"
+                        android:layout_marginTop="3dp"
+                        android:layout_toEndOf="@+id/text_email"
                         android:text="sandeepkumar9334@gmail.com"
                         android:textColor="#00213D"
                         android:textSize="14sp"
                         android:textStyle="bold" />
-                </RelativeLayout>
 
-                <RelativeLayout
+                </RelativeLayout>
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:padding="16dp">
+                    android:orientation="horizontal"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/rectangle_6"
+                    android:padding="12dp"
+                    android:gravity="center_vertical">
 
+                    <!-- Heart Icon -->
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/ic_heart"
+                        android:layout_marginEnd="12dp" />
+
+                    <!-- Favorites Text -->
                     <TextView
                         android:id="@+id/favourite_btn"
-                        android:layout_width="254dp"
-                        android:layout_height="47dp"
-                        android:layout_marginStart="66dp"
-                        android:layout_marginTop="0dp"
-                        android:layout_centerHorizontal="true"
-                        android:background="@drawable/rectangle_5"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:gravity="center"
-                        android:padding="12dp"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:text="Favorites"
                         android:textColor="@color/orange"
                         android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:clickable="true"
+                        android:focusable="true" />
 
+                    <!-- Arrow Icon (optional right arrow) -->
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_arrow_right"
+                        android:contentDescription="Go to Favorites" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="0dp"
+                    android:background="@drawable/rectangle_6"
+                    android:padding="12dp"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/ic_transactions"
+                        android:layout_marginEnd="12dp" />
+
+                    <!-- Favorites Text -->
                     <TextView
                         android:id="@+id/transactions_btn"
-                        android:layout_width="254dp"
-                        android:layout_height="47dp"
-                        android:layout_below="@+id/favourite_btn"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginStart="26dp"
-                        android:layout_centerHorizontal="true"
-                        android:background="@drawable/rectangle_6"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:clickable="true"
                         android:focusable="true"
-                        android:gravity="center"
-                        android:padding="12dp"
                         android:text="Transactions"
                         android:textColor="@color/orange"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
+                    <!-- Arrow Icon (optional right arrow) -->
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_arrow_right"
+                        android:contentDescription="Go to Favorites" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="0dp"
+                    android:background="@drawable/rectangle_6"
+                    android:padding="12dp"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/ic_seetings"
+                        android:layout_marginEnd="12dp" />
+
+                    <!-- Text -->
                     <TextView
                         android:id="@+id/settings_btn"
-                        android:layout_width="254dp"
-                        android:layout_height="47dp"
-                        android:layout_marginStart="0dp"
-                        android:layout_centerHorizontal="true"
-                        android:layout_below="@+id/transactions_btn"
-                        android:layout_marginTop="20dp"
-                        android:background="@drawable/rectangle_7"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:clickable="true"
                         android:focusable="true"
-                        android:gravity="center"
-                        android:padding="12dp"
                         android:text="Settings"
                         android:textColor="@color/orange"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
+                    <!-- Arrow Icon (optional right arrow) -->
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_arrow_right"
+                        android:contentDescription="Go to Favorites" />
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="0dp"
+                    android:background="@drawable/rectangle_6"
+                    android:padding="12dp"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/ic_helpsupport"
+                        android:layout_marginEnd="12dp" />
+
+                    <!-- Text -->
                     <TextView
                         android:id="@+id/help_support"
-                        android:layout_width="254dp"
-                        android:layout_height="47dp"
-                        android:layout_below="@+id/settings_btn"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginEnd="0dp"
-                        android:layout_centerHorizontal="true"
-                        android:background="@drawable/rectangle_8"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:clickable="true"
                         android:focusable="true"
-                        android:gravity="center"
-                        android:padding="12dp"
                         android:text="Help &amp; Support"
                         android:textColor="@color/orange"
-                        android:textSize="16sp"
+                        android:textSize="18sp"
                         android:textStyle="bold" />
 
+                    <!-- Arrow Icon (optional right arrow) -->
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_arrow_right"
+                        android:contentDescription="Go to Favorites" />
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="0dp"
+                    android:background="@drawable/rectangle_6"
+                    android:padding="12dp"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/ic_aboutus"
+                        android:layout_marginEnd="12dp" />
+
+                    <!-- Text -->
                     <TextView
                         android:id="@+id/about_us"
-                        android:layout_width="254dp"
-                        android:layout_height="47dp"
-                        android:layout_below="@+id/help_support"
-                        android:layout_marginStart="0dp"
-                        android:layout_marginTop="20dp"
-                        android:layout_centerHorizontal="true"
-                        android:background="@drawable/rectangle_9"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:clickable="true"
                         android:focusable="true"
-                        android:gravity="center"
-                        android:padding="12dp"
                         android:text="About Us"
                         android:textColor="@color/orange"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
+
+                    <!-- Arrow Icon (optional right arrow) -->
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_arrow_right"
+                        android:contentDescription="Go to Favorites" />
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="0dp"
+                    android:background="@drawable/rectangle_6"
+                    android:padding="12dp"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/ic_logout"
+                        android:layout_marginEnd="12dp" />
+
+                    <!-- Text -->
                     <TextView
                         android:id="@+id/logoutButton"
-                        android:layout_width="254dp"
-                        android:layout_height="47dp"
-                        android:layout_below="@+id/about_us"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginEnd="0dp"
-                        android:layout_centerHorizontal="true"
-                        android:background="@drawable/rectangle_10"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:clickable="true"
                         android:focusable="true"
-                        android:gravity="center"
-                        android:padding="12dp"
                         android:text="Log Out"
                         android:textColor="@color/orange"
                         android:textSize="18sp"
                         android:textStyle="bold" />
-                </RelativeLayout>
+
+
+                    <!-- Arrow Icon (optional right arrow) -->
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_arrow_right"
+                        android:contentDescription="Go to Favorites" />
+
+                </LinearLayout>
+
+
+
 
 
 

@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#B3E5FC">
+    android:background="#B3E5FC"
+    android:paddingTop="36dp">
 
     <!-- Fixed Sky Blue Header -->
     <RelativeLayout
@@ -51,7 +52,7 @@
                 android:layout_height="wrap_content"
                 android:text="Need a Teacher For:"
                 android:textStyle="bold"
-                android:textSize="24sp"
+                android:textSize="20sp"
                 android:textColor="#000000"
                 android:layout_marginBottom="16dp" />
 
@@ -61,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:text="Class "
                 android:textStyle="bold"
-                android:textSize="20sp"
+                android:textSize="16sp"
                 android:textColor="#000000"
                 android:layout_marginBottom="16dp" />
             <EditText
@@ -79,7 +80,7 @@
                 android:layout_height="wrap_content"
                 android:text="Subjects "
                 android:textStyle="bold"
-                android:textSize="20sp"
+                android:textSize="16sp"
                 android:textColor="#000000"
                 android:layout_marginBottom="16dp" />
             <EditText
@@ -97,7 +98,7 @@
                 android:layout_height="wrap_content"
                 android:text="Education Board "
                 android:textStyle="bold"
-                android:textSize="20sp"
+                android:textSize="16sp"
                 android:textColor="#000000"
                 android:layout_marginBottom="16dp" />
 
@@ -117,7 +118,7 @@
                 android:layout_height="wrap_content"
                 android:text="Fee "
                 android:textStyle="bold"
-                android:textSize="20sp"
+                android:textSize="16sp"
                 android:textColor="#000000"
                 android:layout_marginBottom="16dp" />
 
@@ -137,7 +138,7 @@
                 android:layout_height="wrap_content"
                 android:text="Duration "
                 android:textStyle="bold"
-                android:textSize="20sp"
+                android:textSize="16sp"
                 android:textColor="#000000"
                 android:layout_marginBottom="16dp" />
 
@@ -156,7 +157,7 @@
                 android:layout_height="wrap_content"
                 android:text="Number of Classes"
                 android:textStyle="bold"
-                android:textSize="20sp"
+                android:textSize="16sp"
                 android:textColor="#000000"
                 android:layout_marginBottom="16dp" />
             <EditText
@@ -174,7 +175,7 @@
                 android:layout_height="wrap_content"
                 android:text="Gender Preference "
                 android:textStyle="bold"
-                android:textSize="20sp"
+                android:textSize="16sp"
                 android:textColor="#000000"
                 android:layout_marginBottom="16dp" />
 
@@ -192,7 +193,7 @@
                 android:layout_height="wrap_content"
                 android:text="Demo scheduled "
                 android:textStyle="bold"
-                android:textSize="20sp"
+                android:textSize="16sp"
                 android:textColor="#000000"
                 android:layout_marginBottom="16dp" />
 
@@ -229,7 +230,7 @@
                 android:layout_height="wrap_content"
                 android:text="Mode of Class "
                 android:textStyle="bold"
-                android:textSize="20sp"
+                android:textSize="16sp"
                 android:textColor="#000000"
                 android:layout_marginBottom="16dp" />
 
@@ -247,7 +248,7 @@
                 android:layout_height="wrap_content"
                 android:text="Minimum Qualification "
                 android:textStyle="bold"
-                android:textSize="20sp"
+                android:textSize="16sp"
                 android:textColor="#000000"
                 android:layout_marginBottom="16dp" />
 
@@ -266,7 +267,7 @@
                 android:layout_height="wrap_content"
                 android:text="Special Requirements "
                 android:textStyle="bold"
-                android:textSize="20sp"
+                android:textSize="16sp"
                 android:textColor="#000000"
                 android:layout_marginBottom="16dp" />
 
@@ -285,10 +286,11 @@
             <!-- Submit Button -->
             <Button
                 android:id="@+id/submitButton"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:text="SUBMIT"
-                android:backgroundTint="#071E64"
+                android:background="@drawable/submit_form_bg"
                 android:textColor="#FFFFFF"
                 android:textStyle="bold"
                 android:padding="12dp"

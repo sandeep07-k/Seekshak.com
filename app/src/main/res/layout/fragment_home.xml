@@ -3,13 +3,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingTop="36dp"
+    android:background="#B3E5FC"
     xmlns:tools="http://schemas.android.com/tools">
 
     <LinearLayout
         android:id="@+id/student_home"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/white">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -18,7 +21,7 @@
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingHorizontal="10dp"
-            android:background="@drawable/rectangle_2"
+            android:background="#B3E5FC"
             android:paddingStart="8dp"
             android:paddingEnd="0dp">
 
@@ -29,7 +32,6 @@
                 android:layout_height="25dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginStart="10dp"
                 android:layout_marginTop="15dp"
                 android:contentDescription="@string/seekshak_com"
                 android:src="@drawable/seekshak_com" />
@@ -84,7 +86,8 @@
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingStart="10dp"
-            android:paddingEnd="10dp">
+            android:paddingEnd="10dp"
+            android:background="@color/white">
 
             <LinearLayout
                 android:layout_width="185dp"
@@ -143,8 +146,8 @@
 
                 <ImageView
                     android:id="@+id/credit_coin"
-                    android:layout_width="34dp"
-                    android:layout_height="34dp"
+                    android:layout_width="28dp"
+                    android:layout_height="24dp"
                     android:src="@drawable/credit_coin"
                     android:layout_marginEnd="6dp" />
 
@@ -167,7 +170,7 @@
                         android:layout_height="wrap_content"
                         android:text="7.08"
                         android:textColor="@android:color/black"
-                        android:textSize="12sp"
+                        android:textSize="10sp"
                         android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>

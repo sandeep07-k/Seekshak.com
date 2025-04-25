@@ -1,10 +1,15 @@
+@file:Suppress("DEPRECATION")
+
 package com.example.seekshakcom
 
 
 import android.content.Intent
+import android.graphics.Color
 import android.graphics.Typeface
+import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.view.WindowInsetsController
 import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.TextView
@@ -12,6 +17,8 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import com.example.seekshakcom.ui.myaccount.MyAccountFragment
 
 class StudentHomeActivity : AppCompatActivity() {
@@ -32,6 +39,16 @@ class StudentHomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_student_home)
 
+        // 1. Allow layout to draw behind system bars
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        // 2. Make status bar transparent
+        Color.TRANSPARENT.also { window.statusBarColor = it }
+
+        // 3. Optional: Change status bar icon color (dark icons = true)
+        val insetsController = WindowInsetsControllerCompat(window, window.decorView)
+        insetsController.isAppearanceLightStatusBars = true
+
+
 
         // Bottom Navigation
         homeBtn = findViewById(R.id.home_btn)
@@ -47,7 +64,7 @@ class StudentHomeActivity : AppCompatActivity() {
         // Set HomeFragment as default screen on launch
         val fragment = HomeFragment()
         val fragmentContainer = findViewById<FrameLayout>(R.id.student_home_fragment_container)
-        fragmentContainer.visibility = View.VISIBLE // Show fragment container
+        fragmentContainer.visibility = View.VISIBLE
         supportFragmentManager.beginTransaction()
             .replace(R.id.student_home_fragment_container, fragment)
             .commit()
@@ -72,6 +89,12 @@ class StudentHomeActivity : AppCompatActivity() {
 
             fragmentContainer.visibility = View.VISIBLE // Show fragment
             supportFragmentManager.beginTransaction()
+                .setCustomAnimations(
+                    android.R.anim.slide_in_left,  // enter
+                    android.R.anim.slide_out_right, // exit
+                    android.R.anim.slide_in_left,  // popEnter
+                    android.R.anim.slide_out_right // popExit
+                )
                 .replace(R.id.student_home_fragment_container, fragment)
                 .addToBackStack(null)
                 .commit()
@@ -108,7 +131,19 @@ class StudentHomeActivity : AppCompatActivity() {
                     R.color.darkest_blue
                 )
             )
-            // startActivity(Intent(this, ChatActivity::class.java))
+            val fragment = ChatsFragment()
+            fragmentContainer.visibility = View.VISIBLE
+            supportFragmentManager.beginTransaction()
+                .setCustomAnimations(
+                    android.R.anim.slide_in_left,  // enter
+                    android.R.anim.slide_out_right, // exit
+                    android.R.anim.slide_in_left,  // popEnter
+                    android.R.anim.slide_out_right // popExit
+                )
+                .replace(R.id.student_home_fragment_container, fragment)
+                .addToBackStack(null)
+                .commit()
+
         }
 
         myAccountBtn.setOnClickListener {

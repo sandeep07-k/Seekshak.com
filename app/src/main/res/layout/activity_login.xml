@@ -4,8 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    android:background="#FAF7F7"
-    android:padding="12dp">
+    android:padding="12dp"
+    android:background="#B3E5FC"
+    android:paddingTop="36dp">
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -1,10 +1,13 @@
 package com.example.seekshakcom
 
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.widget.VideoView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsControllerCompat
 
 class SplashActivity1 : AppCompatActivity() {
 
@@ -18,6 +21,14 @@ class SplashActivity1 : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash1)
+
+        // 1. Allow layout to draw behind system bars
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        // 2. Make status bar transparent
+        Color.TRANSPARENT.also { window.statusBarColor = it }
+        // 3. Optional: Change status bar icon color (dark icons = true)
+        val insetsController = WindowInsetsControllerCompat(window, window.decorView)
+        insetsController.isAppearanceLightStatusBars = true
 
         video1 = findViewById(R.id.video1)
         video2 = findViewById(R.id.video2)
