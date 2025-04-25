@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#B3E5FC">
+
+    <!-- Fixed Sky Blue Header -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="#B3E5FC"
+        android:padding="12dp">
+
+        <ImageView
+            android:id="@+id/backArrow"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentStart="true"
+            android:src="@drawable/ic_back_arrow"
+            android:contentDescription="Back" />
+
+        <TextView
+            android:id="@+id/headerTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tutor Preference Form"
+            android:textSize="18sp"
+            android:textColor="#000000"
+            android:layout_centerInParent="true"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <!-- Scrollable White Form -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="16dp"
+        android:background="@drawable/form_bg">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Section Title -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Need a Teacher For:"
+                android:textStyle="bold"
+                android:textSize="24sp"
+                android:textColor="#000000"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Class -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Class "
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:textColor="#000000"
+                android:layout_marginBottom="16dp" />
+            <EditText
+                android:id="@+id/classEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="eg: 11th, 12th, JEE, NEET etc."
+                android:background="@drawable/bg_edittext_rounded"
+                android:padding="12dp"
+                android:layout_marginBottom="12dp"/>
+
+            <!-- Subjects -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Subjects "
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:textColor="#000000"
+                android:layout_marginBottom="16dp" />
+            <EditText
+                android:id="@+id/subjectEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="eg: All Main, Math, Physics,etc."
+                android:background="@drawable/bg_edittext_rounded"
+                android:padding="12dp"
+                android:layout_marginBottom="12dp"/>
+
+            <!-- Education Board (Spinner) -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Education Board "
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:textColor="#000000"
+                android:layout_marginBottom="16dp" />
+
+            <EditText
+                android:id="@+id/edu_board"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints="CBSE BSEB, ICSE"
+                android:hint="eg: CBSE, BSEB, ICSE etc."
+                android:background="@drawable/bg_edittext_rounded"
+                android:padding="12dp"
+                android:layout_marginBottom="12dp"/>
+
+            <!-- Expected Fee -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fee "
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:textColor="#000000"
+                android:layout_marginBottom="16dp" />
+
+            <EditText
+                android:id="@+id/feeEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="eg: 250Rs/hr, 3500Rs/month"
+                android:background="@drawable/bg_edittext_rounded"
+                android:padding="12dp"
+                android:inputType="number"
+                android:layout_marginBottom="12dp"/>
+
+            <!-- Duration -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Duration "
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:textColor="#000000"
+                android:layout_marginBottom="16dp" />
+
+            <EditText
+                android:id="@+id/durationEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="eg: 1hr/day, 2hrs/day"
+                android:background="@drawable/bg_edittext_rounded"
+                android:padding="12dp"
+                android:layout_marginBottom="12dp"/>
+
+            <!-- No. of Classes -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Number of Classes"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:textColor="#000000"
+                android:layout_marginBottom="16dp" />
+            <EditText
+                android:id="@+id/noOfClassesEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="eg: 5-6 days/week"
+                android:background="@drawable/bg_edittext_rounded"
+                android:padding="12dp"
+                android:layout_marginBottom="12dp"/>
+
+            <!-- Gender Preference (Spinner) -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Gender Preference "
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:textColor="#000000"
+                android:layout_marginBottom="16dp" />
+
+            <Spinner
+                android:id="@+id/genderSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="45sp"
+                android:background="@drawable/bg_edittext_rounded"
+                android:padding="12dp"
+                android:layout_marginBottom="12dp"/>
+
+            <!-- Scheduled Demo Class (Date Picker) -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Demo scheduled "
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:textColor="#000000"
+                android:layout_marginBottom="16dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@drawable/bg_edittext_rounded"
+                android:padding="12dp"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="12dp">
+
+                <EditText
+                    android:id="@+id/demoClassDateEditText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Scheduled Demo Class"
+                    android:background="@android:color/transparent"
+                    android:focusable="false"
+                    android:clickable="true"/>
+
+                <ImageView
+                    android:id="@+id/calendarIcon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_calendar"
+                    android:contentDescription="Calendar" />
+            </LinearLayout>
+
+            <!-- Mode of Classes (Spinner) -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mode of Class "
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:textColor="#000000"
+                android:layout_marginBottom="16dp" />
+
+            <Spinner
+                android:id="@+id/modeOfClassesSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="45sp"
+                android:background="@drawable/bg_edittext_rounded"
+                android:padding="12dp"
+                android:layout_marginBottom="12dp"/>
+
+            <!-- Minimum Qualification -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Minimum Qualification "
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:textColor="#000000"
+                android:layout_marginBottom="16dp" />
+
+            <EditText
+                android:id="@+id/minQualificationEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="eg: 12th, BA, BSc, MA, BTech etc."
+                android:background="@drawable/bg_edittext_rounded"
+                android:padding="12dp"
+                android:layout_marginBottom="12dp"/>
+
+            <!-- Special Requirement -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Special Requirements "
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:textColor="#000000"
+                android:layout_marginBottom="16dp" />
+
+            <EditText
+                android:id="@+id/specialRequirementEditText"
+                android:layout_width="match_parent"
+                android:layout_height="65sp"
+                android:hint="eg: Good Communication Skills"
+                android:background="@drawable/bg_edittext_rounded"
+                android:padding="12dp"
+                android:minLines="3"
+                android:gravity="top|start"
+                android:inputType="textMultiLine"
+                android:layout_marginBottom="20dp"/>
+
+            <!-- Submit Button -->
+            <Button
+                android:id="@+id/submitButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="SUBMIT"
+                android:backgroundTint="#071E64"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                android:padding="12dp"
+                android:textSize="16sp"
+                android:layout_marginBottom="24dp"/>
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

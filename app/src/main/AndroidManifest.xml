@@ -41,6 +41,7 @@
         <activity android:name=".ResetPasswordActivity" />
         <activity android:name=".SignupActivity2"/>
         <activity android:name=".SignupActivity3"/>
+        <activity android:name=".AddPostActivity"/>
 
 
 

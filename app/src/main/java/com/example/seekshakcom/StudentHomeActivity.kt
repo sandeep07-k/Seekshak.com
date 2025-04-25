@@ -1,6 +1,7 @@
 package com.example.seekshakcom
 
 
+import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
 import android.view.View
@@ -91,9 +92,10 @@ class StudentHomeActivity : AppCompatActivity() {
         }
 
         addPostBtn.setOnClickListener {
-            Toast.makeText(this, "Add Post", Toast.LENGTH_SHORT).show()
-            // startActivity(Intent(this, AddPostActivity::class.java))
+            val intent = Intent(this, AddPostActivity::class.java)
+            startActivity(intent)
         }
+
 
         chatsBtn.setOnClickListener {
             resetAllTabs()
@@ -121,11 +123,17 @@ class StudentHomeActivity : AppCompatActivity() {
                 )
             ) // or your highlight color
 
-            val myAccountfragment = MyAccountFragment()
+            val fragment = MyAccountFragment()
             fragmentContainer.visibility = View.VISIBLE // Show fragment
 
             supportFragmentManager.beginTransaction()
-                .replace(R.id.student_home_fragment_container, myAccountfragment)
+                .setCustomAnimations(
+                    android.R.anim.slide_in_left,  // enter
+                    android.R.anim.slide_out_right, // exit
+                    android.R.anim.slide_in_left,  // popEnter
+                    android.R.anim.slide_out_right // popExit
+                )
+                .replace(R.id.student_home_fragment_container, fragment)
                 .addToBackStack(null)
                 .commit()
         }
