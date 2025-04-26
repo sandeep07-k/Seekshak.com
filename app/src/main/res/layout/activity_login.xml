@@ -1,185 +1,196 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
-    android:padding="12dp"
+    android:orientation="vertical"
     android:background="#B3E5FC"
     android:paddingTop="36dp">
 
-    <LinearLayout
+    <ScrollView
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:background="#FFFFFF"
+        android:padding="14dp">
 
-        <!-- Logo Section -->
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="167dp">
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="96dp"
-                android:layout_marginTop="30dp"
-                android:background="@drawable/title"
-                android:contentDescription="@string/todo" />
-
-        </RelativeLayout>
-
-        <!-- Login Card -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="440dp"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/login_card_bg"
-            android:elevation="4dp"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:layout_height="wrap_content"
+            android:background="#FFFFFF"
+            android:orientation="vertical">
 
-
-            <!-- Login As Text -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:gravity="center"
-                android:text="@string/login_as"
-                android:textColor="#000000"
-                android:textSize="26sp"
-                android:textStyle="bold" />
-
-
-            <!-- Role Buttons -->
-            <LinearLayout
-                style="?android:attr/buttonBarStyle"
-                android:layout_width="match_parent"
-                android:layout_height="42dp"
-                android:layout_marginBottom="16dp"
-                android:layout_marginEnd="15dp"
-                android:autofillHints=""
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:weightSum="3">
-
-                <Button
-                    android:id="@+id/btn_student"
-                    style="?android:attr/buttonBarButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/role_btn_bg"
-                    android:text="@string/Student"
-                    android:textColor="#FFFFFF"
-                    android:textStyle="bold"
-                    tools:ignore="VisualLintButtonSize,TouchTargetSizeCheck" />
-
-                <Button
-                    android:id="@+id/btn_teacher"
-                    style="?android:attr/buttonBarButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/role_btn_bg"
-                    android:text="@string/educator"
-                    android:textColor="#FFFFFF"
-                    android:textStyle="bold"
-                    tools:ignore="VisualLintButtonSize,TouchTargetSizeCheck" />
-
-                <Button
-                    android:id="@+id/btn_institute"
-                    style="?android:attr/buttonBarButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:autofillHints=""
-                    android:background="@drawable/role_btn_bg"
-                    android:text="@string/Institute"
-                    android:textColor="#FFFFFF"
-                    android:textStyle="bold"
-                    tools:ignore="VisualLintButtonSize,TouchTargetSizeCheck" />
-            </LinearLayout>
-
-            <!-- Email/Phone Input -->
-            <EditText
-                android:id="@+id/loginIdentifier"
-                android:layout_width="match_parent"
-                android:layout_height="67dp"
-                android:layout_marginEnd="4dp"
-                android:layout_marginBottom="8dp"
-                android:background="@drawable/edittext_bg"
-                android:hint="@string/enter_mobile_number_or_e_mail"
-                android:inputType="textEmailAddress"
-                android:minHeight="48dp"
-                android:padding="12dp"
-                android:textSize="16sp"
-                tools:ignore="VisualLintTextFieldSize" />
-
+            <!-- Logo Section -->
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="75dp"
-                android:layout_marginBottom="8dp">
+                android:layout_height="167dp">
 
-                <!-- Password Input -->
-                <EditText
-                    android:id="@+id/loginPassword"
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="96dp"
+                    android:layout_marginTop="30dp"
+                    android:background="@drawable/title"
+                    android:contentDescription="@string/todo" />
+
+            </RelativeLayout>
+
+            <!-- Login Card -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="440dp"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/login_card_bg"
+                android:elevation="4dp"
+                android:orientation="vertical"
+                android:padding="18dp">
+
+
+                <!-- Login As Text -->
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="4dp"
+                    android:layout_marginBottom="24dp"
+                    android:gravity="center"
+                    android:text="@string/login_as"
+                    android:textColor="@color/black"
+                    android:textSize="26sp"
+                    android:textStyle="bold" />
+
+
+                <!-- Role Buttons -->
+                <LinearLayout
+                    style="?android:attr/buttonBarStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="42dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginBottom="30dp"
+                    android:paddingHorizontal="4dp"
+                    android:autofillHints=""
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:weightSum="3">
+
+                    <Button
+                        android:id="@+id/btn_student"
+                        style="?android:attr/buttonBarButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="16dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/role_btn_bg"
+                        android:text="@string/Student"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold"
+                        tools:ignore="VisualLintButtonSize,TouchTargetSizeCheck" />
+
+                    <Button
+                        android:id="@+id/btn_teacher"
+                        style="?android:attr/buttonBarButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="16dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/role_btn_bg"
+                        android:text="@string/educator"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold"
+                        tools:ignore="VisualLintButtonSize,TouchTargetSizeCheck" />
+
+                    <Button
+                        android:id="@+id/btn_institute"
+                        style="?android:attr/buttonBarButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:autofillHints=""
+                        android:background="@drawable/role_btn_bg"
+                        android:text="@string/Institute"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold"
+                        tools:ignore="VisualLintButtonSize,TouchTargetSizeCheck" />
+                </LinearLayout>
+
+                <!-- Email/Phone Input -->
+                <EditText
+                    android:id="@+id/loginIdentifier"
+                    android:layout_width="match_parent"
+                    android:layout_height="67dp"
+                    android:paddingHorizontal="0dp"
                     android:layout_marginBottom="8dp"
                     android:background="@drawable/edittext_bg"
-                    android:hint="@string/enter_password"
-                    android:inputType="textPassword"
+                    android:hint="@string/enter_mobile_number_or_e_mail"
+                    android:inputType="textEmailAddress"
                     android:minHeight="48dp"
                     android:padding="12dp"
                     android:textSize="16sp"
                     tools:ignore="VisualLintTextFieldSize" />
-                <!-- Password Toggle -->
-                <ImageView
-                    android:id="@+id/passwordToggle"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginEnd="31dp"
-                    android:layout_marginBottom="31dp"
-                    android:contentDescription="@string/toggle_password_visibility"
-                    android:src="@drawable/ic_visibility" />
 
-            </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="75dp"
+                    android:layout_marginBottom="0dp">
 
-            <!-- Forgot Password Link -->
-            <TextView
-                android:id="@+id/forgotPasswordText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_marginBottom="16dp"
-                android:layout_marginEnd="18dp"
-                android:text="@string/forgot_password"
-                android:textColor="#0000FF"
-                android:textStyle="bold"
-                android:textSize="14sp" />
+                    <!-- Password Input -->
+                    <EditText
+                        android:id="@+id/loginPassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="8dp"
+                        android:background="@drawable/edittext_bg"
+                        android:hint="@string/enter_password"
+                        android:inputType="textPassword"
+                        android:minHeight="48dp"
+                        android:padding="12dp"
+                        android:textSize="16sp"
+                        tools:ignore="VisualLintTextFieldSize" />
+                    <!-- Password Toggle -->
+                    <ImageView
+                        android:id="@+id/passwordToggle"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginEnd="25dp"
+                        android:layout_marginBottom="31dp"
+                        android:contentDescription="@string/toggle_password_visibility"
+                        android:src="@drawable/ic_visibility" />
 
-            <!-- Login Button -->
-            <Button
-                android:id="@+id/loginButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="6dp"
-                android:background="@drawable/button_bg"
-                android:contentDescription="@string/login_button"
-                android:minWidth="120dp"
-                android:padding="10dp"
-                android:text="@string/login"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                </RelativeLayout>
 
+                <!-- Forgot Password Link -->
+                <TextView
+                    android:id="@+id/forgotPasswordText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginEnd="0dp"
+                    android:text="@string/forgot_password"
+                    android:textColor="#0000FF"
+                    android:textStyle="bold"
+                    android:textSize="14sp" />
+
+                <!-- Login Button -->
+                <Button
+                    android:id="@+id/loginButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="6dp"
+                    android:background="@drawable/role_btn_bg"
+                    android:contentDescription="@string/login_button"
+                    android:minWidth="120dp"
+                    android:padding="10dp"
+                    android:text="@string/login"
+                    android:textColor="#FFFFFF"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+
+
+            </LinearLayout>
             <!-- Progress -->
             <ProgressBar
                 android:id="@+id/progressBar"
@@ -187,23 +198,26 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="12dp"
-                android:visibility="gone" />
+                android:visibility="gone"
+                style="?android:attr/progressBarStyleLarge"/>
+
+
+            <TextView
+                android:id="@+id/goToSignup"
+                android:layout_width="166dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/rectangle_1"
+                android:text="@string/new_user"
+                android:textColor="#0000FF"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                tools:ignore="TextSizeCheck" />
+
+
+
         </LinearLayout>
+    </ScrollView>
 
-        <TextView
-            android:id="@+id/goToSignup"
-            android:layout_width="166dp"
-            android:layout_height="25dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/rectangle_1"
-            android:text="@string/new_user"
-            android:textColor="#0000FF"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            tools:ignore="TextSizeCheck" />
-
-
-
-    </LinearLayout>
-</ScrollView>
+</LinearLayout>

@@ -89,12 +89,7 @@ class StudentHomeActivity : AppCompatActivity() {
 
             fragmentContainer.visibility = View.VISIBLE // Show fragment
             supportFragmentManager.beginTransaction()
-                .setCustomAnimations(
-                    android.R.anim.slide_in_left,  // enter
-                    android.R.anim.slide_out_right, // exit
-                    android.R.anim.slide_in_left,  // popEnter
-                    android.R.anim.slide_out_right // popExit
-                )
+
                 .replace(R.id.student_home_fragment_container, fragment)
                 .addToBackStack(null)
                 .commit()
@@ -111,7 +106,12 @@ class StudentHomeActivity : AppCompatActivity() {
                     R.color.darkest_blue
                 )
             )
-            // startActivity(Intent(this, MyPostsActivity::class.java))
+            val fragment = MyPostsFragment()
+            fragmentContainer.visibility = View.VISIBLE
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.student_home_fragment_container, fragment)
+                .addToBackStack(null)
+                .commit()
         }
 
         addPostBtn.setOnClickListener {
@@ -134,12 +134,7 @@ class StudentHomeActivity : AppCompatActivity() {
             val fragment = ChatsFragment()
             fragmentContainer.visibility = View.VISIBLE
             supportFragmentManager.beginTransaction()
-                .setCustomAnimations(
-                    android.R.anim.slide_in_left,  // enter
-                    android.R.anim.slide_out_right, // exit
-                    android.R.anim.slide_in_left,  // popEnter
-                    android.R.anim.slide_out_right // popExit
-                )
+
                 .replace(R.id.student_home_fragment_container, fragment)
                 .addToBackStack(null)
                 .commit()
@@ -162,12 +157,7 @@ class StudentHomeActivity : AppCompatActivity() {
             fragmentContainer.visibility = View.VISIBLE // Show fragment
 
             supportFragmentManager.beginTransaction()
-                .setCustomAnimations(
-                    android.R.anim.slide_in_left,  // enter
-                    android.R.anim.slide_out_right, // exit
-                    android.R.anim.slide_in_left,  // popEnter
-                    android.R.anim.slide_out_right // popExit
-                )
+
                 .replace(R.id.student_home_fragment_container, fragment)
                 .addToBackStack(null)
                 .commit()
