@@ -34,7 +34,7 @@
     <string name="Student">Student</string>
     <string name="new_user">New User ? Sign up</string>
     <string name="sign_up">Sign Up</string>
-    <string name="login_as">Login As</string>
+    <string name="login_as">Login</string>
     <string name="mobile_number_10_digits">Mobile Number (10 digits)</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="already_have_an_account_login_login">already_have_an_account_login_?_Login</string>

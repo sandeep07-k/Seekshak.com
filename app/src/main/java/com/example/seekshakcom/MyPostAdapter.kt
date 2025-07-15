@@ -1,18 +1,23 @@
 package com.example.seekshakcom
 
-import com.example.seekshakcom.model.MyPost
-
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
+import android.widget.*
+import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
+import com.example.seekshakcom.model.MyPost
 import java.text.SimpleDateFormat
 import java.util.*
 
-class MyPostAdapter(private val postList: List<MyPost>) :
-    RecyclerView.Adapter<MyPostAdapter.PostViewHolder>() {
+class MyPostAdapter(
+    private val postList: List<MyPost>,
+    private val onRepost: (MyPost) -> Unit,
+    private val onMarkFilled: (MyPost) -> Unit,
+    private val onRemove: (MyPost) -> Unit,
+    private val onEdit: (MyPost) -> Unit
+) : RecyclerView.Adapter<MyPostAdapter.PostViewHolder>() {
 
     class PostViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val postedDate: TextView = itemView.findViewById(R.id.from_to_date)
@@ -23,57 +28,109 @@ class MyPostAdapter(private val postList: List<MyPost>) :
         val duration: TextView = itemView.findViewById(R.id.duration_Details)
         val genderPreference: TextView = itemView.findViewById(R.id.gender_Preference)
         val expectedFee: TextView = itemView.findViewById(R.id.fee_Details)
+        val classTiming: TextView = itemView.findViewById(R.id.class_Timing)
+        val classSchedule: TextView = itemView.findViewById(R.id.class_Schedule)
+        val modeOfClass: TextView = itemView.findViewById(R.id.mode_Of_Class)
+        val qualification: TextView = itemView.findViewById(R.id.min_Qualification)
+        val demoClassDate: TextView = itemView.findViewById(R.id.demo_Class_Date)
+        val specialReq: TextView = itemView.findViewById(R.id.special_Requirement)
+
         val btnTotalApplications: Button = itemView.findViewById(R.id.btn_total_applications)
-        val btnViewDetails: Button = itemView.findViewById(R.id.btn_Edit_Details)
+        val btnEditDetails: Button = itemView.findViewById(R.id.btn_Edit_Details)
+        val btnRepost: Button = itemView.findViewById(R.id.btn_repost)
+        val btnMarkFilled: Button = itemView.findViewById(R.id.btn_mark_filled)
+
+        val layoutExpired: LinearLayout = itemView.findViewById(R.id.layout_expired_actions)
+        val moreOptions: ImageButton = itemView.findViewById(R.id.moreOptionsButton)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_post, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_post, parent, false)
         return PostViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
         val post = postList[position]
 
-        // Update Posted Date to FROM and TO
-        val inputFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
+        // Format createdAt date
+        val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+        inputFormat.timeZone = TimeZone.getTimeZone("UTC")
         val outputFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
 
         try {
-            val postDate = inputFormat.parse(post.postedDate)
+            val date = inputFormat.parse(post.createdAt)
             val calendar = Calendar.getInstance()
-            calendar.time = postDate!!
-
+            calendar.time = date!!
             val fromDate = outputFormat.format(calendar.time)
-
             calendar.add(Calendar.MONTH, 1)
             val toDate = outputFormat.format(calendar.time)
-
             holder.postedDate.text = "FROM: $fromDate - TO: $toDate"
-
         } catch (e: Exception) {
-            e.printStackTrace()
             holder.postedDate.text = "Invalid Date"
         }
 
+        // Set field values
         holder.tuitionCode.text = "Tuition Code: ${post.tuitionCode}"
-        holder.classDetails.text = "Class: ${post.classDetails}"
-        holder.subjectDetails.text = "Subject: ${post.subjectDetails}"
-        holder.boardDetails.text = "Education Board: ${post.boardDetails}"
-        holder.duration.text = "Duration: ${post.duration} hrs/day"
-        holder.genderPreference.text = "Gender Preference: ${post.genderPreference}"
-        holder.expectedFee.text = "Expected Fee: ${post.expectedFee} rs/month"
+        holder.classDetails.text = "Class: ${post.className}"
+        holder.subjectDetails.text = "Subject: ${post.subject}"
+        holder.boardDetails.text = "Education Board: ${post.educationBoard}"
+        holder.duration.text = "Duration: ${post.duration} "
+        holder.genderPreference.text = "Gender Preference: ${post.gender}"
+        holder.expectedFee.text = "Expected Fee: ${post.fee} "
+        holder.classTiming.text = "Class Timing: ${post.classTiming}"
+        holder.classSchedule.text = "Class Schedule: ${post.classSchedule}"
+        holder.modeOfClass.text = "Mode: ${post.modeOfClass}"
+        holder.qualification.text = "Min Qualification: ${post.qualification}"
+        holder.demoClassDate.text = "Demo Class Date: ${if (post.demoClassDate.isBlank()) "None" else post.demoClassDate}"
+        holder.specialReq.text = "Special Req: ${if (post.specialReq.isBlank()) "None" else post.specialReq}"
+
+
+        // Status logic
+        if (post.status == "expired") {
+            holder.itemView.alpha = 0.5f
+            holder.layoutExpired.visibility = View.VISIBLE
+        } else {
+            holder.itemView.alpha = 1f
+            holder.layoutExpired.visibility = View.GONE
+        }
+
+        // Button actions
+        holder.btnEditDetails.setOnClickListener {
+            val context = holder.itemView.context
+            val intent = Intent(context, EditPostActivity::class.java)
+            intent.putExtra("POST_DATA", postList[position]) // or 'post' if already defined
+            context.startActivity(intent)
+        }
+
 
         holder.btnTotalApplications.setOnClickListener {
-            // TODO: handle total applications click
+            // TODO
         }
-        holder.btnViewDetails.setOnClickListener {
-            // TODO: handle view details click
+
+        holder.btnRepost.setOnClickListener {
+            onRepost(post)
+        }
+
+        holder.btnMarkFilled.setOnClickListener {
+            onMarkFilled(post)
+        }
+
+        holder.moreOptions.setOnClickListener { view ->
+            val popup = PopupMenu(view.context, view)
+            popup.menuInflater.inflate(R.menu.menu_post_options, popup.menu)
+            popup.setOnMenuItemClickListener {
+                when (it.itemId) {
+                    R.id.menu_remove -> {
+                        onRemove(post)
+                        true
+                    }
+                    else -> false
+                }
+            }
+            popup.show()
         }
     }
 
-    override fun getItemCount(): Int {
-        return postList.size
-    }
+    override fun getItemCount(): Int = postList.size
+
 }

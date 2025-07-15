@@ -1,84 +1,259 @@
 package com.example.seekshakcom
 
+
+import androidx.lifecycle.lifecycleScope
+import com.example.seekshakcom.model.PostRequest
+import com.example.seekshakcom.network.ApiClient
+import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.launch
 import android.app.DatePickerDialog
 import android.graphics.Color
 import android.os.Bundle
+import android.text.InputType
+import android.view.View
 import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import com.google.android.material.snackbar.Snackbar
 import java.util.*
 
 class AddPostActivity : AppCompatActivity() {
 
     private lateinit var backArrow: ImageView
-    private lateinit var classEditText: EditText
-    private lateinit var subjectEditText: EditText
-    private lateinit var eduBoardEditText: EditText
+    private lateinit var classEditText: AutoCompleteTextView
+    private lateinit var subjectEditText: AutoCompleteTextView
+    private lateinit var eduBoardEditText: AutoCompleteTextView
     private lateinit var feeEditText: EditText
-    private lateinit var durationEditText: EditText
-    private lateinit var noOfClassesEditText: EditText
-    private lateinit var genderSpinner: Spinner
+    private lateinit var feeTypeRadioGroup: RadioGroup
+    private lateinit var durationEditText: AutoCompleteTextView
+    private lateinit var classScheduleEditText: AutoCompleteTextView
+    private lateinit var classTimingEditText: AutoCompleteTextView
+    private lateinit var genderSpinner: AutoCompleteTextView
     private lateinit var demoClassDateEditText: EditText
-    private lateinit var calendarIcon: ImageView
-    private lateinit var modeOfClassesSpinner: Spinner
-    private lateinit var minQualificationEditText: EditText
+    private lateinit var modeOfClassesSpinner: AutoCompleteTextView
+    private lateinit var minQualificationEditText: AutoCompleteTextView
     private lateinit var specialRequirementEditText: EditText
     private lateinit var submitButton: Button
+    private lateinit var progressBar: ProgressBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_post)
 
-        // 1. Allow layout to draw behind system bars
         WindowCompat.setDecorFitsSystemWindows(window, false)
-        // 2. Make status bar transparent
-        Color.TRANSPARENT.also { window.statusBarColor = it }
-
-        // 3. Optional: Change status bar icon color (dark icons = true)
+        window.statusBarColor = Color.TRANSPARENT
         val insetsController = WindowInsetsControllerCompat(window, window.decorView)
         insetsController.isAppearanceLightStatusBars = true
 
-        // Initialize Views
+        // Initialize views
         backArrow = findViewById(R.id.backArrow)
         classEditText = findViewById(R.id.classEditText)
         subjectEditText = findViewById(R.id.subjectEditText)
         eduBoardEditText = findViewById(R.id.edu_board)
         feeEditText = findViewById(R.id.feeEditText)
+        feeTypeRadioGroup = findViewById(R.id.feeTypeRadioGroup)
         durationEditText = findViewById(R.id.durationEditText)
-        noOfClassesEditText = findViewById(R.id.noOfClassesEditText)
+        classScheduleEditText = findViewById(R.id.classScheduleEditText)
+        classTimingEditText = findViewById(R.id.classTimingEditText)
         genderSpinner = findViewById(R.id.genderSpinner)
         demoClassDateEditText = findViewById(R.id.demoClassDateEditText)
-        calendarIcon = findViewById(R.id.calendarIcon)
         modeOfClassesSpinner = findViewById(R.id.modeOfClassesSpinner)
         minQualificationEditText = findViewById(R.id.minQualificationEditText)
         specialRequirementEditText = findViewById(R.id.specialRequirementEditText)
         submitButton = findViewById(R.id.submitButton)
+        progressBar = findViewById(R.id.progressBar)
 
+        setupClassSuggestions()
+        setupSubjectSuggestions()
+        setupBoardSuggestions()
+        setupDurationDropdown()
         setupGenderSpinner()
         setupModeOfClassesSpinner()
+        setupclassScheduleDropdown()
+        setupClassTimingDropdown()
+        setupQualificationSuggestions()
         setupCalendarPicker()
+        setupSpecialRequirementSuggestions()
+
+
+
 
         backArrow.setOnClickListener {
-            finish() // Go back to previous screen
+            finish()
         }
 
         submitButton.setOnClickListener {
             submitForm()
         }
     }
+    private fun setupClassSuggestions() {
+        val classOptions = listOf(
+            "LKG", "UKG",
+            "Class 1", "Class 2", "Class 3", "Class 4", "Class 5",
+            "Class 6", "Class 7", "Class 8", "Class 9", "Class 10",
+            "Class 11 (Science)", "Class 11 (Commerce)", "Class 11 (Arts)",
+            "Class 12 (Science)", "Class 12 (Commerce)", "Class 12 (Arts)",
+            "Diploma", "BCA", "B.Sc", "B.Com", "BA",
+            "MCA", "M.Sc", "M.Com", "MA", "Other"
+        )
+        val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, classOptions)
+        classEditText.setAdapter(adapter)
+    }
+    private fun setupSubjectSuggestions() {
+        val subjects = listOf(
+            "All Subjects", "Mathematics","Science", "Social Science","English", "Hindi",
+            "Physics", "Chemistry", "Biology", "Social Studies", "History", "Geography", "Civics",
+            "Economics (Basic)", "Computer Science",
+
+            "Drawing", "Computer Basics", "Storytelling", "Handwriting Improvement",
+            "Spoken English", "Hindi Grammar",
+            "Sanskrit", "Moral Education", "Environmental Studies (EVS)", "General Knowledge",
+
+
+        )
+        val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, subjects)
+        subjectEditText.setAdapter(adapter)
+    }
+    private fun setupBoardSuggestions() {
+        val boards = listOf(
+            "CBSE",
+            "BSEB",
+            "ICSE",
+            "State Board",
+            "UP Board",
+            "Bihar Board",
+            "Rajasthan Board",
+            "MP Board",
+            "WB Board",
+            "Punjab Board",
+            "Maharashtra Board",
+            "Karnataka Board",
+            "Tamil Nadu Board",
+            "Kerala Board",
+            "Gujarat Board",
+            "Telangana Board",
+            "Andhra Pradesh Board",
+            "Odisha Board",
+            "Haryana Board",
+            "Jharkhand Board",
+            "Chhattisgarh Board",
+            "Assam Board",
+            "NIOS (National Institute of Open Schooling)",
+            "Other"
+        )
+
+        val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, boards)
+        eduBoardEditText.setAdapter(adapter)
+    }
+    private fun setupDurationDropdown() {
+        val durationOptions = listOf("45 min","0.5 hour", "1 hour", "1.5 hours", "2 hours", "2.5 hours", "3 hours"
+            )
+        val durationAdapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, durationOptions)
+
+        durationEditText.setAdapter(durationAdapter)
+        durationEditText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_WORDS
+
+    }
+    private fun setupclassScheduleDropdown() {
+        val classDayOptions = listOf(
+            "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun",
+            "Mon-Wed", "Tue-Thu", "Wed-Fri", "Thu-Sat", "Sat-Sun",
+            "Mon-Wed-Fri (MWF)",
+            "Tue-Thu-Sat (TTS)",
+            "Mon to Fri",
+            "Mon to Sat",
+            "Daily (7 Days)",
+            "Alternate Days",
+            "Weekends Only",
+            "Custom Days"
+        )
+
+        val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line,classDayOptions)
+        classScheduleEditText.setAdapter(adapter)
+
+    }
+    private fun setupClassTimingDropdown() {
+        val timingOptions = listOf(
+            "7 AM – 8 AM ",
+            "8 AM – 9 AM",
+            "9 AM – 10 AM",
+            "10 AM – 11 AM",
+            "11 AM – 12 PM",
+            "12 PM – 1 PM",
+            "1 PM – 2 PM",
+            "2 PM – 3 PM",
+            "3 PM – 4 PM",
+            "4 PM – 5 PM",
+            "5 PM – 6 PM",
+            "6 PM – 7 PM",
+            "7 PM – 8 PM",
+            "8 PM – 9 PM",
+            "7 AM – 9 AM",
+            "9 AM – 11 AM",
+            "11 AM – 1 PM",
+            "1 PM – 3 PM",
+            "3 PM – 5 PM",
+            "5 PM – 7 PM",
+            "7 PM – 9 PM",
+            "Morning Shift",
+            "Evening Shift",
+            "Flexible Timing",
+            "Custom Timing"
+        )
+
+        val timingAdapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_dropdown_item_1line,
+            timingOptions
+        )
+
+        classTimingEditText.setAdapter(timingAdapter)
+
+    }
+
+
+
+
 
     private fun setupGenderSpinner() {
-        val genderOptions = listOf("No Preference", "Male", "Female")
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, genderOptions)
-        genderSpinner.adapter = adapter
+        val genderOptions = listOf(
+            "Male Tutor Only",
+            "Female Tutor Only",
+            "Any Available Tutor"
+        )
+        val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, genderOptions)
+        genderSpinner.setAdapter(adapter)
+        genderSpinner.setText("Any Available tutor", true)
     }
 
     private fun setupModeOfClassesSpinner() {
-        val modeOptions = listOf("Offline", "Online", "Both")
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, modeOptions)
-        modeOfClassesSpinner.adapter = adapter
+        val modeOptions = listOf(
+            "Offline (In-person at Home)",
+            "Online (Video Call Based)",
+            "Hybrid (Both Online and Offline)"
+        )
+
+        val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, modeOptions)
+        modeOfClassesSpinner.setAdapter(adapter)
+        modeOfClassesSpinner.setText("Offline (In-person at Home)",true)
     }
+    private fun setupQualificationSuggestions() {
+        val qualificationOptions = listOf(
+            "Any Available tutor","10th Pass", "12th Pass", "Graduate", "Postgraduate",
+            "B.Ed", "M.Ed", "Ph.D", "Diploma Holder", "Professional Degree", "Not Required"
+        )
+
+        val qualificationAdapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_dropdown_item_1line,
+            qualificationOptions
+        )
+
+        minQualificationEditText.setAdapter(qualificationAdapter)
+    }
+
 
     private fun setupCalendarPicker() {
         val calendar = Calendar.getInstance()
@@ -91,37 +266,184 @@ class AddPostActivity : AppCompatActivity() {
         demoClassDateEditText.setOnClickListener {
             showDatePicker(calendar, dateSetListener)
         }
-
-        calendarIcon.setOnClickListener {
-            showDatePicker(calendar, dateSetListener)
-        }
     }
 
     private fun showDatePicker(calendar: Calendar, listener: DatePickerDialog.OnDateSetListener) {
-        DatePickerDialog(
+        val datePickerDialog = DatePickerDialog(
             this,
             listener,
             calendar.get(Calendar.YEAR),
             calendar.get(Calendar.MONTH),
             calendar.get(Calendar.DAY_OF_MONTH)
-        ).show()
+        )
+        datePickerDialog.datePicker.minDate = System.currentTimeMillis() - 1000
+        datePickerDialog.show()
+    }
+    private fun setupSpecialRequirementSuggestions() {
+        val specialRequirementSuggestions = listOf(
+            "Good communication skills",
+            "Experienced with slow learners",
+            "Comfortable with online teaching",
+            "Knows phonics & early reading",
+            "ICSE background preferred",
+            "Female tutor preferred",
+            "Weekend classes only",
+            "Experienced with board exam prep",
+            "Can teach multiple subjects",
+            "Comfortable teaching in Hindi",
+            "Comfortable teaching in English"
+        )
+
+        val adapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_dropdown_item_1line,
+            specialRequirementSuggestions
+        )
+
+        (specialRequirementEditText as? AutoCompleteTextView)?.setAdapter(adapter)
     }
 
+
     private fun submitForm() {
-        // Collect the data from fields
         val className = classEditText.text.toString().trim()
         val subject = subjectEditText.text.toString().trim()
         val educationBoard = eduBoardEditText.text.toString().trim()
-        val fee = feeEditText.text.toString().trim()
+        val feeAmount = feeEditText.text.toString().trim()
+        val feeType = when (feeTypeRadioGroup.checkedRadioButtonId) {
+            R.id.radioHourly -> "hourly"
+            R.id.radioMonthly -> "monthly"
+            else -> ""
+        }
         val duration = durationEditText.text.toString().trim()
-        val noOfClasses = noOfClassesEditText.text.toString().trim()
-        val gender = genderSpinner.selectedItem.toString()
+        val classSchedule = classScheduleEditText.text.toString().trim()
+        val classTiming = classTimingEditText.text.toString().trim()
+        val gender = genderSpinner.text.toString()
         val demoClassDate = demoClassDateEditText.text.toString().trim()
-        val modeOfClass = modeOfClassesSpinner.selectedItem.toString()
+        val modeOfClass = modeOfClassesSpinner.text.toString()
         val qualification = minQualificationEditText.text.toString().trim()
         val specialReq = specialRequirementEditText.text.toString().trim()
 
-        // You can now send this data to your server or save locally
-        Toast.makeText(this, "Form Submitted Successfully!", Toast.LENGTH_SHORT).show()
+        val rootView = findViewById<LinearLayout>(R.id.rootLayout) ?: return
+
+        if (className.isEmpty()) { classEditText.error = "Please enter class"; classEditText.requestFocus(); return }
+        if (subject.isEmpty()) { subjectEditText.error = "Please enter subjects"; subjectEditText.requestFocus(); return }
+        if (educationBoard.isEmpty()) { eduBoardEditText.error = "Enter education board"; eduBoardEditText.requestFocus(); return }
+        if (feeAmount.isEmpty() || feeType.isEmpty()) { feeEditText.error = "Enter fee and select type"; feeEditText.requestFocus(); return }
+        if (duration.isEmpty()) { durationEditText.error = "Enter duration"; durationEditText.requestFocus(); return }
+        if (classSchedule.isEmpty()) { classScheduleEditText.error = "Enter days"; classScheduleEditText.requestFocus(); return }
+        if (gender.isEmpty()) { Snackbar.make(rootView, "Please select preferred gender", Snackbar.LENGTH_SHORT).show(); return }
+        if (modeOfClass.isEmpty()) { Snackbar.make(rootView, "Please select mode of class", Snackbar.LENGTH_SHORT).show(); return }
+        if (qualification.isEmpty()) { minQualificationEditText.error = "Enter minimum qualification"; minQualificationEditText.requestFocus(); return }
+        if (specialReq.length > 200) { specialRequirementEditText.error = "Too long – max 200 characters"; specialRequirementEditText.requestFocus(); return }
+
+        val fee = "₹${feeAmount}/${if (feeType == "hourly") "hr" else "month"}"
+
+        val post = PostRequest(
+            className,
+            subject,
+            educationBoard,
+            fee,
+            duration,
+            classSchedule,
+            classTiming,
+            gender,
+            demoClassDate,
+            modeOfClass,
+            qualification,
+            specialReq
+
+        )
+
+
+        val user = FirebaseAuth.getInstance().currentUser
+        if (user == null) {
+            Snackbar.make(rootView, "You're not logged in", Snackbar.LENGTH_LONG).show()
+            return
+        }
+
+        submitButton.isEnabled = false
+        submitButton.animate().alpha(0.5f).setDuration(300).start()
+        progressBar.visibility = View.VISIBLE
+
+        user.getIdToken(true)
+            .addOnSuccessListener { result ->
+                val token = result.token
+                if (token.isNullOrEmpty()) {
+                    progressBar.visibility = View.GONE
+                    Snackbar.make(rootView, "Token generation failed", Snackbar.LENGTH_LONG).show()
+                    submitButton.animate().alpha(1f).setDuration(300).withEndAction {
+                        submitButton.isEnabled = true
+                    }.start()
+                    return@addOnSuccessListener
+                }
+
+                lifecycleScope.launch {
+                    try {
+                        val response = ApiClient.instance.addPost("Bearer $token", post)
+                        progressBar.visibility = View.GONE
+
+                        if (response.isSuccessful) {
+                            AlertDialog.Builder(this@AddPostActivity)
+                                .setTitle("Success")
+                                .setMessage("Post submitted successfully!")
+                                .setPositiveButton("OK", null)
+                                .show()
+
+                            clearFormFields()
+                            submitButton.animate().alpha(0.5f).setDuration(300).start()
+                            submitButton.isEnabled = false
+                        } else {
+                            AlertDialog.Builder(this@AddPostActivity)
+                                .setTitle("Error")
+                                .setMessage("Something went wrong. Code: ${response.code()}")
+                                .setPositiveButton("OK", null)
+                                .show()
+
+                            submitButton.animate().alpha(1f).setDuration(300).withEndAction {
+                                submitButton.isEnabled = true
+                            }.start()
+                        }
+                    } catch (e: Exception) {
+                        progressBar.visibility = View.GONE
+                        AlertDialog.Builder(this@AddPostActivity)
+                            .setTitle("Network Error")
+                            .setMessage("Something went wrong: ${e.localizedMessage}")
+                            .setPositiveButton("OK", null)
+                            .show()
+
+                        submitButton.animate().alpha(1f).setDuration(300).withEndAction {
+                            submitButton.isEnabled = true
+                        }.start()
+                    }
+                }
+            }
+            .addOnFailureListener {
+                progressBar.visibility = View.GONE
+                AlertDialog.Builder(this@AddPostActivity)
+                    .setTitle("Authentication Failed")
+                    .setMessage("Something went wrong: ${it.message}")
+                    .setPositiveButton("OK", null)
+                    .show()
+
+                submitButton.animate().alpha(1f).setDuration(300).withEndAction {
+                    submitButton.isEnabled = true
+                }.start()
+            }
+    }
+
+    private fun clearFormFields() {
+        classEditText.text.clear()
+        subjectEditText.text.clear()
+        eduBoardEditText.text.clear()
+        feeEditText.text.clear()
+        durationEditText.text.clear()
+        classScheduleEditText.text.clear()
+        demoClassDateEditText.text.clear()
+        minQualificationEditText.text.clear()
+        specialRequirementEditText.text.clear()
+
+        genderSpinner.setText("", false)
+        modeOfClassesSpinner.setText("", false)
+        feeTypeRadioGroup.clearCheck()
     }
 }

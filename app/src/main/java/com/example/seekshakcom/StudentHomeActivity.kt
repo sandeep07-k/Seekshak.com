@@ -6,20 +6,19 @@ package com.example.seekshakcom
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
-import android.os.Build
 import android.os.Bundle
 import android.view.View
-import android.view.WindowInsetsController
 import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import com.example.seekshakcom.ui.myaccount.MyAccountFragment
+
 
 class StudentHomeActivity : AppCompatActivity() {
 
@@ -64,16 +63,21 @@ class StudentHomeActivity : AppCompatActivity() {
         // Set HomeFragment as default screen on launch
         val fragment = HomeFragment()
         val fragmentContainer = findViewById<FrameLayout>(R.id.student_home_fragment_container)
+        homeBtn.isSelected = true
+        homeBtn.setImageResource(R.drawable.ic_home_filled) // use filled icon
+        homeText.setTypeface(null, Typeface.BOLD)
+        homeText.setTextColor(
+            ContextCompat.getColor(
+                this,
+                R.color.darkest_blue
+            )
+        )
         fragmentContainer.visibility = View.VISIBLE
         supportFragmentManager.beginTransaction()
             .replace(R.id.student_home_fragment_container, fragment)
             .commit()
 
 
-
-
-
-        // Listeners
 
         homeBtn.setOnClickListener {
             resetAllTabs()
@@ -118,6 +122,8 @@ class StudentHomeActivity : AppCompatActivity() {
             val intent = Intent(this, AddPostActivity::class.java)
             startActivity(intent)
         }
+
+
 
 
         chatsBtn.setOnClickListener {
@@ -165,14 +171,34 @@ class StudentHomeActivity : AppCompatActivity() {
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 val fm = supportFragmentManager
-                if (fm.backStackEntryCount > 0) {
-                    fm.popBackStack()
+                val currentFragment = fm.findFragmentById(R.id.student_home_fragment_container)
+
+                if (currentFragment !is HomeFragment) {
+                    // Navigate to Home tab
+                    resetAllTabs()
+                    selectHomeTab()
+
+                    supportFragmentManager.popBackStack(null, androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.student_home_fragment_container, HomeFragment())
+                        .commit()
                 } else {
-                    isEnabled = false
-                    onBackPressedDispatcher.onBackPressed()
+                    // Already on HomeFragment – show exit confirmation
+                    AlertDialog.Builder(this@StudentHomeActivity)
+                        .setTitle("Exit App")
+                        .setMessage("Are you sure you want to exit?")
+                        .setPositiveButton("Yes") { _, _ ->
+                            finishAffinity() // Exit app completely
+                        }
+                        .setNegativeButton("No", null)
+                        .show()
                 }
+
             }
         })
+
+
+
 
 
     }
@@ -191,6 +217,17 @@ class StudentHomeActivity : AppCompatActivity() {
         resetTab(myPostBtn, myPostText, R.drawable.ic_mypost)
 
 
+    }
+    private fun selectHomeTab() {
+        homeBtn.isSelected = true
+        homeBtn.setImageResource(R.drawable.ic_home_filled) // use filled icon
+        homeText.setTypeface(null, Typeface.BOLD)
+        homeText.setTextColor(
+            ContextCompat.getColor(
+                this,
+                R.color.darkest_blue
+            )
+        )
     }
 
 

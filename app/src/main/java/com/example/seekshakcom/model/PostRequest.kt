@@ -1,11 +1,6 @@
 package com.example.seekshakcom.model
 
-import java.io.Serializable
-
-data class MyPost(
-    val _id: String,
-    val userId: String,
-    val tuitionCode: Int,
+data class PostRequest(
     val className: String,
     val subject: String,
     val educationBoard: String,
@@ -17,7 +12,6 @@ data class MyPost(
     val demoClassDate: String,
     val modeOfClass: String,
     val qualification: String,
-    val specialReq: String,
-    val createdAt: String,
-    val status: String = "active"
-) : Serializable
+    val specialReq: String
+
+)

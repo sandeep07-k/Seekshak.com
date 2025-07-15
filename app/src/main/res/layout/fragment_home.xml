@@ -2,9 +2,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:paddingTop="36dp"
     android:background="#B3E5FC"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <LinearLayout
@@ -29,10 +28,10 @@
             <ImageView
                 android:id="@+id/imageView"
                 android:layout_width="125dp"
-                android:layout_height="25dp"
+                android:layout_height="30dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="12dp"
                 android:contentDescription="@string/seekshak_com"
                 android:src="@drawable/seekshak_com" />
 
@@ -62,9 +61,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="0dp"
-                    android:text="Bakarganj, Patna"
+                    android:text="Select location"
                     android:textColor="#003320"
-                    android:textSize="14sp"
+                    android:textSize="12sp"
                     android:textStyle="bold" />
 
                 <ImageView
@@ -178,7 +177,7 @@
 
         <ScrollView
             android:id="@+id/student_home_scroll"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fillViewport="true"
             android:background="#FFFFFF"
