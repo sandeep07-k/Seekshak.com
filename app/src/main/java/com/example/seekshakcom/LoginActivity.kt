@@ -3,7 +3,6 @@ package com.example.seekshakcom
 import android.content.*
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
@@ -191,6 +190,7 @@ class LoginActivity : AppCompatActivity() {
             sendOtpButton.isEnabled = true
             sendOtpButton.alpha = 1f
 
+
             Toast.makeText(this@LoginActivity, "Failed: ${e.localizedMessage}", Toast.LENGTH_SHORT).show()
         }
         override fun onCodeSent(verificationId: String, token: PhoneAuthProvider.ForceResendingToken) {
@@ -264,9 +264,13 @@ class LoginActivity : AppCompatActivity() {
                 if (response.isSuccessful && response.body() != null) {
                     val role = response.body()!!.role
                     val userId = response.body()!!.userId
-                    Log.d("LoginCheck", "Fetched userId = $userId, role = $role")
-                    saveUserInfo(role,userId)
+                    val token = response.body()?.token ?: "" // ⬅️ make sure your model has this
+
+
+                    saveUserInfo(role, userId, token)
+
                     redirectToHome(role)
+
                 } else {
                     verifyOtpButton.alpha = 1f
                     verifyOtpButton.isEnabled = true
@@ -284,14 +288,18 @@ class LoginActivity : AppCompatActivity() {
         })
     }
 
-    private fun saveUserInfo(role: String, userId: String) {
+    private fun saveUserInfo(role: String, userId: String, token: String) {
         getSharedPreferences("UserPrefs", MODE_PRIVATE).edit().apply {
+            putString("token", token)  // ✅ token is now defined and correct
             putBoolean("isLoggedIn", true)
             putString("userId", userId)
             putString("role", role)
             apply()
         }
+
+
     }
+
 
 
 

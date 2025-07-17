@@ -10,6 +10,8 @@ import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import android.content.Context
+
 
 
 class HomeFragment : Fragment() {
@@ -41,10 +43,10 @@ class HomeFragment : Fragment() {
                 val selectedCity = data?.getStringExtra("selected_city") ?: ""
                 val selectedArea = data?.getStringExtra("selected_area") ?: ""
 
-                // Update your locationText TextView
                 view?.findViewById<TextView>(R.id.locationText)?.text = "$selectedArea, $selectedCity"
             }
         }
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -61,9 +63,16 @@ class HomeFragment : Fragment() {
         val locationSelector = view.findViewById<LinearLayout>(R.id.locationSelector)
 
         locationSelector.setOnClickListener {
-            val intent = Intent(requireContext(), LocationActivity::class.java)
+            val token = requireContext()
+                .getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
+                .getString("token", null)
+
+            val intent = Intent(requireContext(), LocationSelectActivity::class.java)
+            intent.putExtra("token", token)
+
             locationLauncher.launch(intent)
         }
+
 
         // Notifications
         notificationButton.setOnClickListener {

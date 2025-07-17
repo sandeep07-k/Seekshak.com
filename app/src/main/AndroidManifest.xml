@@ -71,11 +71,15 @@
 
         <activity android:name=".AddPostActivity"
             android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".LocationActivity"/>
-        <activity android:name=".MapPickerActivity"/>
+        <activity android:name=".LocationSelectActivity"/>
+        <activity android:name=".CitySelectorActivity"/>
+        <activity android:name=".LocalitySelectorActivity"/>
 
         <activity android:name=".EditPostActivity"
             android:windowSoftInputMode="adjustPan"/>
+
+
+        <uses-library android:name="org.apache.http.legacy" android:required="false"/>
 
 
 

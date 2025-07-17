@@ -7,6 +7,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageButton
@@ -37,6 +38,10 @@ class StudentHomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_student_home)
+
+        val prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE)
+        val token = prefs.getString("token", null)
+        Log.d("TokenDebug", "Token at StudentHomeActivity: $token")
 
         // 1. Allow layout to draw behind system bars
         WindowCompat.setDecorFitsSystemWindows(window, false)

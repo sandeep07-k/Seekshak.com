@@ -1,0 +1,30 @@
+{
+  "states": [
+    {
+      "name": "Bihar",
+      "cities": [
+        {
+          "name": "Patna",
+          "localities": ["Kankarbagh", "Rajendra Nagar", "Boring Road"]
+        },
+        {
+          "name": "Gaya",
+          "localities": ["Rampur", "Magadh Colony"]
+        }
+      ]
+    },
+    {
+      "name": "Maharashtra",
+      "cities": [
+        {
+          "name": "Mumbai",
+          "localities": ["Andheri", "Borivali", "Dadar"]
+        },
+        {
+          "name": "Pune",
+          "localities": ["Kothrud", "Hinjewadi"]
+        }
+      ]
+    }
+  ]
+}
