@@ -1,6 +1,7 @@
 package com.example.seekshakcom.model
 
 data class PostRequest(
+
     val className: String,
     val subject: String,
     val educationBoard: String,

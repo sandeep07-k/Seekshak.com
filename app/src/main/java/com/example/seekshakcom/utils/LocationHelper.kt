@@ -3,6 +3,8 @@ package com.example.seekshakcom.utils
 import android.content.Context
 import android.util.Log
 import com.example.seekshakcom.BuildConfig
+import com.example.seekshakcom.model.LocationRequest
+import com.example.seekshakcom.network.RetrofitInstance
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
@@ -11,56 +13,95 @@ import org.json.JSONObject
 
 object LocationHelper {
 
-    suspend fun getApproxLocation(
-        context: Context,
-        lat: Double,
-        lon: Double
-    ): LocationData? = withContext(Dispatchers.IO) {
-        try {
-//            val token = BuildConfig.MAPPLS_MAP_SDK_KEY
-
-
-            val url = "https://apis.mapmyindia.com/advancedmaps/v1/$token/rev_geocode?lat=$lat&lng=$lon"
-
-
-            val request = Request.Builder().url(url).build()
-            val client = OkHttpClient()
-
-            val response = client.newCall(request).execute()
-            val body = response.body?.string() ?: return@withContext null
-
-
-            val json = JSONObject(body)
-            val result = json.getJSONArray("results").optJSONObject(0)
-            val poi = result.optString("poi")
-            val area = if (poi.isNullOrEmpty()) {
-                result.optString("locality", result.optString("street", "Unknown Area"))
-            } else poi
-            val city = result.optString("city", "Unknown City")
-            val state = result.optString("state", "Unknown State")
-            val country = result.optString("country", "India")
-
-            Log.d("LocationHelper", "Parsed: $area, $city, $state, $country")
-
-            val prefs = context.getSharedPreferences("LocationPrefs", Context.MODE_PRIVATE)
-            prefs.edit()
-                .putString("selected_city", city)
-                .putString("selected_area", area)
-                .apply()
-
-            return@withContext LocationData(lat, lon, area, city, state, country)
-        } catch (e: Exception) {
-            return@withContext null
-        }
-    }
-
     data class LocationData(
         val lat: Double,
         val lon: Double,
+        val sublocality: String?,  // 🆕 Added
         val area: String,
         val city: String,
         val state: String,
         val country: String
     )
 
+    suspend fun getApproxLocation(
+        context: Context,
+        lat: Double,
+        lon: Double
+    ): LocationData? = withContext(Dispatchers.IO) {
+        try {
+            val token = BuildConfig.MAPPLS_MAP_SDK_KEY
+
+            val url =
+                "https://apis.mapmyindia.com/advancedmaps/v1/$token/rev_geocode?lat=$lat&lng=$lon"
+
+            val request = Request.Builder().url(url).build()
+            val client = OkHttpClient()
+            val response = client.newCall(request).execute()
+            val body = response.body?.string() ?: return@withContext null
+
+            val json = JSONObject(body)
+            val result = json.getJSONArray("results").optJSONObject(0)
+
+            val poi = result?.optString("poi") ?: ""
+            val area = if (poi.isNotEmpty()) poi
+            else result?.optString("locality", result.optString("street", "Unknown Area")) ?: "Unknown Area"
+
+            val sublocality = result?.optString("subLocality")?.takeIf { it.isNotBlank() }
+            val city = result?.optString("city", "Unknown City") ?: "Unknown City"
+            val state = result?.optString("state", "Unknown State") ?: "Unknown State"
+            val country = result?.optString("country", "India") ?: "India"
+
+            Log.d("LocationHelper", "Parsed: $sublocality | $area, $city, $state, $country")
+
+            // ✅ Cache in SharedPreferences
+            val prefs = context.getSharedPreferences("LocationPrefs", Context.MODE_PRIVATE)
+            prefs.edit()
+                .putString("selected_city", city)
+                .putString("selected_area", area)
+                .putString("selected_state", state)
+                .putString("selected_country", country)
+                .putString("selected_sublocality", sublocality)
+                .putString("lat", lat.toString())
+                .putString("lon", lon.toString())
+                .apply()
+
+            return@withContext LocationData(lat, lon, sublocality, area, city, state, country)
+
+        } catch (e: Exception) {
+            Log.e("LocationHelper", "getApproxLocation error: ${e.message}")
+            return@withContext null
+        }
+    }
+
+    suspend fun sendLocationToBackend(context: Context, location: LocationData) {
+        val prefs = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
+        val token = prefs.getString("token", null) ?: return
+
+        val locationRequest = LocationRequest(
+            latitude = location.lat,
+            longitude = location.lon,
+            sublocality = location.sublocality,
+            area = location.area,
+            city = location.city,
+            state = location.state,
+            country = location.country
+        )
+
+        withContext(Dispatchers.IO) {
+            try {
+                val response = RetrofitInstance.locationApi.updateLocation(
+                    locationRequest,
+                    "Bearer $token"
+                )
+                if (!response.isSuccessful) {
+                    val errorBody = response.errorBody()?.string()
+                    Log.e("LocationHelper", "Backend Error: $errorBody")
+                } else {
+                    Log.d("LocationHelper", "Location synced to backend.")
+                }
+            } catch (e: Exception) {
+                Log.e("LocationHelper", "sendLocationToBackend error: ${e.message}")
+            }
+        }
+    }
 }

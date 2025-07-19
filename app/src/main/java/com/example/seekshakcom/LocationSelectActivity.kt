@@ -1,233 +1,268 @@
 package com.example.seekshakcom
 
 import android.Manifest
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.location.Location
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
-import android.util.Log
-import android.widget.*
+import android.os.Handler
+import android.os.Looper
+import android.view.View
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.seekshakcom.adapter.StateAdapter
+import com.example.seekshakcom.adapter.RecentLocationAdapter
+import com.example.seekshakcom.databinding.ActivityLocationSelectBinding
 import com.example.seekshakcom.model.LocationRequest
-import com.example.seekshakcom.network.RetrofitInstance
 import com.example.seekshakcom.utils.LocationHelper
-import com.example.seekshakcom.utils.LocationLoader
+import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 
 class LocationSelectActivity : AppCompatActivity() {
 
-    private lateinit var searchBar: EditText
-    private lateinit var stateRecyclerView: RecyclerView
-    private lateinit var recentLocationText: TextView
-    private lateinit var fetchingLocationText: TextView
-    private lateinit var recentLocationLayout: LinearLayout
-    private lateinit var clearLocation: TextView
-    private lateinit var backIcon: ImageView
-    private lateinit var useCurrentLocation: LinearLayout
-
+    private lateinit var binding: ActivityLocationSelectBinding
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private lateinit var stateAdapter: StateAdapter
-    private lateinit var prefs: SharedPreferences
-    private var filteredStates = mutableListOf<String>()
-    private lateinit var allStates: List<String>
+    private lateinit var shimmerLayout: ShimmerFrameLayout
+    private lateinit var adapter: RecentLocationAdapter
 
-    private val cityLauncher = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        if (result.resultCode == RESULT_OK && result.data != null) {
-            setResult(RESULT_OK, result.data)
-            finish()
+    private val coroutineScope = CoroutineScope(Dispatchers.Main)
+    private val fetchCooldownMinutes = 10
+
+    private val locationPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+            if (granted) autoFetchLocation()
+            else Toast.makeText(this, "Permission required", Toast.LENGTH_SHORT).show()
         }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_location_select)
-
-        searchBar = findViewById(R.id.searchBar)
-        stateRecyclerView = findViewById(R.id.stateRecyclerView)
-        recentLocationText = findViewById(R.id.recentLocationText)
-        fetchingLocationText = findViewById(R.id.fetchingLocationText)
-        recentLocationLayout = findViewById(R.id.recentLocation)
-        clearLocation = findViewById(R.id.clearLocation)
-        backIcon = findViewById(R.id.backIcon)
-        useCurrentLocation = findViewById(R.id.useCurrentLocation)
-
-        prefs = getSharedPreferences("LocationPrefs", Context.MODE_PRIVATE)
-
-        val locationData = LocationLoader.loadLocations(this)
-        allStates = locationData.states.map { it.name }
-        filteredStates.addAll(allStates)
-
-        stateAdapter = StateAdapter(this, filteredStates) { selectedState ->
-            val intent = Intent(this, CitySelectorActivity::class.java)
-            intent.putExtra("SELECTED_STATE", selectedState)
-            cityLauncher.launch(intent)
-        }
-
-        stateRecyclerView.layoutManager = LinearLayoutManager(this)
-        stateRecyclerView.adapter = stateAdapter
-
-        searchBar.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) = Unit
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                filterStates(s.toString())
-            }
-        })
-
-        backIcon.setOnClickListener { finish() }
-
-        val savedCity = prefs.getString("selected_city", null)
-        val savedArea = prefs.getString("selected_area", null)
-
-        if (!savedCity.isNullOrEmpty() && !savedArea.isNullOrEmpty()) {
-            recentLocationText.text = "$savedArea, $savedCity"
-        }
-
-        recentLocationLayout.setOnClickListener {
-            if (!savedCity.isNullOrEmpty() && !savedArea.isNullOrEmpty()) {
-                val result = Intent().apply {
-                    putExtra("selected_city", savedCity)
-                    putExtra("selected_area", savedArea)
-                }
-                setResult(RESULT_OK, result)
-                finish()
-            }
-        }
-
-        clearLocation.setOnClickListener {
-            prefs.edit().clear().apply()
-            recentLocationText.text = ""
-            fetchingLocationText.text = "Fetching Location..."
-        }
+        binding = ActivityLocationSelectBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        shimmerLayout = binding.shimmerLayout
 
-        useCurrentLocation.setOnClickListener {
-            requestLocationPermission()
+        setupRecyclerView()
+        setupSwipeToDelete()
+
+        binding.backIcon.setOnClickListener { finish() }
+
+        binding.useCurrentLocation.setOnClickListener {
+            fetchLocationAndReturn(true)
         }
-    }
 
-    private fun requestLocationPermission() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                1001
-            )
-        } else {
-            fetchAndSaveLocation()
-        }
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == 1001 && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            fetchAndSaveLocation()
-        } else {
-            Toast.makeText(this, "Location permission denied", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    private fun filterStates(query: String) {
-        filteredStates.clear()
-        if (query.isEmpty()) {
-            filteredStates.addAll(allStates)
-        } else {
-            filteredStates.addAll(allStates.filter { it.contains(query, ignoreCase = true) })
-        }
-        stateAdapter.notifyDataSetChanged()
-    }
-
-    private fun fetchAndSaveLocation() {
         if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) return
-
-        fusedLocationClient.lastLocation.addOnSuccessListener { location ->
-            if (location != null) {
-                lifecycleScope.launch {
-                    val locData = LocationHelper.getApproxLocation(this@LocationSelectActivity, location.latitude, location.longitude)
-                    if (locData != null) {
-                        recentLocationText.text = "${locData.area}, ${locData.city}"
-                        fetchingLocationText.text = "${locData.area}, ${locData.city}"
-                        sendLocationToBackend(
-                            locData.lat, locData.lon,
-                            locData.area, locData.city,
-                            locData.state, locData.country
-                        )
-                    } else {
-                        Toast.makeText(this@LocationSelectActivity, "Location not found", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            } else {
-                Toast.makeText(this, "Unable to get current location", Toast.LENGTH_SHORT).show()
-            }
+                this, Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            autoFetchLocation()
+        } else {
+            locationPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
         }
     }
 
-    private fun sendLocationToBackend(
-        lat: Double,
-        lng: Double,
-        area: String,
-        city: String,
-        state: String,
-        country: String
-    ) {
-        val prefs = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
-        val token = prefs.getString("token", null)
+    private fun autoFetchLocation() {
+        val prefs = getSharedPreferences("LocationPrefs", Context.MODE_PRIVATE)
+        val lastFetchedMillis = prefs.getLong("last_fetched_time", 0)
+        val now = System.currentTimeMillis()
 
-        if (token.isNullOrEmpty()) {
-            Log.e("LocationUpdate", "No token available to send location")
+        if ((now - lastFetchedMillis) < fetchCooldownMinutes * 60 * 1000) {
+            val city = prefs.getString("selected_city", null)
+            val area = prefs.getString("selected_area", null)
+            val state = prefs.getString("selected_state", null)
+            val sublocality = prefs.getString("selected_sublocality", null)
+
+            val formatted = listOfNotNull(sublocality, area, city, state).joinToString(", ")
+            binding.fetchingLocationText.text = formatted.ifEmpty { "Cached Location" }
+
+            loadRecentLocations()
             return
         }
 
+        fetchLocationAndReturn(false)
+    }
 
-        val locationRequest = LocationRequest(
-            latitude = lat,
-            longitude = lng,
-            area = area,
-            city = city,
-            state = state,
-            country = country
-        )
+    private fun fetchLocationAndReturn(shouldFinish: Boolean) {
+        if (ActivityCompat.checkSelfPermission(
+                this, Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            Toast.makeText(this, "Permission not granted", Toast.LENGTH_SHORT).show()
+            return
+        }
 
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val response = RetrofitInstance.locationApi.updateLocation(locationRequest, "Bearer $token")
-                withContext(Dispatchers.Main) {
-                    if (response.isSuccessful) {
-                        Toast.makeText(this@LocationSelectActivity, "Location updated", Toast.LENGTH_SHORT).show()
+        binding.fetchingLocationText.text = "Fetching Location..."
+
+        fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+            if (location != null) {
+                coroutineScope.launch {
+                    val locationData = LocationHelper.getApproxLocation(
+                        applicationContext,
+                        location.latitude,
+                        location.longitude
+                    )
+                    if (locationData != null) {
+                        val locationRequest = LocationRequest(
+                            latitude = locationData.lat,
+                            longitude = locationData.lon,
+                            sublocality = locationData.sublocality,
+                            area = locationData.area,
+                            city = locationData.city,
+                            state = locationData.state,
+                            country = locationData.country
+                        )
+
+                        val formatted = listOfNotNull(
+                            locationRequest.sublocality,
+                            locationRequest.area,
+                            locationRequest.city,
+                            locationRequest.state
+                        ).joinToString(", ")
+                        binding.fetchingLocationText.text = formatted
+
+                        saveToRecent(locationRequest)
+                        saveToPreferences(locationRequest)
+
+                        getSharedPreferences("LocationPrefs", Context.MODE_PRIVATE).edit()
+                            .putLong("last_fetched_time", System.currentTimeMillis()).apply()
+
+                        if (shouldFinish) {
+                            val intent = Intent()
+                            intent.putExtra("selected_sublocality", locationRequest.sublocality)
+                            intent.putExtra("selected_area", locationRequest.area)
+                            intent.putExtra("selected_city", locationRequest.city)
+                            intent.putExtra("selected_state", locationRequest.state)
+                            intent.putExtra("selected_country", locationRequest.country)
+                            intent.putExtra("lat", locationRequest.latitude.toString())
+                            intent.putExtra("lon", locationRequest.longitude.toString())
+                            setResult(Activity.RESULT_OK, intent)
+                            finish()
+                        } else {
+                            loadRecentLocations()
+                        }
                     } else {
-                        val errorBody = response.errorBody()?.string()
-                        Log.e("LocationUpdate", "Error response: $errorBody")
-                        Toast.makeText(this@LocationSelectActivity, "Server update failed", Toast.LENGTH_SHORT).show()
+                        binding.fetchingLocationText.text = "Failed to fetch location"
                     }
                 }
-            } catch (e: Exception) {
-                withContext(Dispatchers.Main) {
-                    Toast.makeText(this@LocationSelectActivity, "Network error", Toast.LENGTH_SHORT).show()
-                }
+            } else {
+                binding.fetchingLocationText.text = "Unable to get location"
             }
         }
     }
 
+    private fun saveToPreferences(location: LocationRequest) {
+        val prefs = getSharedPreferences("LocationPrefs", Context.MODE_PRIVATE)
+        prefs.edit()
+            .putString("selected_sublocality", location.sublocality)
+            .putString("selected_area", location.area)
+            .putString("selected_city", location.city)
+            .putString("selected_state", location.state)
+            .putString("selected_country", location.country)
+            .putString("lat", location.latitude.toString())
+            .putString("lon", location.longitude.toString())
+            .apply()
+    }
 
+    private fun saveToRecent(location: LocationRequest) {
+        val prefs = getSharedPreferences("RecentLocations", Context.MODE_PRIVATE)
+        val list = getRecentLocationList().toMutableList()
+
+        list.removeAll { it.latitude == location.latitude && it.longitude == location.longitude }
+        list.add(0, location)
+        if (list.size > 5) list.removeAt(list.size - 1)
+
+        val json = list.joinToString("|||") {
+            listOf(it.latitude, it.longitude, it.sublocality, it.area, it.city, it.state, it.country).joinToString("~~")
+        }
+
+        prefs.edit().putString("recent_location_list", json).apply()
+    }
+
+    private fun getRecentLocationList(): List<LocationRequest> {
+        val prefs = getSharedPreferences("RecentLocations", Context.MODE_PRIVATE)
+        val raw = prefs.getString("recent_location_list", null) ?: return emptyList()
+
+        return raw.split("|||").mapNotNull {
+            val parts = it.split("~~")
+            if (parts.size != 7) return@mapNotNull null
+            LocationRequest(
+                latitude = parts[0].toDoubleOrNull() ?: return@mapNotNull null,
+                longitude = parts[1].toDoubleOrNull() ?: return@mapNotNull null,
+                sublocality = parts[2],
+                area = parts[3],
+                city = parts[4],
+                state = parts[5],
+                country = parts[6]
+            )
+        }
+    }
+
+    private fun setupRecyclerView() {
+        adapter = RecentLocationAdapter { locationRequest ->
+            saveToPreferences(locationRequest)
+            val intent = Intent()
+            intent.putExtra("selected_sublocality", locationRequest.sublocality)
+            intent.putExtra("selected_area", locationRequest.area)
+            intent.putExtra("selected_city", locationRequest.city)
+            intent.putExtra("selected_state", locationRequest.state)
+            intent.putExtra("selected_country", locationRequest.country)
+            intent.putExtra("lat", locationRequest.latitude.toString())
+            intent.putExtra("lon", locationRequest.longitude.toString())
+            setResult(Activity.RESULT_OK, intent)
+            finish()
+        }
+
+        binding.recentLocationsRecyclerView.layoutManager = LinearLayoutManager(this)
+        binding.recentLocationsRecyclerView.adapter = adapter
+
+        shimmerLayout.visibility = View.VISIBLE
+        shimmerLayout.startShimmer()
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            loadRecentLocations()
+        }, 1200)
+    }
+
+    private fun loadRecentLocations() {
+        val locations = getRecentLocationList()
+        shimmerLayout.stopShimmer()
+        shimmerLayout.visibility = View.GONE
+        adapter.setLocations(locations)
+    }
+
+    private fun setupSwipeToDelete() {
+        val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
+            0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+        ) {
+            override fun onMove(rv: RecyclerView, vh: RecyclerView.ViewHolder, t: RecyclerView.ViewHolder) = false
+
+            override fun onSwiped(holder: RecyclerView.ViewHolder, direction: Int) {
+                val position = holder.bindingAdapterPosition
+                adapter.removeLocation(position)
+                saveAllRecentLocations(adapter.getLocations())
+            }
+        })
+        itemTouchHelper.attachToRecyclerView(binding.recentLocationsRecyclerView)
+    }
+
+    private fun saveAllRecentLocations(locations: List<LocationRequest>) {
+        val prefs = getSharedPreferences("RecentLocations", Context.MODE_PRIVATE)
+        val json = locations.joinToString("|||") {
+            listOf(it.latitude, it.longitude, it.sublocality, it.area, it.city, it.state, it.country).joinToString("~~")
+        }
+        prefs.edit().putString("recent_location_list", json).apply()
+    }
+
+    override fun onDestroy() {
+        coroutineScope.cancel()
+        super.onDestroy()
+    }
 }

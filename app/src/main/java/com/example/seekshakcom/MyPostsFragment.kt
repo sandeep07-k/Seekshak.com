@@ -266,13 +266,6 @@ class MyPostsFragment : Fragment() {
     }
 
 
-//    private fun editPost(post: MyPost) {
-//        val intent = Intent(requireContext(), EditPostActivity::class.java).apply {
-//            putExtra("POST_ID", post._id)
-//            putExtra("POST_DATA", post)
-//        }
-//        editPostLauncher.launch(intent)
-//    }
 
 
 

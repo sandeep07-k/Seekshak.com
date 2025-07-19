@@ -42,7 +42,7 @@
         android:layout_weight="1"
         android:paddingTop="20dp"
         android:paddingHorizontal="12dp"
-        android:paddingBottom="20dp"
+        android:paddingBottom="40dp"
         android:background="@drawable/form_bg">
 
         <LinearLayout
@@ -156,12 +156,55 @@
                         android:layout_marginStart="8dp" />
                 </RadioGroup>
             </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="12dp">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Location *">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/locationEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="none"
+                        android:focusable="false"
+                        android:clickable="false"
+                        android:background="@null"
+                        android:enabled="false" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:id="@+id/fetchLocationButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:padding="12dp"
+                    android:text="Fetch location..."
+                    android:textColor="@color/darkest_blue"
+                    android:textSize="14sp"
+                    android:drawableStart="@drawable/ic_use_location"
+                    android:drawablePadding="6dp"
+                    android:backgroundTint="@color/teal_700"
+                    android:background="?attr/selectableItemBackground"
+                    android:gravity="center_vertical"
+                    android:contentDescription="Fetch Location"
+                    android:clickable="true"
+                    android:focusable="true" />
+
+            </LinearLayout>
+
 
             <!-- Duration -->
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Class Duration (min\\hr)*"
+                android:hint="Class Duration (in min or hr)*"
                 android:layout_marginBottom="12dp">
 
                 <AutoCompleteTextView
@@ -174,11 +217,11 @@
             </com.google.android.material.textfield.TextInputLayout>
 
 
-            <!-- Number of Classes per Week -->
+            <!-- Class Schedule -->
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Class Schedule *"
+                android:hint="Class Schedule (days in a week) *"
                 android:layout_marginBottom="12dp">
 
                 <AutoCompleteTextView
@@ -191,7 +234,7 @@
                     android:completionThreshold="0" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Class Schedule -->
+            <!-- Class Timing -->
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
