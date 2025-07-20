@@ -16,7 +16,7 @@ object LocationHelper {
     data class LocationData(
         val lat: Double,
         val lon: Double,
-        val sublocality: String?,  // 🆕 Added
+        val sublocality: String?,  // ⬅ New
         val area: String,
         val city: String,
         val state: String,
@@ -30,32 +30,45 @@ object LocationHelper {
     ): LocationData? = withContext(Dispatchers.IO) {
         try {
             val token = BuildConfig.MAPPLS_MAP_SDK_KEY
-
             val url =
                 "https://apis.mapmyindia.com/advancedmaps/v1/$token/rev_geocode?lat=$lat&lng=$lon"
 
             val request = Request.Builder().url(url).build()
             val client = OkHttpClient()
             val response = client.newCall(request).execute()
+
             val body = response.body?.string() ?: return@withContext null
+            Log.d("MapplsResponse", "Raw response: $body")
 
             val json = JSONObject(body)
-            val result = json.getJSONArray("results").optJSONObject(0)
 
-            val poi = result?.optString("poi") ?: ""
-            val area = if (poi.isNotEmpty()) poi
-            else result?.optString("locality", result.optString("street", "Unknown Area")) ?: "Unknown Area"
+            if (json.has("error_code")) {
+                val errorCode = json.optString("error_code")
+                val errorDesc = json.optString("error_description", "Unknown error")
+                Log.e("MapplsAPI", "Error: $errorCode - $errorDesc")
 
-            val sublocality = result?.optString("subLocality")?.takeIf { it.isNotBlank() }
-            val city = result?.optString("city", "Unknown City") ?: "Unknown City"
-            val state = result?.optString("state", "Unknown State") ?: "Unknown State"
-            val country = result?.optString("country", "India") ?: "India"
+                // Handle expired credentials
+                if (errorCode == "CLIENT_CREDENTIAL_EXPIRED") {
+                    return@withContext null
+                }
+            }
 
-            Log.d("LocationHelper", "Parsed: $sublocality | $area, $city, $state, $country")
+            val result = json.optJSONArray("results")?.optJSONObject(0)
+                ?: return@withContext null
 
-            // ✅ Cache in SharedPreferences
-            val prefs = context.getSharedPreferences("LocationPrefs", Context.MODE_PRIVATE)
-            prefs.edit()
+            val poi = result.optString("poi")
+            val area = if (poi.isNotBlank()) poi
+            else result.optString("locality", result.optString("street", "Unknown Area"))
+
+            val sublocality = result.optString("subLocality").takeIf { it.isNotBlank() }
+            val city = result.optString("city", "Unknown City")
+            val state = result.optString("state", "Unknown State")
+            val country = result.optString("country", "India")
+
+            Log.d("LocationHelper", "Parsed Location → $sublocality | $area, $city, $state, $country")
+
+            // Save to SharedPreferences
+            context.getSharedPreferences("LocationPrefs", Context.MODE_PRIVATE).edit()
                 .putString("selected_city", city)
                 .putString("selected_area", area)
                 .putString("selected_state", state)
@@ -75,7 +88,10 @@ object LocationHelper {
 
     suspend fun sendLocationToBackend(context: Context, location: LocationData) {
         val prefs = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
-        val token = prefs.getString("token", null) ?: return
+        val token = prefs.getString("token", null) ?: run {
+            Log.e("LocationHelper", "Token missing from SharedPreferences")
+            return
+        }
 
         val locationRequest = LocationRequest(
             latitude = location.lat,
@@ -93,14 +109,15 @@ object LocationHelper {
                     locationRequest,
                     "Bearer $token"
                 )
-                if (!response.isSuccessful) {
-                    val errorBody = response.errorBody()?.string()
-                    Log.e("LocationHelper", "Backend Error: $errorBody")
+
+                if (response.isSuccessful) {
+                    Log.d("LocationHelper", "Location successfully updated to backend.")
                 } else {
-                    Log.d("LocationHelper", "Location synced to backend.")
+                    val error = response.errorBody()?.string()
+                    Log.e("LocationHelper", "Backend Error: $error")
                 }
             } catch (e: Exception) {
-                Log.e("LocationHelper", "sendLocationToBackend error: ${e.message}")
+                Log.e("LocationHelper", "sendLocationToBackend exception: ${e.message}")
             }
         }
     }

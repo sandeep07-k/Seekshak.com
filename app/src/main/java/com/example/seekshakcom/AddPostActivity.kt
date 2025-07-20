@@ -1,3 +1,4 @@
+
 package com.example.seekshakcom
 
 
@@ -112,7 +113,7 @@ class AddPostActivity : AppCompatActivity() {
             "Sanskrit", "Moral Education", "Environmental Studies (EVS)", "General Knowledge",
 
 
-        )
+            )
         val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, subjects)
         subjectEditText.setAdapter(adapter)
     }
@@ -149,7 +150,7 @@ class AddPostActivity : AppCompatActivity() {
     }
     private fun setupDurationDropdown() {
         val durationOptions = listOf("45 min","0.5 hour", "1 hour", "1.5 hours", "2 hours", "2.5 hours", "3 hours"
-            )
+        )
         val durationAdapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, durationOptions)
 
         durationEditText.setAdapter(durationAdapter)

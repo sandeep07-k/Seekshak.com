@@ -107,11 +107,12 @@ class HomeFragment : Fragment() {
 
             val location = LocationHelper.LocationData(
                 lat, lon,
+                sublocality ?: "",
                 area,
                 city,
                 state ?: "Unknown State",
                 country ?: "India",
-                sublocality ?: ""
+
             )
 
             lifecycleScope.launch {

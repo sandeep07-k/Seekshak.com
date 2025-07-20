@@ -13,6 +13,7 @@ data class PostRequest(
     val demoClassDate: String,
     val modeOfClass: String,
     val qualification: String,
-    val specialReq: String
+    val specialReq: String,
+
 
 )

@@ -92,10 +92,11 @@ class LocationSelectActivity : AppCompatActivity() {
 
     private fun fetchLocationAndReturn(shouldFinish: Boolean) {
         if (ActivityCompat.checkSelfPermission(
-                this, Manifest.permission.ACCESS_FINE_LOCATION
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            Toast.makeText(this, "Permission not granted", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Location permission not granted", Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -103,60 +104,85 @@ class LocationSelectActivity : AppCompatActivity() {
 
         fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
             if (location != null) {
-                coroutineScope.launch {
-                    val locationData = LocationHelper.getApproxLocation(
-                        applicationContext,
-                        location.latitude,
-                        location.longitude
-                    )
-                    if (locationData != null) {
-                        val locationRequest = LocationRequest(
-                            latitude = locationData.lat,
-                            longitude = locationData.lon,
-                            sublocality = locationData.sublocality,
-                            area = locationData.area,
-                            city = locationData.city,
-                            state = locationData.state,
-                            country = locationData.country
-                        )
-
-                        val formatted = listOfNotNull(
-                            locationRequest.sublocality,
-                            locationRequest.area,
-                            locationRequest.city,
-                            locationRequest.state
-                        ).joinToString(", ")
-                        binding.fetchingLocationText.text = formatted
-
-                        saveToRecent(locationRequest)
-                        saveToPreferences(locationRequest)
-
-                        getSharedPreferences("LocationPrefs", Context.MODE_PRIVATE).edit()
-                            .putLong("last_fetched_time", System.currentTimeMillis()).apply()
-
-                        if (shouldFinish) {
-                            val intent = Intent()
-                            intent.putExtra("selected_sublocality", locationRequest.sublocality)
-                            intent.putExtra("selected_area", locationRequest.area)
-                            intent.putExtra("selected_city", locationRequest.city)
-                            intent.putExtra("selected_state", locationRequest.state)
-                            intent.putExtra("selected_country", locationRequest.country)
-                            intent.putExtra("lat", locationRequest.latitude.toString())
-                            intent.putExtra("lon", locationRequest.longitude.toString())
-                            setResult(Activity.RESULT_OK, intent)
-                            finish()
-                        } else {
-                            loadRecentLocations()
-                        }
+                handleLocation(location, shouldFinish)
+            } else {
+                // Fallback to current location if last known is null
+                fusedLocationClient.getCurrentLocation(
+                    com.google.android.gms.location.Priority.PRIORITY_HIGH_ACCURACY,
+                    null
+                ).addOnSuccessListener { freshLocation: Location? ->
+                    if (freshLocation != null) {
+                        handleLocation(freshLocation, shouldFinish)
                     } else {
-                        binding.fetchingLocationText.text = "Failed to fetch location"
+                        binding.fetchingLocationText.text = "Unable to fetch location"
                     }
+                }.addOnFailureListener {
+                    binding.fetchingLocationText.text = "Failed to fetch location"
+                }
+            }
+        }.addOnFailureListener {
+            binding.fetchingLocationText.text = "Failed to fetch location"
+        }
+    }
+    private fun handleLocation(location: Location, shouldFinish: Boolean) {
+        coroutineScope.launch {
+            val locationData = LocationHelper.getApproxLocation(
+                applicationContext,
+                location.latitude,
+                location.longitude
+            )
+
+            if (locationData != null) {
+                // ✅ This sends updated location to backend!
+                LocationHelper.sendLocationToBackend(applicationContext, locationData)
+
+                val locationRequest = LocationRequest(
+                    latitude = locationData.lat,
+                    longitude = locationData.lon,
+                    sublocality = locationData.sublocality,
+                    area = locationData.area,
+                    city = locationData.city,
+                    state = locationData.state,
+                    country = locationData.country
+                )
+
+                val formatted = listOfNotNull(
+                    locationRequest.sublocality,
+                    locationRequest.area,
+                    locationRequest.city,
+                    locationRequest.state
+                ).joinToString(", ")
+                binding.fetchingLocationText.text = formatted
+
+                saveToRecent(locationRequest)
+                saveToPreferences(locationRequest)
+
+                getSharedPreferences("LocationPrefs", Context.MODE_PRIVATE).edit()
+                    .putLong("last_fetched_time", System.currentTimeMillis()).apply()
+
+                if (shouldFinish) {
+                    val intent = Intent().apply {
+                        putExtra("selected_sublocality", locationRequest.sublocality)
+                        putExtra("selected_area", locationRequest.area)
+                        putExtra("selected_city", locationRequest.city)
+                        putExtra("selected_state", locationRequest.state)
+                        putExtra("selected_country", locationRequest.country)
+                        putExtra("lat", locationRequest.latitude.toString())
+                        putExtra("lon", locationRequest.longitude.toString())
+                    }
+                    setResult(Activity.RESULT_OK, intent)
+                    finish()
+                } else {
+                    loadRecentLocations()
                 }
             } else {
-                binding.fetchingLocationText.text = "Unable to get location"
+                binding.fetchingLocationText.text = "Failed to get location details"
             }
         }
     }
+
+
+
 
     private fun saveToPreferences(location: LocationRequest) {
         val prefs = getSharedPreferences("LocationPrefs", Context.MODE_PRIVATE)
