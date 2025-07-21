@@ -33,6 +33,7 @@ class LocationSelectActivity : AppCompatActivity() {
     private lateinit var shimmerLayout: ShimmerFrameLayout
     private lateinit var adapter: RecentLocationAdapter
 
+
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
     private val fetchCooldownMinutes = 10
 

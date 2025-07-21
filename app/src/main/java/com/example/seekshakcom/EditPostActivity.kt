@@ -43,6 +43,13 @@ class EditPostActivity : AppCompatActivity() {
     private lateinit var progressBar: ProgressBar
 
     private var postId: String? = null
+    private var latitude: Double? = null
+    private var longitude: Double? = null
+    private var sublocality: String? = null
+    private var area: String? = null
+    private var city: String? = null
+    private var state: String? = null
+    private var country: String? = null
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -212,8 +219,11 @@ class EditPostActivity : AppCompatActivity() {
         val fee = "₹$feeAmount/${if (feeType == "hourly") "hr" else "month"}"
         val updatedPost = PostRequest(
             className, subject, educationBoard, fee, duration, classSchedule,
-            classTiming, gender, demoClassDate, modeOfClass, qualification, specialReq
+            classTiming, gender, demoClassDate, modeOfClass, qualification, specialReq,
+            latitude ?: 0.0, longitude ?: 0.0, // fallback if null
+            sublocality ?: "", area ?: "", city ?: "", state ?: "", country ?: ""
         )
+
 
         progressBar.visibility = View.VISIBLE
         submitButton.isEnabled = false

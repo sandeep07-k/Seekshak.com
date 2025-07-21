@@ -73,6 +73,7 @@
             android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".LocationSelectActivity"
             android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".PostLocationSelectActivity"/>
 
         <activity android:name=".EditPostActivity"
             android:windowSoftInputMode="adjustPan"/>

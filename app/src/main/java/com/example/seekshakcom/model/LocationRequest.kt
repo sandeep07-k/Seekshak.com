@@ -9,6 +9,7 @@ data class LocationRequest(
     val area: String?,
     val city: String?,
     val state: String?,
-    val country: String?
+    val country: String?,
+
 
 ) : Serializable

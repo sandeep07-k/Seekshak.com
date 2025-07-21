@@ -54,6 +54,7 @@ playServicesAuthApiPhone = "18.2.0"
 playServicesLocation = "21.3.0"
 compiler = "3.2.0-alpha11"
 databindingCompiler = "8.11.1"
+playServicesIdentity = "18.1.0"
 
 [libraries]
 androidsvg = { module = "com.caverock:androidsvg", version.ref = "androidsvg" }
@@ -126,6 +127,7 @@ sdk-rest-apis = { module = "com.mappls.sdk:rest-apis", version.ref = "restApisVe
 shimmer = { module = "com.facebook.shimmer:shimmer", version.ref = "shimmer" }
 androidx-compiler = { group = "androidx.databinding", name = "compiler", version.ref = "compiler" }
 androidx-databinding-compiler = { group = "androidx.databinding", name = "databinding-compiler", version.ref = "databindingCompiler" }
+play-services-identity = { group = "com.google.android.gms", name = "play-services-identity", version.ref = "playServicesIdentity" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

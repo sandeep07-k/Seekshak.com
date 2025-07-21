@@ -9,7 +9,6 @@
     android:background="#B3E5FC"
     android:paddingTop="16dp">
 
-    <!-- Header -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
@@ -30,79 +29,79 @@
             android:id="@+id/headerTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Edit Tutor Post"
+            android:text="Tutor Preference Form"
             android:textSize="18sp"
             android:textColor="#000000"
             android:layout_centerInParent="true"
             android:textStyle="bold" />
     </RelativeLayout>
 
-    <!-- Form -->
     <ScrollView
-        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:paddingTop="20dp"
         android:paddingHorizontal="12dp"
-        android:paddingBottom="20dp"
+        android:paddingBottom="110dp"
         android:background="@drawable/form_bg">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingBottom="40dp">
+            android:paddingBottom="35dp"
+            android:orientation="vertical">
 
-            <!-- Class -->
+            <!-- Class Field -->
             <com.google.android.material.textfield.TextInputLayout
-                android:hint="Class *"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="Class *"
                 android:layout_marginBottom="12dp">
 
                 <AutoCompleteTextView
                     android:id="@+id/classEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:imeOptions="actionNext"
                     android:inputType="text"
+                    android:imeOptions="actionNext"
                     android:maxLines="1"
-                    android:completionThreshold="0"/>
+                    android:completionThreshold="0" /> <!-- Shows suggestions after typing 1 character -->
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Subject -->
+
+            <!-- Subject Field -->
             <com.google.android.material.textfield.TextInputLayout
-                android:hint="Subjects *"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="Subjects *"
                 android:layout_marginBottom="12dp">
 
                 <AutoCompleteTextView
                     android:id="@+id/subjectEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:imeOptions="actionNext"
                     android:inputType="text"
+                    android:imeOptions="actionNext"
                     android:maxLines="2"
-                    android:completionThreshold="0"/>
+                    android:completionThreshold="0" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Education Board -->
             <com.google.android.material.textfield.TextInputLayout
-                android:hint="Education Board *"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="Education Board *"
                 android:layout_marginBottom="12dp">
 
                 <AutoCompleteTextView
                     android:id="@+id/edu_board"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:imeOptions="actionNext"
-                    android:inputType="text"
                     android:maxLines="1"
-                    android:completionThreshold="0"/>
+                    android:completionThreshold="0"
+                    android:inputType="text"
+                    android:imeOptions="actionNext" />
+
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Tuition Fee and Type -->
@@ -117,22 +116,23 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginBottom="12dp"
-                android:gravity="center_vertical">
+                android:gravity="center_vertical"
+                android:layout_marginBottom="12dp">
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:hint="Fee Amount"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:hint="Fee Amount">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/feeEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="number"
                         android:maxLines="1"
-                        android:imeOptions="actionNext"/>
+                        android:completionThreshold="0"
+                        android:inputType="number"
+                        android:imeOptions="actionNext" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <RadioGroup
@@ -146,22 +146,64 @@
                         android:id="@+id/radioHourly"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Hourly"/>
+                        android:text="Hourly" />
 
                     <RadioButton
                         android:id="@+id/radioMonthly"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Monthly"
-                        android:layout_marginStart="8dp"/>
+                        android:layout_marginStart="8dp" />
                 </RadioGroup>
             </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="12dp">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Location *">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/locationEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="none"
+                        android:focusable="false"
+                        android:clickable="false"
+                        android:enabled="true" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:id="@+id/fetchLocationButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:padding="12dp"
+                    android:text="Fetch location..."
+                    android:textColor="#007BFF"
+                    android:textSize="14sp"
+                    android:drawableStart="@drawable/ic_use_location"
+                    android:drawablePadding="6dp"
+                    android:backgroundTint="@color/teal_700"
+                    android:background="?attr/selectableItemBackground"
+                    android:gravity="center_vertical"
+                    android:contentDescription="Fetch Location"
+                    android:clickable="true"
+                    android:focusable="true" />
+
+            </LinearLayout>
+
 
             <!-- Duration -->
             <com.google.android.material.textfield.TextInputLayout
-                android:hint="Class Duration (min\\hr)*"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="Class Duration (in min or hr)*"
                 android:layout_marginBottom="12dp">
 
                 <AutoCompleteTextView
@@ -170,32 +212,32 @@
                     android:layout_height="wrap_content"
                     android:maxLines="1"
                     android:imeOptions="actionNext"
-                    android:inputType="text"
                     android:completionThreshold="0"/>
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Schedule -->
+
+            <!-- Class Schedule -->
             <com.google.android.material.textfield.TextInputLayout
-                android:hint="Class Schedule *"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="Class Schedule (days in a week) *"
                 android:layout_marginBottom="12dp">
 
                 <AutoCompleteTextView
                     android:id="@+id/classScheduleEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textCapWords"
                     android:maxLines="1"
+                    android:inputType="textCapWords"
                     android:imeOptions="actionNext"
-                    android:completionThreshold="0"/>
+                    android:completionThreshold="0" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Timing -->
+            <!-- Class Timing -->
             <com.google.android.material.textfield.TextInputLayout
-                android:hint="Class Timing *"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="Class Timing *"
                 android:layout_marginBottom="12dp">
 
                 <AutoCompleteTextView
@@ -205,14 +247,16 @@
                     android:maxLines="1"
                     android:imeOptions="actionNext"
                     android:completionThreshold="0"
-                    android:inputType="text"/>
+                    android:inputType="text" />
             </com.google.android.material.textfield.TextInputLayout>
+
+
 
             <!-- Gender Preference -->
             <com.google.android.material.textfield.TextInputLayout
-                android:hint="Gender Preference *"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="Gender Preference *"
                 android:layout_marginBottom="12dp">
 
                 <AutoCompleteTextView
@@ -225,31 +269,14 @@
                     android:completionThreshold="0"/>
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Demo Class Date -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:hint="Demo Class Date ( if any )"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
-                app:endIconMode="custom"
-                app:endIconDrawable="@drawable/ic_calendar"
-                app:endIconContentDescription="Select Date">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/demoClassDateEditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:focusable="false"
-                    android:clickable="true"
-                    android:inputType="none"
-                    android:imeOptions="actionNext"/>
-            </com.google.android.material.textfield.TextInputLayout>
+
 
             <!-- Mode of Class -->
             <com.google.android.material.textfield.TextInputLayout
-                android:hint="Mode of Class *"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="Mode of Class *"
                 android:layout_marginBottom="12dp">
 
                 <AutoCompleteTextView
@@ -262,11 +289,11 @@
                     android:completionThreshold="0"/>
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Minimum Qualification -->
+            <!-- Qualification -->
             <com.google.android.material.textfield.TextInputLayout
-                android:hint="Minimum Qualification *"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="Minimum Qualification *"
                 android:layout_marginBottom="12dp">
 
                 <AutoCompleteTextView
@@ -279,11 +306,32 @@
                     android:completionThreshold="0"/>
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Special Requirements -->
+            <!-- Demo Date -->
             <com.google.android.material.textfield.TextInputLayout
-                android:hint="Special Requirements (if any)"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="Demo Class Date ( if any )"
+                android:layout_marginBottom="12dp"
+                app:endIconMode="custom"
+                app:endIconDrawable="@drawable/ic_calendar"
+                app:endIconContentDescription="Select Date">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/demoClassDateEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:imeOptions="actionNext"
+                    android:clickable="true"
+                    android:inputType="none"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <!-- Special Requirement -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Special Requirements (if any)"
                 android:layout_marginBottom="20dp">
 
                 <com.google.android.material.textfield.MaterialAutoCompleteTextView
@@ -294,29 +342,34 @@
                     android:maxLines="2"
                     android:imeOptions="actionDone"
                     android:completionThreshold="1"
-                    android:dropDownHeight="200dp"/>
+                    android:dropDownHeight="200dp" />
             </com.google.android.material.textfield.TextInputLayout>
+
+
+
 
             <!-- Submit Button -->
             <Button
                 android:id="@+id/submitButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="UPDATE POST"
+                android:text="SUBMIT"
                 android:backgroundTint="#0288D1"
                 android:textColor="#FFFFFF"
                 android:textStyle="bold"
                 android:padding="12dp"
                 android:textSize="16sp"
-                android:layout_marginBottom="20dp"/>
+                android:layout_marginBottom="24dp" />
 
+            <!-- ProgressBar -->
             <ProgressBar
                 android:id="@+id/progressBar"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_gravity="center"
-                android:layout_marginBottom="50dp"
-                android:visibility="gone"/>
+                android:layout_marginTop="6dp"
+                android:visibility="gone" />
+
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

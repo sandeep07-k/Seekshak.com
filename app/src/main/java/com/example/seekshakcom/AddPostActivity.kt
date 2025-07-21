@@ -2,23 +2,32 @@
 package com.example.seekshakcom
 
 
+import android.app.Activity
 import androidx.lifecycle.lifecycleScope
 import com.example.seekshakcom.model.PostRequest
 import com.example.seekshakcom.network.ApiClient
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 import android.app.DatePickerDialog
+import android.content.Intent
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.text.InputType
+import android.util.Log
 import android.view.View
 import android.widget.*
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import com.google.android.material.snackbar.Snackbar
 import java.util.*
+import android.widget.AutoCompleteTextView
+import androidx.activity.result.ActivityResultLauncher
+
+
 
 class AddPostActivity : AppCompatActivity() {
 
@@ -26,6 +35,8 @@ class AddPostActivity : AppCompatActivity() {
     private lateinit var classEditText: AutoCompleteTextView
     private lateinit var subjectEditText: AutoCompleteTextView
     private lateinit var eduBoardEditText: AutoCompleteTextView
+    private lateinit var locationEditText: AutoCompleteTextView
+    private lateinit var fetchLocationButton: TextView
     private lateinit var feeEditText: EditText
     private lateinit var feeTypeRadioGroup: RadioGroup
     private lateinit var durationEditText: AutoCompleteTextView
@@ -38,6 +49,20 @@ class AddPostActivity : AppCompatActivity() {
     private lateinit var specialRequirementEditText: EditText
     private lateinit var submitButton: Button
     private lateinit var progressBar: ProgressBar
+    private var selectedLat: Double? = null
+    private var selectedLon: Double? = null
+    private var selectedSublocality: String? = null
+    private var selectedArea: String? = null
+    private var selectedCity: String? = null
+    private var selectedState: String? = null
+    private var selectedCountry: String? = null
+    private lateinit var locationResultLauncher: ActivityResultLauncher<Intent>
+
+
+
+
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,6 +77,8 @@ class AddPostActivity : AppCompatActivity() {
         backArrow = findViewById(R.id.backArrow)
         classEditText = findViewById(R.id.classEditText)
         subjectEditText = findViewById(R.id.subjectEditText)
+        locationEditText = findViewById(R.id.locationEditText)
+        fetchLocationButton = findViewById(R.id.fetchLocationButton)
         eduBoardEditText = findViewById(R.id.edu_board)
         feeEditText = findViewById(R.id.feeEditText)
         feeTypeRadioGroup = findViewById(R.id.feeTypeRadioGroup)
@@ -66,6 +93,8 @@ class AddPostActivity : AppCompatActivity() {
         submitButton = findViewById(R.id.submitButton)
         progressBar = findViewById(R.id.progressBar)
 
+
+
         setupClassSuggestions()
         setupSubjectSuggestions()
         setupBoardSuggestions()
@@ -78,12 +107,46 @@ class AddPostActivity : AppCompatActivity() {
         setupCalendarPicker()
         setupSpecialRequirementSuggestions()
 
+        locationResultLauncher = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { result ->
+            if (result.resultCode == Activity.RESULT_OK && result.data != null) {
+                val data = result.data!!
+                selectedLat = data?.getStringExtra("lat")?.toDoubleOrNull()
+                selectedLon = data?.getStringExtra("lon")?.toDoubleOrNull()
+                selectedSublocality = data?.getStringExtra("selected_sublocality")
+                selectedArea = data?.getStringExtra("selected_area")
+                selectedCity = data?.getStringExtra("selected_city")
+                selectedState = data?.getStringExtra("selected_state")
+                selectedCountry = data?.getStringExtra("selected_country")
+//
+
+
+                val locationText = listOfNotNull(selectedSublocality, selectedArea, selectedCity)
+                    .joinToString(", ")
+
+                locationEditText.setText(locationText)
+            } else {
+                Log.d("AutoFillCheck", "Result not OK or data is null")
+            }
+        }
+
+
+
+
+
 
 
 
         backArrow.setOnClickListener {
             finish()
         }
+        fetchLocationButton.setOnClickListener {
+            val intent = Intent(this, PostLocationSelectActivity::class.java)
+            locationResultLauncher.launch(intent)
+
+        }
+
 
         submitButton.setOnClickListener {
             submitForm()
@@ -159,12 +222,12 @@ class AddPostActivity : AppCompatActivity() {
     }
     private fun setupclassScheduleDropdown() {
         val classDayOptions = listOf(
-            "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun",
-            "Mon-Wed", "Tue-Thu", "Wed-Fri", "Thu-Sat", "Sat-Sun",
+            "Mon to Sat",
             "Mon-Wed-Fri (MWF)",
             "Tue-Thu-Sat (TTS)",
             "Mon to Fri",
-            "Mon to Sat",
+            "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun",
+            "Mon-Wed", "Tue-Thu", "Wed-Fri", "Thu-Sat", "Sat-Sun",
             "Daily (7 Days)",
             "Alternate Days",
             "Weekends Only",
@@ -329,6 +392,13 @@ class AddPostActivity : AppCompatActivity() {
         if (className.isEmpty()) { classEditText.error = "Please enter class"; classEditText.requestFocus(); return }
         if (subject.isEmpty()) { subjectEditText.error = "Please enter subjects"; subjectEditText.requestFocus(); return }
         if (educationBoard.isEmpty()) { eduBoardEditText.error = "Enter education board"; eduBoardEditText.requestFocus(); return }
+        if (selectedLat == null || selectedLon == null ||
+            selectedCity.isNullOrEmpty() || selectedState.isNullOrEmpty() || selectedCountry.isNullOrEmpty()
+        ) {
+            Snackbar.make(rootView, "Please select a valid location", Snackbar.LENGTH_SHORT).show()
+            return
+        }
+
         if (feeAmount.isEmpty() || feeType.isEmpty()) { feeEditText.error = "Enter fee and select type"; feeEditText.requestFocus(); return }
         if (duration.isEmpty()) { durationEditText.error = "Enter duration"; durationEditText.requestFocus(); return }
         if (classSchedule.isEmpty()) { classScheduleEditText.error = "Enter days"; classScheduleEditText.requestFocus(); return }
@@ -338,6 +408,7 @@ class AddPostActivity : AppCompatActivity() {
         if (specialReq.length > 200) { specialRequirementEditText.error = "Too long – max 200 characters"; specialRequirementEditText.requestFocus(); return }
 
         val fee = "₹${feeAmount}/${if (feeType == "hourly") "hr" else "month"}"
+
 
         val post = PostRequest(
             className,
@@ -351,7 +422,15 @@ class AddPostActivity : AppCompatActivity() {
             demoClassDate,
             modeOfClass,
             qualification,
-            specialReq
+            specialReq,
+            latitude = selectedLat?: 0.0,
+            longitude = selectedLon ?: 0.0,
+            sublocality = selectedSublocality ?: "",
+            area = selectedArea ?: "",
+            city = selectedCity ?: "",
+            state = selectedState ?: "",
+            country = selectedCountry ?: ""
+
 
         )
 
@@ -436,13 +515,13 @@ class AddPostActivity : AppCompatActivity() {
         classEditText.text.clear()
         subjectEditText.text.clear()
         eduBoardEditText.text.clear()
+        locationEditText.text.clear()
         feeEditText.text.clear()
         durationEditText.text.clear()
         classScheduleEditText.text.clear()
         demoClassDateEditText.text.clear()
         minQualificationEditText.text.clear()
         specialRequirementEditText.text.clear()
-
         genderSpinner.setText("", false)
         modeOfClassesSpinner.setText("", false)
         feeTypeRadioGroup.clearCheck()

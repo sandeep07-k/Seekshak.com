@@ -42,7 +42,7 @@
         android:layout_weight="1"
         android:paddingTop="20dp"
         android:paddingHorizontal="12dp"
-        android:paddingBottom="40dp"
+        android:paddingBottom="110dp"
         android:background="@drawable/form_bg">
 
         <LinearLayout
@@ -175,8 +175,7 @@
                         android:inputType="none"
                         android:focusable="false"
                         android:clickable="false"
-                        android:background="@null"
-                        android:enabled="false" />
+                        android:enabled="true" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
@@ -186,7 +185,7 @@
                     android:layout_marginStart="8dp"
                     android:padding="12dp"
                     android:text="Fetch location..."
-                    android:textColor="@color/darkest_blue"
+                    android:textColor="#007BFF"
                     android:textSize="14sp"
                     android:drawableStart="@drawable/ic_use_location"
                     android:drawablePadding="6dp"
@@ -270,25 +269,7 @@
                     android:completionThreshold="0"/>
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Demo Date -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Demo Class Date ( if any )"
-                android:layout_marginBottom="12dp"
-                app:endIconMode="custom"
-                app:endIconDrawable="@drawable/ic_calendar"
-                app:endIconContentDescription="Select Date">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/demoClassDateEditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:focusable="false"
-                    android:imeOptions="actionNext"
-                    android:clickable="true"
-                    android:inputType="none"/>
-            </com.google.android.material.textfield.TextInputLayout>
 
 
             <!-- Mode of Class -->
@@ -323,6 +304,26 @@
                     android:maxLines="1"
                     android:imeOptions="actionNext"
                     android:completionThreshold="0"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Demo Date -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Demo Class Date ( if any )"
+                android:layout_marginBottom="12dp"
+                app:endIconMode="custom"
+                app:endIconDrawable="@drawable/ic_calendar"
+                app:endIconContentDescription="Select Date">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/demoClassDateEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:imeOptions="actionNext"
+                    android:clickable="true"
+                    android:inputType="none"/>
             </com.google.android.material.textfield.TextInputLayout>
 
 

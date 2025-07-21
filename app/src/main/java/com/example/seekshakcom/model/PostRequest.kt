@@ -1,7 +1,6 @@
 package com.example.seekshakcom.model
 
 data class PostRequest(
-
     val className: String,
     val subject: String,
     val educationBoard: String,
@@ -15,5 +14,12 @@ data class PostRequest(
     val qualification: String,
     val specialReq: String,
 
-
+    // Location fields
+    val latitude: Double,
+    val longitude: Double,
+    val sublocality: String,
+    val area: String,
+    val city: String,
+    val state: String,
+    val country: String
 )
