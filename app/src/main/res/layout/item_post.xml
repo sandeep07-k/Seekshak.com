@@ -2,6 +2,7 @@
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/post_card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -173,14 +174,46 @@
             android:textColor="#000000"
             android:textSize="14sp"
             android:layout_marginTop="4dp" />
-        <TextView
-            android:id="@+id/location_details"
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Address: Sublocality, City "
-            android:textColor="#000000"
-            android:textSize="14sp"
-            android:layout_marginTop="4dp" />
+            android:orientation="horizontal"
+            android:gravity="clip_horizontal"
+            android:layout_marginTop="4dp">
+
+
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="Address: "-->
+<!--                android:textColor="#000000"-->
+<!--                android:textSize="14sp" />-->
+
+            <TextView
+                android:id="@+id/location_details"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Address: Sublocality, City"
+                android:textColor="#000000"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:id="@+id/location_icon"
+                android:layout_width="16dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_location_pin"
+                android:layout_marginStart="4dp"
+                android:layout_gravity="center_horizontal"
+                android:contentDescription="Location Icon"
+                />
+
+
+
+        </LinearLayout>
+
+
+
 
         <TextView
             android:id="@+id/gender_Preference"

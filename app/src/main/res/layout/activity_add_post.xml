@@ -160,39 +160,56 @@
                 android:orientation="horizontal"
                 android:layout_marginBottom="12dp">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:hint="Location *">
 
-                    <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                        android:id="@+id/locationEditText"
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="0dp">
+
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/locationInputLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="none"
-                        android:focusable="false"
-                        android:clickable="false"
-                        android:enabled="true" />
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:hint="Location *">
 
-                <TextView
-                    android:id="@+id/fetchLocationButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:padding="12dp"
-                    android:text="Fetch location..."
-                    android:textColor="#007BFF"
-                    android:textSize="14sp"
-                    android:drawableStart="@drawable/ic_use_location"
-                    android:drawablePadding="6dp"
-                    android:backgroundTint="@color/teal_700"
-                    android:background="?attr/selectableItemBackground"
-                    android:gravity="center_vertical"
-                    android:contentDescription="Fetch Location"
-                    android:clickable="true"
-                    android:focusable="true" />
+                        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                            android:id="@+id/locationEditText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="none"
+                            android:focusable="false"
+                            android:clickable="false"
+                            android:enabled="true"
+                            android:paddingEnd="96dp" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Fetch location button floating on right -->
+                    <TextView
+                        android:id="@+id/fetchLocationButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignEnd="@id/locationInputLayout"
+                        android:layout_alignBottom="@id/locationInputLayout"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:padding="6dp"
+                        android:text="Fetch location.."
+                        android:textColor="#007BFF"
+                        android:textSize="14sp"
+                        android:drawableStart="@drawable/ic_use_location"
+                        android:drawablePadding="4dp"
+                        android:background="?attr/selectableItemBackground"
+                        android:gravity="center"
+                        android:clickable="true"
+                        android:focusable="true" />
+                </RelativeLayout>
+
+
+
+
             </LinearLayout>
 
 
