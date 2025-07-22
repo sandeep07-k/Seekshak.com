@@ -1,17 +1,22 @@
 
 package com.example.seekshakcom
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.graphics.Color
-import android.location.Geocoder
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.*
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.ProgressBar
+import android.widget.RadioGroup
+import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
@@ -19,7 +24,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import com.example.seekshakcom.model.LocationRequest
 import com.example.seekshakcom.model.MyPost
 import com.example.seekshakcom.model.PostRequest
 import com.example.seekshakcom.network.ApiClient
@@ -31,7 +35,7 @@ import com.google.android.material.textfield.TextInputEditText
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.*
+import java.util.Calendar
 
 class EditPostActivity : AppCompatActivity() {
 
@@ -41,7 +45,6 @@ class EditPostActivity : AppCompatActivity() {
     private lateinit var eduBoardEditText: AutoCompleteTextView
     private lateinit var feeEditText: TextInputEditText
     private lateinit var feeTypeRadioGroup: RadioGroup
-    private lateinit var durationEditText: AutoCompleteTextView
     private lateinit var classScheduleEditText: AutoCompleteTextView
     private lateinit var classTimingEditText: AutoCompleteTextView
     private lateinit var genderSpinner: AutoCompleteTextView
@@ -84,7 +87,6 @@ class EditPostActivity : AppCompatActivity() {
         eduBoardEditText = findViewById(R.id.edu_board)
         feeEditText = findViewById(R.id.feeEditText)
         feeTypeRadioGroup = findViewById(R.id.feeTypeRadioGroup)
-        durationEditText = findViewById(R.id.durationEditText)
         classScheduleEditText = findViewById(R.id.classScheduleEditText)
         classTimingEditText = findViewById(R.id.classTimingEditText)
         genderSpinner = findViewById(R.id.genderSpinner)
@@ -148,7 +150,6 @@ class EditPostActivity : AppCompatActivity() {
         subjectEditText.setText(post.subject)
         eduBoardEditText.setText(post.educationBoard)
         feeEditText.setText(post.fee.filter { it.isDigit() })
-        durationEditText.setText(post.duration)
         classScheduleEditText.setText(post.classSchedule)
         classTimingEditText.setText(post.classTiming)
         genderSpinner.setText(post.gender, false)
@@ -157,10 +158,17 @@ class EditPostActivity : AppCompatActivity() {
         minQualificationEditText.setText(post.qualification)
         specialRequirementEditText.setText(post.specialReq)
 
-        when {
-            post.fee.contains("hour", true) -> feeTypeRadioGroup.check(R.id.radioHourly)
-            post.fee.contains("month", true) -> feeTypeRadioGroup.check(R.id.radioMonthly)
+        val feeParts = post.fee.split("/")
+        if (feeParts.isNotEmpty()) {
+            feeEditText.setText(feeParts[0].replace("₹", "").trim()) // e.g. "500–1000"
         }
+
+        when {
+            post.fee.contains("/hr", true) -> feeTypeRadioGroup.check(R.id.radioHourly)
+            post.fee.contains("/month", true) -> feeTypeRadioGroup.check(R.id.radioMonthly)
+        }
+
+
 
         // ✅ Pre-fill location
         val locationDisplay = listOfNotNull(post.sublocality, post.area, post.city)
@@ -207,9 +215,7 @@ class EditPostActivity : AppCompatActivity() {
             "Haryana Board", "Jharkhand Board", "Chhattisgarh Board", "Assam Board", "NIOS", "Other"
         )))
 
-        durationEditText.setAdapter(ArrayAdapter(context, android.R.layout.simple_dropdown_item_1line, listOf(
-            "45 min", "0.5 hour", "1 hour", "1.5 hours", "2 hours", "2.5 hours", "3 hours"
-        )))
+
 
         classScheduleEditText.setAdapter(ArrayAdapter(context, android.R.layout.simple_dropdown_item_1line, listOf(
             "Mon-Wed-Fri (MWF)", "Tue-Thu-Sat (TTS)", "Mon to Fri", "Mon to Sat", "Weekends Only", "Daily (7 Days)",
@@ -266,7 +272,6 @@ class EditPostActivity : AppCompatActivity() {
             R.id.radioMonthly -> "monthly"
             else -> ""
         }
-        val duration = durationEditText.text.toString().trim()
         val classSchedule = classScheduleEditText.text.toString().trim()
         val classTiming = classTimingEditText.text.toString().trim()
         val gender = genderSpinner.text.toString().trim()
@@ -276,7 +281,7 @@ class EditPostActivity : AppCompatActivity() {
         val specialReq = specialRequirementEditText.text.toString().trim()
 
         if (className.isEmpty() || subject.isEmpty() || educationBoard.isEmpty() ||
-            feeAmount.isEmpty() || feeType.isEmpty() || duration.isEmpty() ||
+            feeAmount.isEmpty() || feeType.isEmpty() ||
             classSchedule.isEmpty() || gender.isEmpty() || modeOfClass.isEmpty() ||
             qualification.isEmpty()
         ) {
@@ -293,7 +298,7 @@ class EditPostActivity : AppCompatActivity() {
 
         val fee = "₹$feeAmount/${if (feeType == "hourly") "hr" else "month"}"
         val updatedPost = PostRequest(
-            className, subject, educationBoard, fee, duration, classSchedule,
+            className, subject, educationBoard, fee, classSchedule,
             classTiming, gender, demoClassDate, modeOfClass, qualification, specialReq,
             latitude = selectedLat?: 0.0,
             longitude = selectedLon ?: 0.0,

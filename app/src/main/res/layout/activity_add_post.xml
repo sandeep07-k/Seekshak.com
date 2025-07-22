@@ -121,15 +121,14 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:hint="Fee Amount">
+                    android:hint="e.g. 500–1000">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/feeEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:maxLines="1"
-                        android:completionThreshold="0"
-                        android:inputType="number"
+                        android:inputType="text"
                         android:imeOptions="actionNext" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -196,21 +195,6 @@
                     android:focusable="true" />
             </LinearLayout>
 
-            <!-- Duration -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Class Duration (in min or hr)*"
-                android:layout_marginBottom="12dp">
-
-                <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                    android:id="@+id/durationEditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:maxLines="1"
-                    android:imeOptions="actionNext"
-                    android:completionThreshold="0"/>
-            </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Class Schedule -->
             <com.google.android.material.textfield.TextInputLayout

@@ -44,7 +44,6 @@ class AddPostActivity : AppCompatActivity() {
     private lateinit var fetchLocationButton: TextView
     private lateinit var feeEditText: EditText
     private lateinit var feeTypeRadioGroup: RadioGroup
-    private lateinit var durationEditText: AutoCompleteTextView
     private lateinit var classScheduleEditText: AutoCompleteTextView
     private lateinit var classTimingEditText: AutoCompleteTextView
     private lateinit var genderSpinner: AutoCompleteTextView
@@ -87,7 +86,6 @@ class AddPostActivity : AppCompatActivity() {
         eduBoardEditText = findViewById(R.id.edu_board)
         feeEditText = findViewById(R.id.feeEditText)
         feeTypeRadioGroup = findViewById(R.id.feeTypeRadioGroup)
-        durationEditText = findViewById(R.id.durationEditText)
         classScheduleEditText = findViewById(R.id.classScheduleEditText)
         classTimingEditText = findViewById(R.id.classTimingEditText)
         genderSpinner = findViewById(R.id.genderSpinner)
@@ -103,7 +101,6 @@ class AddPostActivity : AppCompatActivity() {
         setupClassSuggestions()
         setupSubjectSuggestions()
         setupBoardSuggestions()
-        setupDurationDropdown()
         setupGenderSpinner()
         setupModeOfClassesSpinner()
         setupclassScheduleDropdown()
@@ -216,15 +213,7 @@ class AddPostActivity : AppCompatActivity() {
         val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, boards)
         eduBoardEditText.setAdapter(adapter)
     }
-    private fun setupDurationDropdown() {
-        val durationOptions = listOf("45 min","0.5 hour", "1 hour", "1.5 hours", "2 hours", "2.5 hours", "3 hours"
-        )
-        val durationAdapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, durationOptions)
 
-        durationEditText.setAdapter(durationAdapter)
-        durationEditText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_WORDS
-
-    }
     private fun setupclassScheduleDropdown() {
         val classDayOptions = listOf(
             "Mon to Sat",
@@ -371,6 +360,17 @@ class AddPostActivity : AppCompatActivity() {
 
         (specialRequirementEditText as? AutoCompleteTextView)?.setAdapter(adapter)
     }
+    private fun isValidFeeInput(feeInput: String): Boolean {
+        val trimmedInput = feeInput.trim()
+
+        // Regex to match either:
+        // - A single number (e.g. 500)
+        // - A range with two numbers, allowing - or – as separator (e.g. 500-1000 or 500–1000)
+        val feePattern = Regex("^\\d{2,5}(?:[-–]\\d{2,5})?$")
+
+        return feePattern.matches(trimmedInput)
+    }
+
 
 
     private fun submitForm() {
@@ -383,7 +383,6 @@ class AddPostActivity : AppCompatActivity() {
             R.id.radioMonthly -> "monthly"
             else -> ""
         }
-        val duration = durationEditText.text.toString().trim()
         val classSchedule = classScheduleEditText.text.toString().trim()
         val classTiming = classTimingEditText.text.toString().trim()
         val gender = genderSpinner.text.toString()
@@ -405,14 +404,20 @@ class AddPostActivity : AppCompatActivity() {
         }
 
         if (feeAmount.isEmpty() || feeType.isEmpty()) { feeEditText.error = "Enter fee and select type"; feeEditText.requestFocus(); return }
-        if (duration.isEmpty()) { durationEditText.error = "Enter duration"; durationEditText.requestFocus(); return }
         if (classSchedule.isEmpty()) { classScheduleEditText.error = "Enter days"; classScheduleEditText.requestFocus(); return }
         if (gender.isEmpty()) { Snackbar.make(rootView, "Please select preferred gender", Snackbar.LENGTH_SHORT).show(); return }
         if (modeOfClass.isEmpty()) { Snackbar.make(rootView, "Please select mode of class", Snackbar.LENGTH_SHORT).show(); return }
         if (qualification.isEmpty()) { minQualificationEditText.error = "Enter minimum qualification"; minQualificationEditText.requestFocus(); return }
         if (specialReq.length > 200) { specialRequirementEditText.error = "Too long – max 200 characters"; specialRequirementEditText.requestFocus(); return }
 
-        val fee = "₹${feeAmount}/${if (feeType == "hourly") "hr" else "month"}"
+        val feeInput = feeEditText.text.toString().trim()
+
+        if (!isValidFeeInput(feeInput)) {
+            feeEditText.error = "Enter a valid fee or range (e.g. 500 or 500–1000)"
+            return
+        }
+
+        val fee = "₹${feeInput}/${if (feeType == "hourly") "hr" else "month"}"
 
 
         val post = PostRequest(
@@ -420,7 +425,6 @@ class AddPostActivity : AppCompatActivity() {
             subject,
             educationBoard,
             fee,
-            duration,
             classSchedule,
             classTiming,
             gender,
@@ -522,7 +526,6 @@ class AddPostActivity : AppCompatActivity() {
         eduBoardEditText.text.clear()
         locationEditText.text.clear()
         feeEditText.text.clear()
-        durationEditText.text.clear()
         classScheduleEditText.text.clear()
         demoClassDateEditText.text.clear()
         minQualificationEditText.text.clear()

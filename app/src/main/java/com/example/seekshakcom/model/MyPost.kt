@@ -10,7 +10,6 @@ data class MyPost(
     val subject: String,
     val educationBoard: String,
     val fee: String,
-    val duration: String,
     val classSchedule: String,
     val classTiming: String,
     val gender: String,

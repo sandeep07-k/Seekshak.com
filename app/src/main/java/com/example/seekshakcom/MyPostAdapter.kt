@@ -25,7 +25,6 @@ class MyPostAdapter(
         val classDetails: TextView = itemView.findViewById(R.id.class_Details)
         val subjectDetails: TextView = itemView.findViewById(R.id.subject_Details)
         val boardDetails: TextView = itemView.findViewById(R.id.board_Details)
-        val duration: TextView = itemView.findViewById(R.id.duration_Details)
         val genderPreference: TextView = itemView.findViewById(R.id.gender_Preference)
         val expectedFee: TextView = itemView.findViewById(R.id.fee_Details)
         val classTiming: TextView = itemView.findViewById(R.id.class_Timing)
@@ -75,7 +74,6 @@ class MyPostAdapter(
         holder.classDetails.text = "Class: ${post.className}"
         holder.subjectDetails.text = "Subject: ${post.subject}"
         holder.boardDetails.text = "Education Board: ${post.educationBoard}"
-        holder.duration.text = "Duration: ${post.duration} "
         holder.genderPreference.text = "Gender Preference: ${post.gender}"
         holder.expectedFee.text = "Expected Fee: ${post.fee} "
         holder.classTiming.text = "Class Timing: ${post.classTiming}"
