@@ -58,16 +58,15 @@
                 android:hint="Class *"
                 android:layout_marginBottom="12dp">
 
-                <AutoCompleteTextView
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
                     android:id="@+id/classEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text"
                     android:imeOptions="actionNext"
                     android:maxLines="1"
-                    android:completionThreshold="0" /> <!-- Shows suggestions after typing 1 character -->
+                    android:completionThreshold="0" />
             </com.google.android.material.textfield.TextInputLayout>
-
 
             <!-- Subject Field -->
             <com.google.android.material.textfield.TextInputLayout
@@ -76,7 +75,7 @@
                 android:hint="Subjects *"
                 android:layout_marginBottom="12dp">
 
-                <AutoCompleteTextView
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
                     android:id="@+id/subjectEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -93,7 +92,7 @@
                 android:hint="Education Board *"
                 android:layout_marginBottom="12dp">
 
-                <AutoCompleteTextView
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
                     android:id="@+id/edu_board"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -101,7 +100,6 @@
                     android:completionThreshold="0"
                     android:inputType="text"
                     android:imeOptions="actionNext" />
-
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Tuition Fee and Type -->
@@ -156,6 +154,7 @@
                         android:layout_marginStart="8dp" />
                 </RadioGroup>
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -168,7 +167,7 @@
                     android:layout_weight="1"
                     android:hint="Location *">
 
-                    <AutoCompleteTextView
+                    <com.google.android.material.textfield.MaterialAutoCompleteTextView
                         android:id="@+id/locationEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -195,9 +194,7 @@
                     android:contentDescription="Fetch Location"
                     android:clickable="true"
                     android:focusable="true" />
-
             </LinearLayout>
-
 
             <!-- Duration -->
             <com.google.android.material.textfield.TextInputLayout
@@ -206,7 +203,7 @@
                 android:hint="Class Duration (in min or hr)*"
                 android:layout_marginBottom="12dp">
 
-                <AutoCompleteTextView
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
                     android:id="@+id/durationEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -215,7 +212,6 @@
                     android:completionThreshold="0"/>
             </com.google.android.material.textfield.TextInputLayout>
 
-
             <!-- Class Schedule -->
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
@@ -223,7 +219,7 @@
                 android:hint="Class Schedule (days in a week) *"
                 android:layout_marginBottom="12dp">
 
-                <AutoCompleteTextView
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
                     android:id="@+id/classScheduleEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -240,7 +236,7 @@
                 android:hint="Class Timing *"
                 android:layout_marginBottom="12dp">
 
-                <AutoCompleteTextView
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
                     android:id="@+id/classTimingEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -250,8 +246,6 @@
                     android:inputType="text" />
             </com.google.android.material.textfield.TextInputLayout>
 
-
-
             <!-- Gender Preference -->
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
@@ -259,7 +253,7 @@
                 android:hint="Gender Preference *"
                 android:layout_marginBottom="12dp">
 
-                <AutoCompleteTextView
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
                     android:id="@+id/genderSpinner"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -269,9 +263,6 @@
                     android:completionThreshold="0"/>
             </com.google.android.material.textfield.TextInputLayout>
 
-
-
-
             <!-- Mode of Class -->
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
@@ -279,7 +270,7 @@
                 android:hint="Mode of Class *"
                 android:layout_marginBottom="12dp">
 
-                <AutoCompleteTextView
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
                     android:id="@+id/modeOfClassesSpinner"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -296,7 +287,7 @@
                 android:hint="Minimum Qualification *"
                 android:layout_marginBottom="12dp">
 
-                <AutoCompleteTextView
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
                     android:id="@+id/minQualificationEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -326,7 +317,6 @@
                     android:inputType="none"/>
             </com.google.android.material.textfield.TextInputLayout>
 
-
             <!-- Special Requirement -->
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
@@ -344,9 +334,6 @@
                     android:completionThreshold="1"
                     android:dropDownHeight="200dp" />
             </com.google.android.material.textfield.TextInputLayout>
-
-
-
 
             <!-- Submit Button -->
             <Button
@@ -369,7 +356,6 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="6dp"
                 android:visibility="gone" />
-
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

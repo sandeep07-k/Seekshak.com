@@ -12,6 +12,7 @@ import android.os.Looper
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -32,6 +33,7 @@ class LocationSelectActivity : AppCompatActivity() {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var shimmerLayout: ShimmerFrameLayout
     private lateinit var adapter: RecentLocationAdapter
+    private lateinit var locationDialog: AlertDialog
 
 
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
@@ -57,6 +59,7 @@ class LocationSelectActivity : AppCompatActivity() {
         binding.backIcon.setOnClickListener { finish() }
 
         binding.useCurrentLocation.setOnClickListener {
+            showLocationDialog()
             fetchLocationAndReturn(true)
         }
 
@@ -115,13 +118,16 @@ class LocationSelectActivity : AppCompatActivity() {
                     if (freshLocation != null) {
                         handleLocation(freshLocation, shouldFinish)
                     } else {
+                        dismissLocationDialog()
                         binding.fetchingLocationText.text = "Unable to fetch location"
                     }
                 }.addOnFailureListener {
+                    dismissLocationDialog()
                     binding.fetchingLocationText.text = "Failed to fetch location"
                 }
             }
         }.addOnFailureListener {
+            dismissLocationDialog()
             binding.fetchingLocationText.text = "Failed to fetch location"
         }
     }
@@ -177,6 +183,7 @@ class LocationSelectActivity : AppCompatActivity() {
                     loadRecentLocations()
                 }
             } else {
+                dismissLocationDialog()
                 binding.fetchingLocationText.text = "Failed to get location details"
             }
         }
@@ -287,8 +294,25 @@ class LocationSelectActivity : AppCompatActivity() {
         }
         prefs.edit().putString("recent_location_list", json).apply()
     }
+    private fun showLocationDialog() {
+        val dialogView = layoutInflater.inflate(R.layout.dialog_fetching_location, null)
+
+        val builder = AlertDialog.Builder(this)
+            .setView(dialogView)
+            .setCancelable(false)
+
+        locationDialog = builder.create()
+        locationDialog.show()
+    }
+
+    private fun dismissLocationDialog() {
+        if (::locationDialog.isInitialized && locationDialog.isShowing) {
+            locationDialog.dismiss()
+        }
+    }
 
     override fun onDestroy() {
+        dismissLocationDialog()
         coroutineScope.cancel()
         super.onDestroy()
     }
