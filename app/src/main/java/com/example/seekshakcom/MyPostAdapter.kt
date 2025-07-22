@@ -34,6 +34,7 @@ class MyPostAdapter(
         val qualification: TextView = itemView.findViewById(R.id.min_Qualification)
         val demoClassDate: TextView = itemView.findViewById(R.id.demo_Class_Date)
         val specialReq: TextView = itemView.findViewById(R.id.special_Requirement)
+        val locationDetails: TextView = itemView.findViewById(R.id.location_details)
 
         val btnTotalApplications: Button = itemView.findViewById(R.id.btn_total_applications)
         val btnEditDetails: Button = itemView.findViewById(R.id.btn_Edit_Details)
@@ -84,6 +85,13 @@ class MyPostAdapter(
         holder.demoClassDate.text = "Demo Class Date: ${if (post.demoClassDate.isBlank()) "None" else post.demoClassDate}"
         holder.specialReq.text = "Special Req: ${if (post.specialReq.isBlank()) "None" else post.specialReq}"
 
+        // Address: sublocality, area, city
+        val locationDisplay = listOfNotNull(
+            post.sublocality?.takeIf { it.isNotBlank() },
+            post.area?.takeIf { it.isNotBlank() },
+            post.city?.takeIf { it.isNotBlank() }
+        ).joinToString(", ").ifBlank { "Unknown" }
+        holder.locationDetails.text = "Address: $locationDisplay"
 
         // Status logic
         if (post.status == "expired") {
@@ -98,10 +106,9 @@ class MyPostAdapter(
         holder.btnEditDetails.setOnClickListener {
             val context = holder.itemView.context
             val intent = Intent(context, EditPostActivity::class.java)
-            intent.putExtra("POST_DATA", postList[position]) // or 'post' if already defined
+            intent.putExtra("POST_DATA", postList[position])
             context.startActivity(intent)
         }
-
 
         holder.btnTotalApplications.setOnClickListener {
             // TODO
@@ -132,5 +139,4 @@ class MyPostAdapter(
     }
 
     override fun getItemCount(): Int = postList.size
-
 }

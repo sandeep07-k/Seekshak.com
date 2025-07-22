@@ -18,6 +18,13 @@ data class MyPost(
     val modeOfClass: String,
     val qualification: String,
     val specialReq: String,
+    val latitude: Double?,
+    val longitude: Double?,
+    val sublocality: String?,
+    val area: String?,
+    val city: String?,
+    val state: String?,
+    val country: String?,
     val createdAt: String,
     val status: String = "active"
 ) : Serializable

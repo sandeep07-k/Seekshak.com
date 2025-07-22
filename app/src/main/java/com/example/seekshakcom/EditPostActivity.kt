@@ -1,21 +1,31 @@
 
 package com.example.seekshakcom
 
+import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.DatePickerDialog
+import android.content.Intent
 import android.graphics.Color
+import android.location.Geocoder
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.*
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import com.example.seekshakcom.model.LocationRequest
 import com.example.seekshakcom.model.MyPost
 import com.example.seekshakcom.model.PostRequest
 import com.example.seekshakcom.network.ApiClient
 import com.example.seekshakcom.network.ApiResponse
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.android.material.textfield.TextInputEditText
 import retrofit2.Call
@@ -39,17 +49,24 @@ class EditPostActivity : AppCompatActivity() {
     private lateinit var modeOfClassesSpinner: AutoCompleteTextView
     private lateinit var minQualificationEditText: AutoCompleteTextView
     private lateinit var specialRequirementEditText: MaterialAutoCompleteTextView
-    private lateinit var submitButton: Button
+    private lateinit var updateButton: Button
     private lateinit var progressBar: ProgressBar
+    private lateinit var locationEditText: AutoCompleteTextView
+    private lateinit var fetchLocationButton: TextView
+    private var selectedLat: Double? = null
+    private var selectedLon: Double? = null
+    private var selectedSublocality: String? = null
+    private var selectedArea: String? = null
+    private var selectedCity: String? = null
+    private var selectedState: String? = null
+    private var selectedCountry: String? = null
+    private lateinit var locationResultLauncher: ActivityResultLauncher<Intent>
+
 
     private var postId: String? = null
-    private var latitude: Double? = null
-    private var longitude: Double? = null
-    private var sublocality: String? = null
-    private var area: String? = null
-    private var city: String? = null
-    private var state: String? = null
-    private var country: String? = null
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+
+
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,18 +92,54 @@ class EditPostActivity : AppCompatActivity() {
         modeOfClassesSpinner = findViewById(R.id.modeOfClassesSpinner)
         minQualificationEditText = findViewById(R.id.minQualificationEditText)
         specialRequirementEditText = findViewById(R.id.specialRequirementEditText)
-        submitButton = findViewById(R.id.submitButton)
+        updateButton = findViewById(R.id.updateButton)
         progressBar = findViewById(R.id.progressBar)
+        locationEditText = findViewById(R.id.locationEditText)
+        fetchLocationButton = findViewById(R.id.fetchLocationButton)
+
 
         backArrow.setOnClickListener { finish() }
         demoClassDateEditText.setOnClickListener { showDatePicker() }
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
 
         setupSuggestions()
+
+
+        locationResultLauncher = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { result ->
+            if (result.resultCode == Activity.RESULT_OK && result.data != null) {
+                val data = result.data!!
+                selectedLat = data?.getStringExtra("lat")?.toDoubleOrNull()
+                selectedLon = data?.getStringExtra("lon")?.toDoubleOrNull()
+                selectedSublocality = data?.getStringExtra("selected_sublocality")
+                selectedArea = data?.getStringExtra("selected_area")
+                selectedCity = data?.getStringExtra("selected_city")
+                selectedState = data?.getStringExtra("selected_state")
+                selectedCountry = data?.getStringExtra("selected_country")
+//
+
+
+                val locationText = listOfNotNull(selectedSublocality, selectedArea, selectedCity)
+                    .joinToString(", ")
+
+                locationEditText.setText(locationText)
+            } else {
+                Log.d("AutoFillCheck", "Result not OK or data is null")
+            }
+        }
+
+        fetchLocationButton.setOnClickListener {
+            val intent = Intent(this, PostLocationSelectActivity::class.java)
+            locationResultLauncher.launch(intent)
+        }
 
         val post = intent.getSerializableExtra("POST_DATA", MyPost::class.java)
         post?.let { populateFields(it) }
 
-        submitButton.setOnClickListener { showConfirmationDialog() }
+
+        updateButton.setOnClickListener { showConfirmationDialog() }
     }
 
     private fun populateFields(post: MyPost) {
@@ -108,6 +161,16 @@ class EditPostActivity : AppCompatActivity() {
             post.fee.contains("hour", true) -> feeTypeRadioGroup.check(R.id.radioHourly)
             post.fee.contains("month", true) -> feeTypeRadioGroup.check(R.id.radioMonthly)
         }
+
+        // ✅ Pre-fill location
+        val locationDisplay = listOfNotNull(post.sublocality, post.area, post.city)
+            .filter { it.isNotBlank() }
+            .joinToString(", ")
+        locationEditText.setText(locationDisplay)
+
+
+
+
     }
 
     private fun showDatePicker() {
@@ -180,6 +243,10 @@ class EditPostActivity : AppCompatActivity() {
         )))
     }
 
+
+
+
+
     private fun showConfirmationDialog() {
         AlertDialog.Builder(this)
             .setTitle("Confirm Update")
@@ -210,29 +277,42 @@ class EditPostActivity : AppCompatActivity() {
 
         if (className.isEmpty() || subject.isEmpty() || educationBoard.isEmpty() ||
             feeAmount.isEmpty() || feeType.isEmpty() || duration.isEmpty() ||
-            classSchedule.isEmpty() || gender.isEmpty() || modeOfClass.isEmpty() || qualification.isEmpty()
+            classSchedule.isEmpty() || gender.isEmpty() || modeOfClass.isEmpty() ||
+            qualification.isEmpty()
         ) {
             Toast.makeText(this, "Please fill all required fields", Toast.LENGTH_SHORT).show()
             return
         }
+        if (selectedLat == null || selectedLon == null || selectedLat == 0.0 || selectedLon == 0.0 ||
+            selectedCity.isNullOrBlank() || selectedArea.isNullOrBlank()) {
+            Toast.makeText(this, "Please select a valid location", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+
 
         val fee = "₹$feeAmount/${if (feeType == "hourly") "hr" else "month"}"
         val updatedPost = PostRequest(
             className, subject, educationBoard, fee, duration, classSchedule,
             classTiming, gender, demoClassDate, modeOfClass, qualification, specialReq,
-            latitude ?: 0.0, longitude ?: 0.0, // fallback if null
-            sublocality ?: "", area ?: "", city ?: "", state ?: "", country ?: ""
+            latitude = selectedLat?: 0.0,
+            longitude = selectedLon ?: 0.0,
+            sublocality = selectedSublocality ?: "",
+            area = selectedArea ?: "",
+            city = selectedCity ?: "",
+            state = selectedState ?: "",
+            country = selectedCountry ?: ""
         )
 
 
         progressBar.visibility = View.VISIBLE
-        submitButton.isEnabled = false
+        updateButton.isEnabled = false
 
         ApiClient.instance.updatePost(postId!!, updatedPost)
             .enqueue(object : Callback<ApiResponse> {
                 override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
                     progressBar.visibility = View.GONE
-                    submitButton.isEnabled = true
+                    updateButton.isEnabled = true
                     if (response.isSuccessful && response.body()?.success == true) {
                         Toast.makeText(this@EditPostActivity, "Post updated successfully", Toast.LENGTH_SHORT).show()
                         setResult(RESULT_OK)
@@ -244,7 +324,7 @@ class EditPostActivity : AppCompatActivity() {
 
                 override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
                     progressBar.visibility = View.GONE
-                    submitButton.isEnabled = true
+                    updateButton.isEnabled = true
                     Toast.makeText(this@EditPostActivity, "Error: ${t.localizedMessage}", Toast.LENGTH_LONG).show()
                 }
             })
