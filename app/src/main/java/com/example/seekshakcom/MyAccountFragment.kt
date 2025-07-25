@@ -1,4 +1,4 @@
-package com.example.seekshakcom.ui.myaccount
+package com.example.seekshakcom
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,11 +9,13 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import com.google.firebase.auth.FirebaseAuth
-import com.example.seekshakcom.R
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.example.seekshakcom.LoginActivity
+import androidx.lifecycle.lifecycleScope
 import com.example.seekshakcom.databinding.FragmentMyaccountBinding
+import com.example.seekshakcom.network.ApiClient
+import com.example.seekshakcom.utils.SharedPrefManager
+import kotlinx.coroutines.launch
 
 class MyAccountFragment : Fragment() {
 
@@ -65,12 +67,6 @@ class MyAccountFragment : Fragment() {
         startActivity(intent)
     }
 
-    private fun setupViews() {
-        binding.userId.text = "Std-1234"
-        binding.userName.text = "Sandeep Kumar"
-        binding.mobileNo.text = "+91 9876543210"
-        binding.userEmail.text = "sandeepkumar9334@gmail.com"
-    }
 
     private fun setupListeners() {
 
@@ -79,6 +75,64 @@ class MyAccountFragment : Fragment() {
             Toast.makeText(requireContext(), "Change profile picture", Toast.LENGTH_SHORT).show()
         }
     }
+    private fun setupViews() {
+        // Load from SharedPreferences first
+        SharedPrefManager.getUser(requireContext())?.let { user ->
+            binding.userId.text = user.userId.uppercase()
+            binding.userName.text = user.name
+                .split(" ")
+                .joinToString(" ") { word ->
+                    word.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
+                }
+            binding.mobileNo.text = user.phone
+        }
+
+        // Fetch fresh from server in background
+        FirebaseAuth.getInstance().currentUser?.getIdToken(true)
+            ?.addOnSuccessListener { result ->
+                val idToken = result.token
+                if (idToken != null) {
+                    fetchUserFromBackend("Bearer $idToken")
+                }
+            }
+            ?.addOnFailureListener {
+                Toast.makeText(requireContext(), "Failed to get auth token", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+
+
+    private fun fetchUserFromBackend(authToken: String) {
+        lifecycleScope.launch {
+            try {
+                val response = ApiClient.instance.getUserProfile(authToken)
+                if (response.isSuccessful) {
+                    response.body()?.let { user ->
+                        // Save to prefs
+                        SharedPrefManager.saveUser(requireContext(), user)
+
+                        // Update UI
+                        binding.userId.text = user.userId.uppercase()
+                        binding.userName.text = user.name
+                            .split(" ")
+                            .joinToString(" ") { word ->
+                                word.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
+                            }
+                        binding.mobileNo.text = user.phone
+                    }
+                }
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Toast.makeText(requireContext(), "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+
+
+
+
 
 
     override fun onDestroyView() {

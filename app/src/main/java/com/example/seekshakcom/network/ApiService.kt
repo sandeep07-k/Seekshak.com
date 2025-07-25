@@ -39,7 +39,6 @@ interface ApiService {
     @PUT("api/posts/update-post/{id}")
     fun updatePost(@Path("id") postId: String, @Body post: PostRequest): Call<ApiResponse>
 
-
     // 🔁 Reactivate Post
     @POST("api/posts/reactivate-post/{postId}")
     fun reactivatePost(@Path("postId") postId: String): Call<ApiResponse>
@@ -51,6 +50,12 @@ interface ApiService {
     // ❌ Delete Post
     @DELETE("api/posts/delete-post/{postId}")
     fun deletePost(@Path("postId") postId: String): Call<ApiResponse>
+
+    @GET("/api/user/profile")
+    suspend fun getUserProfile(
+        @Header("Authorization") token: String
+    ): Response<UserResponse>
+
 
 
 

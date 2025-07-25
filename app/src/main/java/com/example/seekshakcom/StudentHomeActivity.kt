@@ -18,7 +18,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import com.example.seekshakcom.ui.myaccount.MyAccountFragment
 
 
 class StudentHomeActivity : AppCompatActivity() {

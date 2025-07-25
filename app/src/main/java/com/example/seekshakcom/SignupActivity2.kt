@@ -140,7 +140,7 @@ class SignupActivity2 : AppCompatActivity() {
         verifyOtpButton.isEnabled = true
         verifyOtpButton.alpha = 1f
 
-//        verifyOtpButton.isEnabled = otpFields.all { it.text.toString().trim().length == 1 }
+
     }
 
     private fun startSmsRetriever() {

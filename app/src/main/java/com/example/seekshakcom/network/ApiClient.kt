@@ -12,7 +12,7 @@ object ApiClient {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
-    val locationService: LocationApiService = retrofit.create(LocationApiService::class.java)
+
 
     val instance: ApiService by lazy {
         retrofit.create(ApiService::class.java)

@@ -58,17 +58,17 @@
                     android:paddingStart="16dp">
 
                     <TextView
-                        android:layout_width="117dp"
+                        android:layout_width="115dp"
                         android:layout_height="35dp"
                         android:layout_alignParentEnd="true"
-                        android:layout_marginEnd="10dp"
+                        android:layout_marginEnd="9dp"
                         android:background="@drawable/bg_viewprofile"
                         android:clickable="true"
                         android:focusable="true"
                         android:gravity="center"
                         android:lineSpacingExtra="4sp"
                         android:text="Edit Profile >>"
-                        android:textColor="#AAD9FF"
+                        android:textColor="#FFFFFF"
                         android:textSize="12sp"
                         android:textStyle="bold" />
 
@@ -129,14 +129,26 @@
                     </LinearLayout>
 
                     <TextView
+                        android:id="@+id/text_user_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/profile_frame"
+                        android:layout_marginTop="14dp"
+                        android:text="Name: "
+                        android:textColor="#000000"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <TextView
                         android:id="@+id/user_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/profile_frame"
-                        android:layout_marginTop="8dp"
-                        android:text="Sandeep Kumar"
+                        android:layout_marginTop="14dp"
+                        android:layout_toEndOf="@+id/text_user_name"
+                        android:text="Unknown"
                         android:textColor="#000000"
-                        android:textSize="18sp"
+                        android:textSize="14sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -144,8 +156,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/user_name"
-                        android:layout_marginTop="3dp"
-                        android:text="Mobile No. : "
+                        android:layout_marginTop="4dp"
+                        android:text="Mobile: "
                         android:textColor="#000000"
                         android:textSize="14sp"
                         android:textStyle="bold" />
@@ -156,44 +168,44 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/user_name"
                         android:layout_marginStart="1dp"
-                        android:layout_marginTop="3dp"
+                        android:layout_marginTop="4dp"
                         android:layout_toEndOf="@+id/text_mobile"
                         android:text="+91 XXXXXXXXXX"
                         android:textColor="#00213D"
                         android:textSize="14sp"
                         android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/text_email"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/text_mobile"
+<!--                    <TextView-->
+<!--                        android:id="@+id/text_email"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_below="@+id/text_mobile"-->
 
-                        android:layout_marginTop="3dp"
-                        android:text="Email : "
-                        android:textColor="#000000"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
+<!--                        android:layout_marginTop="3dp"-->
+<!--                        android:text="Email : "-->
+<!--                        android:textColor="#000000"-->
+<!--                        android:textSize="14sp"-->
+<!--                        android:textStyle="bold" />-->
 
-                    <TextView
-                        android:id="@+id/user_email"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/mobile_no"
-                        android:layout_marginStart="2dp"
-                        android:layout_marginTop="3dp"
-                        android:layout_toEndOf="@+id/text_email"
-                        android:text="sandeepkumar9334@gmail.com"
-                        android:textColor="#00213D"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
+<!--                    <TextView-->
+<!--                        android:id="@+id/user_email"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_below="@+id/mobile_no"-->
+<!--                        android:layout_marginStart="2dp"-->
+<!--                        android:layout_marginTop="3dp"-->
+<!--                        android:layout_toEndOf="@+id/text_email"-->
+<!--                        android:text=" "-->
+<!--                        android:textColor="#00213D"-->
+<!--                        android:textSize="14sp"-->
+<!--                        android:textStyle="bold" />-->
 
                 </RelativeLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="15dp"
                     android:background="@drawable/rectangle_6"
                     android:padding="12dp"
                     android:gravity="center_vertical">
