@@ -4,5 +4,6 @@ data class UserResponse(
     val userId: String,
     val name: String,
     val phone: String,
+    val profileImage: String?
 
 )

@@ -2,6 +2,8 @@ package com.example.seekshakcom.network
 
 import LoginResponse
 import com.example.seekshakcom.model.*
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.*
@@ -56,10 +58,22 @@ interface ApiService {
         @Header("Authorization") token: String
     ): Response<UserResponse>
 
+    @Multipart
+    @POST("/api/image/upload-profile")
+    suspend fun uploadProfileImage(
+        @Part profileImage: MultipartBody.Part,
+        @Part("firebaseUid") firebaseUid: RequestBody
+    ): Response<UploadResponse>
+
+    @POST("/api/image/remove-profile")
+    fun removeImage(@Body request: ImageRemoveRequest): Call<GenericResponse>
+
+
 
 
 
 
 
 }
+
 
