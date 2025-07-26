@@ -77,9 +77,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
-                        android:layout_marginTop="16dp">
+                        android:layout_marginTop="16dp"
+                        android:clickable="true"
+                        android:focusable="true">
 
-                        <!-- Profile Picture -->
 
                         <!-- Camera Icon Overlay -->
                         <ImageView
@@ -88,8 +89,10 @@
                             android:layout_height="65dp"
                             android:background="@drawable/bg_profilecicle"
                             android:contentDescription="Profile"
-                            android:padding="8dp"
+                            android:padding="0dp"
+                            android:scaleType="centerCrop"
                             android:src="@drawable/ic_user" />
+
 
                         <ImageButton
                             android:id="@+id/ic_camera"

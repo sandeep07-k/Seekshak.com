@@ -25,8 +25,13 @@ dependencyResolutionManagement {
         maven {
             url = uri("https://maven.mappls.com/repository/mappls/")
         }
+        // ✅ JitPack for uCrop or other libraries
+        maven {
+            url = uri("https://jitpack.io")
+        }
     }
 }
+
 
 rootProject.name = "seekshak.com"
 include(":app")
