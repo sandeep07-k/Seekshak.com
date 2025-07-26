@@ -12,11 +12,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
+import com.bumptech.glide.signature.ObjectKey
 import com.example.seekshakcom.databinding.FragmentMyaccountBinding
 import com.example.seekshakcom.model.GenericResponse
 import com.example.seekshakcom.model.ImageRemoveRequest
@@ -38,6 +40,10 @@ class MyAccountFragment : Fragment() {
 
     private var _binding: FragmentMyaccountBinding? = null
     private val binding get() = _binding!!
+    private lateinit var cameraLauncher: ActivityResultLauncher<Uri>
+    private var cameraImageUri: Uri? = null
+    private lateinit var imagePickerLauncher: ActivityResultLauncher<String>
+
 
     private val cropImageLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -61,6 +67,17 @@ class MyAccountFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        imagePickerLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+            uri?.let {
+                uploadImageToServer(it)
+            }
+        }
+        cameraLauncher = registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
+            if (success && cameraImageUri != null) {
+                uploadImageToServer(cameraImageUri!!)
+            }
+        }
+
 
         view.findViewById<LinearLayout>(R.id.logout_layout).setOnClickListener {
             showLogoutDialog()
@@ -68,6 +85,8 @@ class MyAccountFragment : Fragment() {
 
         setupViews()
         setupListeners()
+
+        loadProfileImageFromPrefs()
     }
 
     private fun showLogoutDialog() {
@@ -95,28 +114,25 @@ class MyAccountFragment : Fragment() {
     }
 
     private fun setupViews() {
-        SharedPrefManager.getUser(requireContext())?.let { user ->
-            binding.userId.text = user.userId.uppercase()
-            binding.userName.text = user.name.split(" ").joinToString(" ") {
-                it.replaceFirstChar { c -> c.uppercaseChar() }
-            }
-            binding.mobileNo.text = user.phone
-        }
+        val user = SharedPrefManager.getUser(requireContext())
+        binding.userId.text = user?.userId?.uppercase() ?: ""
+        binding.userName.text = user?.name
+            ?.split(" ")
+            ?.joinToString(" ") { it.replaceFirstChar { c -> c.uppercaseChar() } } ?: ""
+        binding.mobileNo.text = user?.phone ?: ""
 
+        val imageUrl = user?.profileImage ?: SharedPrefManager.getImageUrl(requireContext())
 
-        val imageUrl = SharedPrefManager.getImageUrl(requireContext())
-
-        Glide.with(this)
-            .load(imageUrl ?: R.drawable.ic_user)
+        Glide.with(requireContext())
+            .load(imageUrl)
+            .signature(ObjectKey(imageUrl ?: "default_key")) // 👈 add this to force refresh if URL changes
             .placeholder(R.drawable.ic_user)
             .error(R.drawable.ic_user)
             .circleCrop()
             .into(binding.profileIcon)
 
 
-
-
-
+        // 🔄 Always fetch fresh user data in background
         FirebaseAuth.getInstance().currentUser?.getIdToken(true)
             ?.addOnSuccessListener { result ->
                 val idToken = result.token
@@ -126,13 +142,17 @@ class MyAccountFragment : Fragment() {
             }
     }
 
+
     private fun fetchUserFromBackend(authToken: String) {
         lifecycleScope.launch {
             try {
                 val response = ApiClient.instance.getUserProfile(authToken)
                 if (response.isSuccessful) {
                     response.body()?.let { user ->
-                        SharedPrefManager.saveUser(requireContext(), user)
+//                        SharedPrefManager.saveUser(requireContext(), user)
+                        SharedPrefManager.saveImageUrl(requireContext(), user.profileImage) // Save the image URL separately
+                        SharedPrefManager.saveUser(requireContext(), user.copy(profileImage = user.profileImage))
+
 
                         binding.userId.text = user.userId.uppercase()
                         binding.userName.text = user.name
@@ -168,7 +188,7 @@ class MyAccountFragment : Fragment() {
 
 
 
-    private var cameraImageUri: Uri? = null
+
 
     private val pickImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         uri?.let { launchImageCropper(it) }
@@ -228,19 +248,14 @@ class MyAccountFragment : Fragment() {
             }
             .show()
     }
-
     private fun uploadImageToServer(uri: Uri) {
         val context = requireContext()
         val file = uriToFile(uri) ?: return
         val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
         val body = MultipartBody.Part.createFormData("profileImage", file.name, requestFile)
 
-
-
-
         val firebaseUid = FirebaseAuth.getInstance().currentUser?.uid
         val uidRequestBody = firebaseUid?.toRequestBody("text/plain".toMediaTypeOrNull())
-
         if (uidRequestBody == null) {
             Toast.makeText(context, "Firebase UID is null", Toast.LENGTH_SHORT).show()
             return
@@ -253,6 +268,13 @@ class MyAccountFragment : Fragment() {
                     val imageUrl = response.body()?.imageUrl
                     if (!imageUrl.isNullOrEmpty()) {
                         SharedPrefManager.saveImageUrl(context, imageUrl)
+
+                        // Also update full user object if exists
+                        SharedPrefManager.getUser(context)?.let { oldUser ->
+                            val updatedUser = oldUser.copy(profileImage = imageUrl)
+                            SharedPrefManager.saveUser(context, updatedUser)
+                        }
+
                         Glide.with(context)
                             .load(imageUrl)
                             .placeholder(R.drawable.ic_user)
@@ -262,15 +284,16 @@ class MyAccountFragment : Fragment() {
                     } else {
                         Toast.makeText(context, "Image URL is empty", Toast.LENGTH_SHORT).show()
                     }
-
                 } else {
                     Toast.makeText(context, "Upload failed", Toast.LENGTH_SHORT).show()
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
+                Toast.makeText(context, "Error uploading", Toast.LENGTH_SHORT).show()
             }
         }
     }
+
 
     private fun removeProfileImage() {
         val firebaseUid = FirebaseAuth.getInstance().currentUser?.uid ?: return
@@ -325,6 +348,32 @@ class MyAccountFragment : Fragment() {
         }
         return tempFile
     }
+    private fun loadProfileImageFromPrefs() {
+        val context = requireContext()
+        val imageUrl = SharedPrefManager.getImageUrl(context)
+
+        if (!imageUrl.isNullOrEmpty()) {
+            Glide.with(context)
+                .load(imageUrl)
+                .placeholder(R.drawable.ic_user)
+                .error(R.drawable.ic_user)
+                .circleCrop()
+                .signature(ObjectKey(imageUrl)) // 🔁 Important: Refresh when URL changes
+                .into(binding.profileIcon)
+        } else {
+            binding.profileIcon.setImageResource(R.drawable.ic_user)
+        }
+    }
+
+
+
+
+    override fun onResume() {
+        super.onResume()
+        loadProfileImageFromPrefs()
+    }
+
+
 
     override fun onDestroyView() {
         super.onDestroyView()

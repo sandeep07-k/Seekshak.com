@@ -31,13 +31,19 @@ class StudentHomeActivity : AppCompatActivity() {
 
     private lateinit var fragmentContainer: FrameLayout
 
+    // Cached fragment instances
+    private val homeFragment = HomeFragment()
+    private val myPostsFragment = MyPostsFragment()
+    private val chatsFragment = ChatsFragment()
+    private val myAccountFragment = MyAccountFragment()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_student_home)
 
         val prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE)
         val token = prefs.getString("token", null)
-        Log.d("TokenDebug", "Token at StudentHomeActivity: $token")
+
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
         window.statusBarColor = Color.TRANSPARENT
@@ -54,48 +60,45 @@ class StudentHomeActivity : AppCompatActivity() {
         chatsText = findViewById(R.id.chatsText)
         fragmentContainer = findViewById(R.id.student_home_fragment_container)
 
-        // Load default HomeFragment
-        selectHomeTab()
         fragmentContainer.visibility = View.VISIBLE
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.student_home_fragment_container, HomeFragment())
-            .commit()
+        selectHomeTab()
+        showFragment(homeFragment)
 
         homeBtn.setOnClickListener {
-            ifNotVisibleThenShow(HomeFragment()) {
+            ifNotVisibleThenShow(homeFragment) {
                 resetAllTabs()
-                homeBtn.isSelected = true
                 homeBtn.setImageResource(R.drawable.ic_home_filled)
+                homeBtn.isSelected = true
                 homeText.setTypeface(null, Typeface.BOLD)
                 homeText.setTextColor(ContextCompat.getColor(this, R.color.darkest_blue))
             }
         }
 
         myPostBtn.setOnClickListener {
-            ifNotVisibleThenShow(MyPostsFragment()) {
+            ifNotVisibleThenShow(myPostsFragment) {
                 resetAllTabs()
-                myPostBtn.isSelected = true
                 myPostBtn.setImageResource(R.drawable.ic_mypost_filled)
+                myPostBtn.isSelected = true
                 myPostText.setTypeface(null, Typeface.BOLD)
                 myPostText.setTextColor(ContextCompat.getColor(this, R.color.darkest_blue))
             }
         }
 
         chatsBtn.setOnClickListener {
-            ifNotVisibleThenShow(ChatsFragment()) {
+            ifNotVisibleThenShow(chatsFragment) {
                 resetAllTabs()
-                chatsBtn.isSelected = true
                 chatsBtn.setImageResource(R.drawable.ic_chats_filled)
+                chatsBtn.isSelected = true
                 chatsText.setTypeface(null, Typeface.BOLD)
                 chatsText.setTextColor(ContextCompat.getColor(this, R.color.darkest_blue))
             }
         }
 
         myAccountBtn.setOnClickListener {
-            ifNotVisibleThenShow(MyAccountFragment()) {
+            ifNotVisibleThenShow(myAccountFragment) {
                 resetAllTabs()
-                myAccountBtn.isSelected = true
                 myAccountBtn.setImageResource(R.drawable.ic_account_filled)
+                myAccountBtn.isSelected = true
                 myAccountText.setTypeface(null, Typeface.BOLD)
                 myAccountText.setTextColor(ContextCompat.getColor(this, R.color.darkest_blue))
             }
@@ -111,10 +114,7 @@ class StudentHomeActivity : AppCompatActivity() {
                 if (currentFragment !is HomeFragment) {
                     resetAllTabs()
                     selectHomeTab()
-                    supportFragmentManager.popBackStack(null, androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE)
-                    supportFragmentManager.beginTransaction()
-                        .replace(R.id.student_home_fragment_container, HomeFragment())
-                        .commit()
+                    showFragment(homeFragment)
                 } else {
                     AlertDialog.Builder(this@StudentHomeActivity)
                         .setTitle("Exit App")
@@ -131,11 +131,14 @@ class StudentHomeActivity : AppCompatActivity() {
         val current = supportFragmentManager.findFragmentById(R.id.student_home_fragment_container)
         if (current?.javaClass != fragment.javaClass) {
             onSelected()
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.student_home_fragment_container, fragment)
-                .addToBackStack(null)
-                .commit()
+            showFragment(fragment)
         }
+    }
+
+    private fun showFragment(fragment: androidx.fragment.app.Fragment) {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.student_home_fragment_container, fragment)
+            .commit()
     }
 
     private fun resetTab(icon: ImageButton, label: TextView, defaultIconRes: Int) {
