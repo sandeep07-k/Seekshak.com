@@ -97,6 +97,8 @@
 
         <activity android:name=".EditPostActivity"
             android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".FullImageActivity" />
+
 
 
         <uses-library android:name="org.apache.http.legacy" android:required="false"/>

@@ -111,6 +111,18 @@ class MyAccountFragment : Fragment() {
         binding.icCamera.setOnClickListener {
             showImagePickerDialog()
         }
+
+        binding.profileIcon.setOnClickListener {
+            val imageUrl = SharedPrefManager.getUser(requireContext())?.profileImage
+                ?: SharedPrefManager.getImageUrl(requireContext())
+
+            if (!imageUrl.isNullOrEmpty()) {
+                val intent = Intent(requireContext(), FullImageActivity::class.java)
+                intent.putExtra("imageUrl", imageUrl)
+                startActivity(intent)
+            }
+        }
+
     }
 
     private fun setupViews() {
