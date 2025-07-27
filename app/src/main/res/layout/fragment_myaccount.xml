@@ -229,7 +229,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Favorites"
-                        android:textColor="@color/orange"
+                        android:textColor="@color/black"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         android:clickable="true"
@@ -267,7 +267,7 @@
                         android:clickable="true"
                         android:focusable="true"
                         android:text="Transactions"
-                        android:textColor="@color/orange"
+                        android:textColor="@color/black"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -302,7 +302,7 @@
                         android:clickable="true"
                         android:focusable="true"
                         android:text="Settings"
-                        android:textColor="@color/orange"
+                        android:textColor="@color/black"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -338,7 +338,7 @@
                         android:clickable="true"
                         android:focusable="true"
                         android:text="Help &amp; Support"
-                        android:textColor="@color/orange"
+                        android:textColor="@color/black"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -374,7 +374,7 @@
                         android:clickable="true"
                         android:focusable="true"
                         android:text="About Us"
-                        android:textColor="@color/orange"
+                        android:textColor="@color/black"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -414,7 +414,7 @@
                         android:clickable="true"
                         android:focusable="true"
                         android:text="Log Out"
-                        android:textColor="@color/orange"
+                        android:textColor="@color/black"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
