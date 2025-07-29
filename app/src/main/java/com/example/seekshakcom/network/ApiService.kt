@@ -68,12 +68,15 @@ interface ApiService {
     @POST("/api/image/remove-profile")
     fun removeImage(@Body request: ImageRemoveRequest): Call<GenericResponse>
 
-
+    @PUT("api/user/update")
+    fun updateUserProfilePartial(@Body updates: Map<String, String>): Call<UpdateProfileResponse>
 
 
 
 
 
 }
+
+
 
 

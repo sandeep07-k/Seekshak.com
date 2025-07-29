@@ -98,6 +98,9 @@
         <activity android:name=".EditPostActivity"
             android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".FullImageActivity" />
+        <activity android:name=".EditProfileActivity"/>
+        <activity android:name=".OtpVerificationActivity"/>
+        <activity android:name=".PhoneVerificationActivity"/>
 
 
 

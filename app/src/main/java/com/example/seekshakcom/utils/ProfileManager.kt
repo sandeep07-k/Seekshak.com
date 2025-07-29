@@ -5,12 +5,14 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Environment
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
-import com.bumptech.glide.signature.ObjectKey
 import com.example.seekshakcom.R
 import com.example.seekshakcom.databinding.FragmentMyaccountBinding
 import com.example.seekshakcom.model.GenericResponse
@@ -40,7 +42,9 @@ class ProfileManager(
         pickImageLauncher: ActivityResultLauncher<String>,
         takePictureLauncher: ActivityResultLauncher<Uri>
     ) {
-        binding.icCamera.setOnClickListener { showImagePickerDialog(pickImageLauncher, takePictureLauncher) }
+        binding.icCamera.setOnClickListener {
+            showImagePickerDialog(pickImageLauncher, takePictureLauncher)
+        }
 
         binding.profileIcon.setOnClickListener {
             val imageUrl = SharedPrefManager.getUser(fragment.requireContext())?.profileImage
@@ -55,7 +59,9 @@ class ProfileManager(
         FirebaseAuth.getInstance().currentUser?.getIdToken(true)
             ?.addOnSuccessListener {
                 val token = it.token
-                if (token != null) fetchUserFromBackend("Bearer $token")
+                if (!token.isNullOrEmpty()) {
+                    fetchUserFromBackend("Bearer $token")
+                }
             }
 
         loadUserData()
@@ -100,7 +106,9 @@ class ProfileManager(
     }
 
     fun handleCameraImageResult(success: Boolean) {
-        if (success && cameraImageUri != null) launchImageCropper(cameraImageUri!!)
+        if (success && cameraImageUri != null) {
+            launchImageCropper(cameraImageUri!!)
+        }
     }
 
     fun handleGalleryImage(uri: Uri?) {
@@ -127,6 +135,7 @@ class ProfileManager(
     private fun uploadImageToServer(uri: Uri) {
         val context = fragment.requireContext()
         val file = uriToFile(uri) ?: return
+
         val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
         val body = MultipartBody.Part.createFormData("profileImage", file.name, requestFile)
 
@@ -158,7 +167,6 @@ class ProfileManager(
                 e.printStackTrace()
             }
         }
-
     }
 
     private fun fetchUserFromBackend(authToken: String) {
@@ -200,26 +208,16 @@ class ProfileManager(
         })
     }
 
-    fun loadProfileImageFromPrefs() {
-        val context = fragment.requireContext()
-        val imageUrl = SharedPrefManager.getImageUrl(context)
-        if (!imageUrl.isNullOrEmpty()) {
-            Glide.with(context).load(imageUrl)
-                .circleCrop()
-                .signature(ObjectKey(imageUrl))
-                .into(binding.profileIcon)
-        } else {
-            binding.profileIcon.setImageResource(R.drawable.ic_user)
-        }
-    }
-
     fun loadUserData() {
         val user = SharedPrefManager.getUser(fragment.requireContext())
         binding.userId.text = user?.userId?.uppercase() ?: ""
         binding.userName.text = user?.name?.split(" ")?.joinToString(" ") { it.replaceFirstChar { c -> c.uppercaseChar() } } ?: ""
-        binding.mobileNo.text = user?.phone ?: ""
+        binding.mobileNo.text = user?.phone?.let {
+            if (it.startsWith("+91")) "+91 ${it.removePrefix("+91").trim()}" else it
+        } ?: ""
 
-        // Show static image if available
+        binding.userEmail.text = user?.email ?: ""
+
         val imageUrl = user?.profileImage
         if (!imageUrl.isNullOrEmpty()) {
             Glide.with(fragment.requireContext()).load(imageUrl)
@@ -230,8 +228,6 @@ class ProfileManager(
             binding.profileIcon.setImageResource(R.drawable.ic_user)
         }
     }
-
-
 
     private fun saveProfileImageUri(uri: Uri?) {
         val context = fragment.requireContext()
@@ -245,12 +241,48 @@ class ProfileManager(
     }
 
     private fun uriToFile(uri: Uri): File? {
-        val inputStream = fragment.requireContext().contentResolver.openInputStream(uri) ?: return null
-        val tempFile = File.createTempFile("upload_", ".jpg", fragment.requireContext().cacheDir)
-        tempFile.outputStream().use { outputStream ->
-            inputStream.copyTo(outputStream)
+        return try {
+            val inputStream = fragment.requireContext().contentResolver.openInputStream(uri) ?: return null
+            val tempFile = File.createTempFile("upload_", ".jpg", fragment.requireContext().cacheDir)
+            tempFile.outputStream().use { outputStream -> inputStream.copyTo(outputStream) }
+            tempFile
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
         }
-        return tempFile
     }
 
+    companion object {
+        fun fetchAndLoadUserDataForEditProfile(
+            context: Context,
+            userIdText: TextView,
+            nameField: EditText,
+            phoneField: EditText,
+            emailField: EditText,
+            profileImage: ImageView,
+            onLoaded: (() -> Unit)? = null // ✅ Allow optional callback
+        ) {
+            val user = SharedPrefManager.getUser(context)
+            if (user != null) {
+                userIdText.text = user.userId.uppercase()
+
+                val capitalizedName = user.name.replaceFirstChar {
+                    if (it.isLowerCase()) it.titlecase() else it.toString()
+                }
+                nameField.setText(capitalizedName)
+
+                phoneField.setText(user.phone.removePrefix("+91"))
+                emailField.setText(user.email ?: "")
+                if (!user.profileImage.isNullOrBlank()) {
+                    Glide.with(context)
+                        .load(user.profileImage)
+                        .placeholder(R.drawable.ic_user)
+                        .circleCrop()
+                        .into(profileImage)
+                }
+                onLoaded?.invoke() // ✅ Call the callback after UI update
+            }
+        }
+
+    }
 }

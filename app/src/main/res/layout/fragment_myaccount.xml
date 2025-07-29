@@ -58,6 +58,7 @@
                     android:paddingStart="16dp">
 
                     <TextView
+                        android:id="@+id/edit_profile"
                         android:layout_width="115dp"
                         android:layout_height="35dp"
                         android:layout_alignParentEnd="true"
@@ -85,8 +86,8 @@
                         <!-- Camera Icon Overlay -->
                         <ImageView
                             android:id="@+id/profile_icon"
-                            android:layout_width="65dp"
-                            android:layout_height="65dp"
+                            android:layout_width="85dp"
+                            android:layout_height="85dp"
                             android:background="@drawable/bg_profilecicle"
                             android:contentDescription="Profile"
                             android:padding="0dp"
@@ -118,7 +119,7 @@
                             android:layout_marginTop="35dp"
                             android:text="User ID : "
                             android:textColor="#000000"
-                            android:textSize="12sp"
+                            android:textSize="14sp"
                             android:textStyle="bold" />
 
                         <TextView
@@ -127,8 +128,8 @@
                             android:layout_height="wrap_content"
                             android:text="User ID"
                             android:textColor="#000000"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
+                            android:textSize="18sp"
+                            android:textStyle="normal" />
                     </LinearLayout>
 
                     <TextView
@@ -140,7 +141,7 @@
                         android:layout_marginStart="20dp"
                         android:text="Name: "
                         android:textColor="#000000"
-                        android:textSize="14sp"
+                        android:textSize="16sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -152,8 +153,8 @@
                         android:layout_toEndOf="@+id/text_user_name"
                         android:text="Unknown"
                         android:textColor="#000000"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
+                        android:textSize="16sp"
+                        android:textStyle="normal" />
 
                     <TextView
                         android:id="@+id/text_mobile"
@@ -164,7 +165,7 @@
                         android:layout_marginStart="20dp"
                         android:text="Mobile: "
                         android:textColor="#000000"
-                        android:textSize="14sp"
+                        android:textSize="16sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -177,8 +178,8 @@
                         android:layout_toEndOf="@+id/text_mobile"
                         android:text="+91 XXXXXXXXXX"
                         android:textColor="#000000"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
+                        android:textSize="16sp"
+                        android:textStyle="normal" />
 
                     <TextView
                         android:id="@+id/text_email"
@@ -189,7 +190,7 @@
                         android:layout_marginStart="20dp"
                         android:text="Email : "
                         android:textColor="#000000"
-                        android:textSize="14sp"
+                        android:textSize="16sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -200,12 +201,14 @@
                         android:layout_marginStart="2dp"
                         android:layout_marginTop="3dp"
                         android:layout_toEndOf="@+id/text_email"
-                        android:text="Update Email!"
+                        android:text="Update Email !!"
                         android:textColor="#FFA500"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
+                        android:textSize="16sp"
+                        android:textStyle="normal" />
 
                 </RelativeLayout>
+
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -230,15 +233,15 @@
                         android:layout_weight="1"
                         android:text="Favorites"
                         android:textColor="@color/black"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        android:textStyle="normal"
                         android:clickable="true"
                         android:focusable="true" />
 
                     <!-- Arrow Icon (optional right arrow) -->
                     <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:src="@drawable/ic_arrow_right"
                         android:contentDescription="Go to Favorites" />
                 </LinearLayout>
@@ -268,13 +271,13 @@
                         android:focusable="true"
                         android:text="Transactions"
                         android:textColor="@color/black"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:textSize="16sp"
+                        android:textStyle="normal" />
 
                     <!-- Arrow Icon (optional right arrow) -->
                     <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:src="@drawable/ic_arrow_right"
                         android:contentDescription="Go to Favorites" />
                 </LinearLayout>
@@ -303,13 +306,13 @@
                         android:focusable="true"
                         android:text="Settings"
                         android:textColor="@color/black"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:textSize="16sp"
+                        android:textStyle="normal" />
 
                     <!-- Arrow Icon (optional right arrow) -->
                     <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:src="@drawable/ic_arrow_right"
                         android:contentDescription="Go to Favorites" />
 
@@ -339,13 +342,13 @@
                         android:focusable="true"
                         android:text="Help &amp; Support"
                         android:textColor="@color/black"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:textSize="16sp"
+                        android:textStyle="normal" />
 
                     <!-- Arrow Icon (optional right arrow) -->
                     <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:src="@drawable/ic_arrow_right"
                         android:contentDescription="Go to Favorites" />
 
@@ -375,14 +378,14 @@
                         android:focusable="true"
                         android:text="About Us"
                         android:textColor="@color/black"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:textSize="16sp"
+                        android:textStyle="normal" />
 
 
                     <!-- Arrow Icon (optional right arrow) -->
                     <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:src="@drawable/ic_arrow_right"
                         android:contentDescription="Go to Favorites" />
 
@@ -415,14 +418,14 @@
                         android:focusable="true"
                         android:text="Log Out"
                         android:textColor="@color/black"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:textSize="16sp"
+                        android:textStyle="normal" />
 
 
                     <!-- Arrow Icon (optional right arrow) -->
                     <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:src="@drawable/ic_arrow_right"
                         android:contentDescription="Go to Favorites" />
 

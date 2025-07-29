@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
@@ -23,6 +24,8 @@ class MyAccountFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var profileManager: ProfileManager
+
+    private lateinit var editProfileLauncher: ActivityResultLauncher<Intent>
 
     private val cropImageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
@@ -49,24 +52,31 @@ class MyAccountFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         profileManager = ProfileManager(this, binding, cropImageLauncher)
         profileManager.initProfile(pickImageLauncher, takePictureLauncher)
+
+        editProfileLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                profileManager.loadUserData()
+            }
+        }
+
+        binding.editProfile.setOnClickListener {
+            val intent = Intent(requireContext(), EditProfileActivity::class.java)
+            editProfileLauncher.launch(intent)
+        }
 
         view.findViewById<LinearLayout>(R.id.logout_layout).setOnClickListener {
             showLogoutDialog()
         }
     }
+
     override fun onResume() {
         super.onResume()
-        profileManager?.loadUserData()
+        profileManager.loadUserData()
     }
 
-
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
     private fun showLogoutDialog() {
         AlertDialog.Builder(requireContext())
             .setTitle("Log Out")
@@ -79,14 +89,18 @@ class MyAccountFragment : Fragment() {
     private fun logoutUser() {
         FirebaseAuth.getInstance().signOut()
 
-        // Clear SharedPreferences
         requireContext().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE).edit().clear().apply()
         requireContext().getSharedPreferences("user_profile", Context.MODE_PRIVATE).edit().clear().apply()
 
-        // Navigate to Login screen
         val intent = Intent(requireContext(), LoginActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
 
 }
