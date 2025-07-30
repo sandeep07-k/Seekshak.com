@@ -11,6 +11,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.example.seekshakcom.databinding.ActivityEditProfileBinding
 import com.example.seekshakcom.model.UpdateProfileResponse
 import com.example.seekshakcom.network.ApiClient
@@ -27,6 +28,10 @@ class EditProfileActivity : AppCompatActivity() {
     private lateinit var binding: ActivityEditProfileBinding
     private lateinit var apiService: ApiService
     private lateinit var phoneVerificationLauncher: ActivityResultLauncher<Intent>
+    private lateinit var enterEmailLauncher: ActivityResultLauncher<Intent>
+
+
+
 
     private var originalName: String = ""
     private var originalPhone: String = ""
@@ -69,11 +74,29 @@ class EditProfileActivity : AppCompatActivity() {
                 if (!newNumber.isNullOrBlank()) {
                     val displayNumber = if (newNumber.startsWith("+91")) newNumber.removePrefix("+91") else newNumber
                     binding.mobileNo.setText(displayNumber)
-                    binding.mobileVerified.text = "Yay! Your number is verified."
-//                    SharedPrefManager.getUser(this)?.let {
-//                        val updatedUser = it.copy(phone = newNumber)
-//                        SharedPrefManager.saveUser(this, updatedUser)
-//                    }
+
+                    binding.mobileVerified.apply {
+                        text = "Yay! Your email is verified."
+                        setTextColor(ContextCompat.getColor(context, R.color.green))
+                    }
+
+
+                }
+            }
+        }
+
+
+        enterEmailLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val verifiedEmail = result.data?.getStringExtra("verified_Email")
+                if (!verifiedEmail.isNullOrBlank()) {
+                    binding.emailId.setText(verifiedEmail)
+
+                    binding.emailVerified.apply {
+                        text = "Yay! Your email is verified."
+                        setTextColor(ContextCompat.getColor(context, R.color.green))
+                    }
+
                 }
             }
         }
@@ -83,6 +106,12 @@ class EditProfileActivity : AppCompatActivity() {
             intent.putExtra("existingNumber", binding.mobileNo.text.toString())
             phoneVerificationLauncher.launch(intent)
         }
+        binding.emailId.setOnClickListener {
+            val intent = Intent(this, EnterEmailActivity::class.java)
+            intent.putExtra("enteredEmail", binding.emailId.text.toString())
+            enterEmailLauncher.launch(intent)
+        }
+
 
         binding.saveBtn.setOnClickListener {
             val name = binding.userName.text.toString().trim()

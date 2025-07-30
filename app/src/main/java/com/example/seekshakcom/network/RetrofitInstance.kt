@@ -17,4 +17,8 @@ object RetrofitInstance {
     val locationApi: LocationApiService by lazy {
         retrofit.create(LocationApiService::class.java)
     }
+
+    val emailOtpApi: EmailOtpApi by lazy {
+        retrofit.create(EmailOtpApi::class.java)
+    }
 }

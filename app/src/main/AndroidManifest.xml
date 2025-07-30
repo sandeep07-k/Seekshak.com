@@ -101,6 +101,8 @@
         <activity android:name=".EditProfileActivity"/>
         <activity android:name=".OtpVerificationActivity"/>
         <activity android:name=".PhoneVerificationActivity"/>
+        <activity android:name=".EnterEmailActivity"/>
+        <activity android:name=".EmailVerificationActivity"/>
 
 
 

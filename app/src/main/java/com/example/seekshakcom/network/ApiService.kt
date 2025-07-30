@@ -1,12 +1,32 @@
 package com.example.seekshakcom.network
 
 import LoginResponse
-import com.example.seekshakcom.model.*
+import com.example.seekshakcom.model.GenericResponse
+import com.example.seekshakcom.model.ImageRemoveRequest
+import com.example.seekshakcom.model.LoginRequest
+import com.example.seekshakcom.model.MyPost
+import com.example.seekshakcom.model.PostRequest
+import com.example.seekshakcom.model.RegisterRequest
+import com.example.seekshakcom.model.RegisterResponse
+import com.example.seekshakcom.model.UpdateProfileResponse
+import com.example.seekshakcom.model.UploadResponse
+import com.example.seekshakcom.model.UserExistsResponse
+import com.example.seekshakcom.model.UserResponse
+import com.example.seekshakcom.model.UserRoleResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Response
-import retrofit2.http.*
+import retrofit2.http.Body
+import retrofit2.http.DELETE
+import retrofit2.http.GET
+import retrofit2.http.Header
+import retrofit2.http.Multipart
+import retrofit2.http.POST
+import retrofit2.http.PUT
+import retrofit2.http.Part
+import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface ApiService {
 
@@ -70,6 +90,8 @@ interface ApiService {
 
     @PUT("api/user/update")
     fun updateUserProfilePartial(@Body updates: Map<String, String>): Call<UpdateProfileResponse>
+
+
 
 
 

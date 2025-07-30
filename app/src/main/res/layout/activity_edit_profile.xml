@@ -280,7 +280,7 @@
                         android:text="Yay! Your number is verified."
                         android:textSize="12sp"
                         android:textColor="#6A6A6A"
-                        android:layout_marginTop="3dp" />
+                        android:layout_marginTop="4dp" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -307,7 +307,8 @@
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
                     android:clickable="true"
-                    android:focusable="true">
+                    android:focusable="true"
+                    android:layout_marginTop="5dp">
 
                     <AutoCompleteTextView
                         android:id="@+id/email_Id"
@@ -346,11 +347,10 @@
                     android:id="@+id/email_verified"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Yay! Your email is Verified."
+                    android:text="Update your email here. It's important to allow us to securelycomunnicate with you."
                     android:textSize="12sp"
                     android:textColor="#6A6A6A"
-                    android:layout_marginTop="2dp"
-                    android:visibility="gone"/>
+                    android:layout_marginTop="4dp" />
             </LinearLayout>
 
         </LinearLayout>

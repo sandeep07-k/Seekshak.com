@@ -47,7 +47,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingHorizontal="16dp">
+                android:paddingHorizontal="12dp">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -55,7 +55,7 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="30dp"
                     android:background="@drawable/profile_card_bg"
-                    android:paddingStart="16dp">
+                    android:paddingStart="10dp">
 
                     <TextView
                         android:id="@+id/edit_profile"
@@ -109,14 +109,14 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="22dp"
+                        android:layout_marginStart="26dp"
                         android:layout_toEndOf="@id/profile_frame"
                         android:orientation="vertical">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="35dp"
+                            android:layout_marginTop="40dp"
                             android:text="User ID : "
                             android:textColor="#000000"
                             android:textSize="14sp"
@@ -202,7 +202,7 @@
                         android:layout_marginTop="3dp"
                         android:layout_toEndOf="@+id/text_email"
                         android:text="Update Email !!"
-                        android:textColor="#FFA500"
+                        android:textColor="#000000"
                         android:textSize="16sp"
                         android:textStyle="normal" />
 
@@ -215,13 +215,13 @@
                     android:orientation="horizontal"
                     android:layout_marginTop="15dp"
                     android:background="@drawable/rectangle_6"
-                    android:padding="12dp"
+                    android:padding="8dp"
                     android:gravity="center_vertical">
 
                     <!-- Heart Icon -->
                     <ImageView
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
                         android:src="@drawable/ic_heart"
                         android:layout_marginEnd="12dp" />
 
@@ -252,12 +252,12 @@
                     android:orientation="horizontal"
                     android:layout_marginTop="0dp"
                     android:background="@drawable/rectangle_6"
-                    android:padding="12dp"
+                    android:padding="8dp"
                     android:gravity="center_vertical">
 
                     <ImageView
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
                         android:src="@drawable/ic_transactions"
                         android:layout_marginEnd="12dp" />
 
@@ -287,12 +287,12 @@
                     android:orientation="horizontal"
                     android:layout_marginTop="0dp"
                     android:background="@drawable/rectangle_6"
-                    android:padding="12dp"
+                    android:padding="8dp"
                     android:gravity="center_vertical">
 
                     <ImageView
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
                         android:src="@drawable/ic_seetings"
                         android:layout_marginEnd="12dp" />
 
@@ -323,12 +323,12 @@
                     android:orientation="horizontal"
                     android:layout_marginTop="0dp"
                     android:background="@drawable/rectangle_6"
-                    android:padding="12dp"
+                    android:padding="8dp"
                     android:gravity="center_vertical">
 
                     <ImageView
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
                         android:src="@drawable/ic_helpsupport"
                         android:layout_marginEnd="12dp" />
 
@@ -359,12 +359,12 @@
                     android:orientation="horizontal"
                     android:layout_marginTop="0dp"
                     android:background="@drawable/rectangle_6"
-                    android:padding="12dp"
+                    android:padding="8dp"
                     android:gravity="center_vertical">
 
                     <ImageView
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
                         android:src="@drawable/ic_aboutus"
                         android:layout_marginEnd="12dp" />
 
@@ -397,14 +397,14 @@
                     android:orientation="horizontal"
                     android:layout_marginTop="0dp"
                     android:background="@drawable/rectangle_6"
-                    android:padding="12dp"
+                    android:padding="8dp"
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="center_vertical">
 
                     <ImageView
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
                         android:src="@drawable/ic_logout"
                         android:layout_marginEnd="12dp" />
 
