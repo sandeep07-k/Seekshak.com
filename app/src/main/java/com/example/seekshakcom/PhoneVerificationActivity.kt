@@ -140,7 +140,7 @@ class PhoneVerificationActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<UserExistsResponse>, t: Throwable) {
-                Toast.makeText(this@PhoneVerificationActivity, "Network error: ${t.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@PhoneVerificationActivity, "No internet: ${t.message}", Toast.LENGTH_SHORT).show()
                 nextButton.isEnabled = true
                 nextButton.alpha = 1f
                 dismissProgressDialog()

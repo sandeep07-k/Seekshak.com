@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="24dp"
+    android:padding="30dp"
     android:background="@android:color/white">
 
     <!-- Back Arrow -->
@@ -123,16 +123,15 @@
         android:textColor="#003B84"
         android:textSize="14sp"
         android:textStyle="bold"
-        android:layout_marginTop="22dp"
+        android:layout_marginTop="26dp"
         app:layout_constraintTop_toBottomOf="@id/otp_layout"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent" />
 
     <!-- Verify OTP -->
     <Button
         android:id="@+id/verifyOtpButton"
         android:layout_width="0dp"
-        android:layout_height="65dp"
+        android:layout_height="55dp"
         android:text="Verify"
         android:textColor="#FFFFFF"
         android:textSize="16sp"

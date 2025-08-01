@@ -61,7 +61,7 @@
         android:id="@+id/email_input"
         android:layout_width="0dp"
         android:layout_height="50dp"
-        android:background="@drawable/edittext_bg"
+        android:background="@drawable/edittext_bg_email"
         android:hint="Email"
         android:inputType="textEmailAddress"
         android:paddingHorizontal="12dp"
@@ -76,7 +76,7 @@
     <Button
         android:id="@+id/next_button"
         android:layout_width="0dp"
-        android:layout_height="65dp"
+        android:layout_height="55dp"
         android:text="Next"
         android:textColor="#FFFFFF"
         android:textSize="16sp"

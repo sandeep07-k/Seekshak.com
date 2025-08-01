@@ -1,5 +1,6 @@
 package com.example.seekshakcom
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
@@ -10,6 +11,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import com.example.seekshakcom.model.UserExistsResponse
@@ -20,6 +22,10 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.concurrent.TimeUnit
+
+object OtpSession {
+    var resendToken: PhoneAuthProvider.ForceResendingToken? = null
+}
 
 class SignupActivity : AppCompatActivity() {
 
@@ -50,12 +56,13 @@ class SignupActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signup)
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
-        window.statusBarColor = Color.TRANSPARENT
+        window.statusBarColor = ContextCompat.getColor(this, R.color.soft_blue)
         WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightStatusBars = true
 
         nameEditText = findViewById(R.id.editTextName)
@@ -87,14 +94,11 @@ class SignupActivity : AppCompatActivity() {
             val rawPhone = phoneEditText.text.toString().trim()
             phone = if (rawPhone.startsWith("+91")) rawPhone else "+91$rawPhone"
 
-            // === Validation ===
             if (name.isEmpty()) {
                 nameEditText.error = "Please enter your name"
                 nameEditText.requestFocus()
                 return@setOnClickListener
             }
-
-
 
             if (phoneEditText.text.toString().trim().isEmpty()) {
                 phoneEditText.error = "Please enter your mobile number"
@@ -119,14 +123,12 @@ class SignupActivity : AppCompatActivity() {
             checkUserExists(phone)
         }
 
-
         loginRedirectText.setOnClickListener {
             startActivity(Intent(this, LoginActivity::class.java))
             hideKeyboard()
             finish()
         }
 
-        // ✅ Hide keyboard when tapping outside
         findViewById<View>(R.id.signup_root_view)?.setOnTouchListener { _, event ->
             if (event.action == MotionEvent.ACTION_DOWN) {
                 hideKeyboard()
@@ -149,10 +151,8 @@ class SignupActivity : AppCompatActivity() {
     }
 
     private fun resetFieldErrors() {
-
         nameEditText.error = null
         phoneEditText.error = null
-
     }
 
     private fun hideKeyboard() {
@@ -170,9 +170,8 @@ class SignupActivity : AppCompatActivity() {
 
         ApiClient.instance.checkUserExists(phone).enqueue(object : Callback<UserExistsResponse> {
             override fun onResponse(call: Call<UserExistsResponse>, response: Response<UserExistsResponse>) {
-
-
                 val body = response.body()
+
                 if (body?.exists == true) {
                     Toast.makeText(this@SignupActivity, body.message ?: "User already exists", Toast.LENGTH_LONG).show()
                     loginRedirectText.visibility = View.VISIBLE
@@ -180,13 +179,32 @@ class SignupActivity : AppCompatActivity() {
                     sendOtpButton.isEnabled = true
                     sendOtpButton.alpha = 1f
                 } else {
-                    sendOtpToPhone()
+                    val prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE)
+                    val lastPhone = prefs.getString("last_phone", null)
+                    val lastVerificationId = prefs.getString("last_verification_id", null)
+
+                    if (lastPhone == phone && lastVerificationId != null) {
+                        val intent = Intent(this@SignupActivity, SignupActivity2::class.java).apply {
+                            putExtra("role", selectedRole)
+                            putExtra("name", name)
+                            putExtra("phone", phone)
+                            putExtra("verificationId", lastVerificationId)
+                            OtpSession.resendToken?.let {
+                                putExtra("resendToken", it)
+                            }
+                        }
+                        progressBar.visibility = View.GONE
+                        sendOtpButton.isEnabled = true
+                        sendOtpButton.alpha = 1f
+                        otpResultLauncher.launch(intent)
+                    } else {
+                        sendOtpToPhone()
+                    }
                 }
             }
 
             override fun onFailure(call: Call<UserExistsResponse>, t: Throwable) {
-
-                Toast.makeText(this@SignupActivity, "Network error: ${t.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@SignupActivity, "No internet connection", Toast.LENGTH_SHORT).show()
                 progressBar.visibility = View.GONE
                 sendOtpButton.isEnabled = true
                 sendOtpButton.alpha = 1f
@@ -215,14 +233,25 @@ class SignupActivity : AppCompatActivity() {
                     progressBar.visibility = View.GONE
                     Toast.makeText(this@SignupActivity, "OTP Sent", Toast.LENGTH_SHORT).show()
 
-                    val intent = Intent(this@SignupActivity, SignupActivity2::class.java)
-                    intent.putExtra("role", selectedRole)
-                    intent.putExtra("name", name)
-//                    intent.putExtra("email", email)
-                    intent.putExtra("phone", phone)
-                    intent.putExtra("verificationId", id)
+                    val prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE)
+                    prefs.edit().apply {
+                        putString("last_phone", phone)
+                        putString("last_verification_id", id)
+                        apply()
+                    }
+
+                    OtpSession.resendToken = token
+
+                    val intent = Intent(this@SignupActivity, SignupActivity2::class.java).apply {
+                        putExtra("role", selectedRole)
+                        putExtra("name", name)
+                        putExtra("phone", phone)
+                        putExtra("verificationId", id)
+                        putExtra("resendToken", token)
+                    }
                     otpResultLauncher.launch(intent)
                 }
+
             })
             .build()
 

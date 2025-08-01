@@ -61,6 +61,12 @@ class EnterEmailActivity : AppCompatActivity() {
             showProgressDialog()
             sendEmailOtp(email)
         }
+        // ✅ Restore email if passed back
+        val lastEmail = intent.getStringExtra("email")
+        lastEmail?.let {
+            emailInput.setText(it)
+            emailInput.setSelection(it.length) // 👈 put cursor at end
+        }
 
         backArrow.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()

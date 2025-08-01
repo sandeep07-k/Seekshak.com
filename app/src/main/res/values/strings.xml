@@ -53,7 +53,6 @@
     <string name="seekshak_logo">Seekshak Logo</string>
 
     <string name="signup_as">SignUp As </string>
-    <string name="already_have_an_account_log_in">Already Have an Account? Log In</string>
     <string name="otp">OTP</string>
     <string name="enter_name">Enter Name</string>
     <string name="enter_e_mail_optional">Enter E-mail (Optional)</string>

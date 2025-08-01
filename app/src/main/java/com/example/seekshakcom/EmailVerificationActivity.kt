@@ -24,6 +24,7 @@ class EmailVerificationActivity : AppCompatActivity() {
     private lateinit var resendTimerText: TextView
     private lateinit var emailText: TextView
     private var resendJob: Job? = null
+    private lateinit var editEmailIcon: ImageView
 
     private lateinit var email: String
 
@@ -45,6 +46,14 @@ class EmailVerificationActivity : AppCompatActivity() {
 
         setupOtpInputNavigation()
         startResendCountdown()
+
+        editEmailIcon = findViewById(R.id.edit_email)
+
+        editEmailIcon.setOnClickListener {
+            // 👇 Simply finish to go back to EnterEmailActivity
+            finish()
+        }
+
 
 
         verifyOtpButton.setOnClickListener {
@@ -145,6 +154,7 @@ class EmailVerificationActivity : AppCompatActivity() {
                 }
             })
     }
+
 
     override fun onDestroy() {
         resendJob?.cancel()

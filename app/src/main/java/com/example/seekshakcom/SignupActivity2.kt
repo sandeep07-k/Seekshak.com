@@ -1,11 +1,10 @@
 package com.example.seekshakcom
 
 import android.content.*
-import android.graphics.Color
 import android.os.*
-import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
@@ -27,14 +26,14 @@ class SignupActivity2 : AppCompatActivity() {
     private lateinit var otpFields: List<EditText>
     private lateinit var verifyOtpButton: Button
     private lateinit var resendOtpButton: TextView
-    private lateinit var progressBar: ProgressBar
-    private lateinit var backPage: TextView
+    private lateinit var backPage: ImageView
     private lateinit var auth: FirebaseAuth
     private lateinit var smsReceiver: BroadcastReceiver
     private lateinit var countdownTimer: CountDownTimer
+    private lateinit var editNumber: ImageView
 
     private var verificationId: String? = null
-    private lateinit var resendToken: PhoneAuthProvider.ForceResendingToken
+    private var resendToken: PhoneAuthProvider.ForceResendingToken? = null
 
     private lateinit var role: String
     private lateinit var name: String
@@ -45,10 +44,17 @@ class SignupActivity2 : AppCompatActivity() {
         setContentView(R.layout.activity_signup2)
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
-        window.statusBarColor = Color.TRANSPARENT
+        window.statusBarColor = ContextCompat.getColor(this, R.color.soft_blue)
         WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightStatusBars = true
 
         auth = FirebaseAuth.getInstance()
+        verifyOtpButton = findViewById(R.id.button_verify_otp)
+        resendOtpButton = findViewById(R.id.button_resend_otp)
+        backPage = findViewById(R.id.goToBackPage)
+        editNumber = findViewById(R.id.edit_number)
+
+
+
 
         otpFields = listOf(
             findViewById(R.id.otp1),
@@ -59,22 +65,25 @@ class SignupActivity2 : AppCompatActivity() {
             findViewById(R.id.otp6)
         )
 
-        verifyOtpButton = findViewById(R.id.button_verify_otp)
-        resendOtpButton = findViewById(R.id.button_resend_otp)
-        progressBar = findViewById(R.id.progressBar)
-        backPage = findViewById(R.id.goToBackPage)
+
 
         role = intent.getStringExtra("role") ?: ""
         name = intent.getStringExtra("name") ?: ""
         phone = intent.getStringExtra("phone") ?: ""
         verificationId = intent.getStringExtra("verificationId")
+        resendToken = intent.getParcelableExtra("resendToken")
 
         verifyOtpButton.isEnabled = false
+        findViewById<TextView>(R.id.subtitle).text = "We sent a 6-digit code to $phone"
 
         setupOtpAutoMove()
         setupVerifyButtonWatcher()
         startSmsRetriever()
         startResendCountdown()
+
+        editNumber.setOnClickListener {
+            finish()
+        }
 
         verifyOtpButton.setOnClickListener {
             hideKeyboard()
@@ -82,7 +91,6 @@ class SignupActivity2 : AppCompatActivity() {
 
             val code = otpFields.joinToString("") { it.text.toString().trim() }
             if (verificationId != null && code.length == 6) {
-                progressBar.visibility = View.VISIBLE
                 val credential = PhoneAuthProvider.getCredential(verificationId!!, code)
                 signInWithPhoneAuthCredential(credential)
             } else {
@@ -97,7 +105,7 @@ class SignupActivity2 : AppCompatActivity() {
         }
 
         backPage.setOnClickListener {
-            startActivity(Intent(this, SignupActivity::class.java))
+            onBackPressedDispatcher.onBackPressed()
         }
     }
 
@@ -180,11 +188,12 @@ class SignupActivity2 : AppCompatActivity() {
 
     private fun resendOtp() {
         hideKeyboard()
-        progressBar.visibility = View.VISIBLE
-        resendOtpButton.isEnabled = false
-        resendOtpButton.text = "Sending OTP..."
 
-        val options = PhoneAuthOptions.newBuilder(auth)
+        resendOtpButton.isEnabled = false
+        resendOtpButton.alpha = 0.7f
+        resendOtpButton.text = "resending code"
+
+        val builder = PhoneAuthOptions.newBuilder(auth)
             .setPhoneNumber(phone)
             .setTimeout(30L, TimeUnit.SECONDS)
             .setActivity(this)
@@ -194,29 +203,37 @@ class SignupActivity2 : AppCompatActivity() {
                 }
 
                 override fun onVerificationFailed(e: FirebaseException) {
-                    progressBar.visibility = View.GONE
-                    resendOtpButton.isEnabled = true
-                    resendOtpButton.text = "Resend OTP"
-
-                    Toast.makeText(this@SignupActivity2, "Verification failed: ${e.message}", Toast.LENGTH_LONG).show()
+                    resendOtpButton.isEnabled = false
+                    resendOtpButton.alpha = 0.7f
+                    resendOtpButton.text = "Resend code"
+                    Toast.makeText(this@SignupActivity2, "No internet: ${e.message}", Toast.LENGTH_LONG).show()
                 }
 
-                override fun onCodeSent(id: String, token: PhoneAuthProvider.ForceResendingToken) {
-                    progressBar.visibility = View.GONE
-                    verificationId = id
+                override fun onCodeSent(newVerificationId: String, token: PhoneAuthProvider.ForceResendingToken) {
+                    verificationId = newVerificationId
                     resendToken = token
-
                     clearOtpFields()
                     startResendCountdown()
                     startSmsRetriever()
+                    resendOtpButton.isEnabled = false
+                    resendOtpButton.alpha = 0.7f
+                    resendOtpButton.text = "Resend code"
 
-                    Toast.makeText(this@SignupActivity2, "OTP resent", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@SignupActivity2, "OTP resent successfully", Toast.LENGTH_SHORT).show()
                 }
             })
-            .build()
 
-        PhoneAuthProvider.verifyPhoneNumber(options)
+        // ✅ Use existing resendToken if available
+        if (resendToken != null) {
+            builder.setForceResendingToken(resendToken!!)
+        }
+
+        PhoneAuthProvider.verifyPhoneNumber(builder.build())
     }
+
+
+
+
 
     private fun clearOtpFields() {
         otpFields.forEach { it.setText("") }
@@ -227,18 +244,18 @@ class SignupActivity2 : AppCompatActivity() {
         if (::countdownTimer.isInitialized) countdownTimer.cancel()
 
         resendOtpButton.isEnabled = false
-        resendOtpButton.alpha = 0.5f
-        resendOtpButton.text = "Resend OTP in 30s"
+        resendOtpButton.alpha = 0.7f
+        resendOtpButton.text = "Resend code in 30s"
 
         countdownTimer = object : CountDownTimer(30000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 val seconds = millisUntilFinished / 1000
-                resendOtpButton.text = "Resend OTP in ${seconds}s"
+                resendOtpButton.text = "Resend code in ${seconds}s"
             }
 
             override fun onFinish() {
                 resendOtpButton.isEnabled = true
-                resendOtpButton.text = "Resend OTP"
+                resendOtpButton.text = "Resend code"
                 resendOtpButton.alpha = 1f
 
             }
@@ -250,12 +267,18 @@ class SignupActivity2 : AppCompatActivity() {
     }
 
     private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
+        val loadingDialog = AlertDialog.Builder(this)
+            .setView(R.layout.dialog_loading_otp)
+            .setCancelable(false)
+            .create()
+        loadingDialog.show()
+
         auth.signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     sendToBackend()
                 } else {
-                    progressBar.visibility = View.GONE
+
                     verifyOtpButton.alpha = 1f
                     verifyOtpButton.isEnabled = true
                     Toast.makeText(this, "Invalid OTP", Toast.LENGTH_SHORT).show()
@@ -278,19 +301,23 @@ class SignupActivity2 : AppCompatActivity() {
             ApiClient.instance.registerUser(registerRequest)
                 .enqueue(object : Callback<RegisterResponse> {
                     override fun onResponse(call: Call<RegisterResponse>, response: Response<RegisterResponse>) {
-                        progressBar.visibility = View.GONE
                         if (response.isSuccessful) {
                             val userId = response.body()?.userId
                             getSharedPreferences("UserPrefs", MODE_PRIVATE).edit().apply {
                                 putString("user_id", userId)
                                 putString("firebase_token", firebaseToken)
                                 putString("user_role", role)
-                                putBoolean("isLoggedIn", true)
+//                                putBoolean("isLoggedIn", true)
                                 apply()
                             }
+                            Toast.makeText(this@SignupActivity2, "Signup successful. Please Login", Toast.LENGTH_SHORT).show()
+                            // 🔄 Redirect to SignupActivity (or LoginActivity if you meant that)
+                            val intent = Intent(this@SignupActivity2, LoginActivity::class.java)
+                            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                            startActivity(intent)
 
-                            Toast.makeText(this@SignupActivity2, "Signup successful", Toast.LENGTH_SHORT).show()
-                            redirectToHome(role)
+                            finish()
+//                            redirectToHome(role)
                         } else {
                             verifyOtpButton.alpha = 1f
                             verifyOtpButton.isEnabled = true
@@ -299,30 +326,30 @@ class SignupActivity2 : AppCompatActivity() {
                     }
 
                     override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
-                        progressBar.visibility = View.GONE
+
                         verifyOtpButton.alpha = 1f
                         verifyOtpButton.isEnabled = true
                         Toast.makeText(this@SignupActivity2, "Error: ${t.message}", Toast.LENGTH_LONG).show()
                     }
                 })
         } ?: run {
-            progressBar.visibility = View.GONE
+
             verifyOtpButton.alpha = 1f
             verifyOtpButton.isEnabled = true
             Toast.makeText(this, "Failed to get Firebase token", Toast.LENGTH_SHORT).show()
         }
     }
 
-    private fun redirectToHome(role: String) {
-        val intent = when (role) {
-            "student" -> Intent(this, StudentHomeActivity::class.java)
-            "educator" -> Intent(this, TutorHomeActivity::class.java)
-            "institute" -> Intent(this, InstituteHomeActivity::class.java)
-            else -> Intent(this, StudentHomeActivity::class.java)
-        }
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        startActivity(intent)
-    }
+//    private fun redirectToHome(role: String) {
+//        val intent = when (role) {
+//            "student" -> Intent(this, StudentHomeActivity::class.java)
+//            "educator" -> Intent(this, TutorHomeActivity::class.java)
+//            "institute" -> Intent(this, InstituteHomeActivity::class.java)
+//            else -> Intent(this, StudentHomeActivity::class.java)
+//        }
+//        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+//        startActivity(intent)
+//    }
 
     override fun onDestroy() {
         super.onDestroy()

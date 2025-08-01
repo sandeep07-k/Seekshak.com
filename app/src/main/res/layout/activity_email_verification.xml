@@ -145,7 +145,7 @@
     <Button
         android:id="@+id/verifyOtpButton"
         android:layout_width="0dp"
-        android:layout_height="65dp"
+        android:layout_height="55dp"
         android:text="Verify"
         android:textColor="#FFFFFF"
         android:textSize="16sp"
