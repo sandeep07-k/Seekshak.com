@@ -8,6 +8,9 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import com.example.seekshakcom.model.EmailRequest
 import com.example.seekshakcom.model.OtpVerificationRequest
 import com.example.seekshakcom.network.ApiResponse
@@ -31,6 +34,10 @@ class EmailVerificationActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_email_verification)
+
+        WindowCompat.setDecorFitsSystemWindows(window, true)
+        window.statusBarColor = ContextCompat.getColor(this, R.color.soft_blue)
+        WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightStatusBars = true
 
         email = intent.getStringExtra("email") ?: ""
         emailText = findViewById(R.id.email_Id)
@@ -93,6 +100,7 @@ class EmailVerificationActivity : AppCompatActivity() {
     private fun startResendCountdown() {
         resendTimerText.isEnabled = false
         resendJob?.cancel()
+        resendTimerText.alpha = 0.5f
 
         resendJob = CoroutineScope(Dispatchers.Main).launch {
             var timeLeft = 30

@@ -34,6 +34,8 @@ class SignupActivity2 : AppCompatActivity() {
 
     private var verificationId: String? = null
     private var resendToken: PhoneAuthProvider.ForceResendingToken? = null
+    private lateinit var loadingDialog: AlertDialog
+
 
     private lateinit var role: String
     private lateinit var name: String
@@ -43,7 +45,7 @@ class SignupActivity2 : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signup2)
 
-        WindowCompat.setDecorFitsSystemWindows(window, false)
+        WindowCompat.setDecorFitsSystemWindows(window, true)
         window.statusBarColor = ContextCompat.getColor(this, R.color.soft_blue)
         WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightStatusBars = true
 
@@ -53,7 +55,10 @@ class SignupActivity2 : AppCompatActivity() {
         backPage = findViewById(R.id.goToBackPage)
         editNumber = findViewById(R.id.edit_number)
 
-
+        loadingDialog = AlertDialog.Builder(this)
+            .setView(R.layout.dialog_loading_otp)
+            .setCancelable(false)
+            .create()
 
 
         otpFields = listOf(
@@ -267,10 +272,6 @@ class SignupActivity2 : AppCompatActivity() {
     }
 
     private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
-        val loadingDialog = AlertDialog.Builder(this)
-            .setView(R.layout.dialog_loading_otp)
-            .setCancelable(false)
-            .create()
         loadingDialog.show()
 
         auth.signInWithCredential(credential)
@@ -278,7 +279,7 @@ class SignupActivity2 : AppCompatActivity() {
                 if (task.isSuccessful) {
                     sendToBackend()
                 } else {
-
+                    loadingDialog.dismiss()
                     verifyOtpButton.alpha = 1f
                     verifyOtpButton.isEnabled = true
                     Toast.makeText(this, "Invalid OTP", Toast.LENGTH_SHORT).show()
@@ -301,6 +302,7 @@ class SignupActivity2 : AppCompatActivity() {
             ApiClient.instance.registerUser(registerRequest)
                 .enqueue(object : Callback<RegisterResponse> {
                     override fun onResponse(call: Call<RegisterResponse>, response: Response<RegisterResponse>) {
+                        loadingDialog.dismiss()
                         if (response.isSuccessful) {
                             val userId = response.body()?.userId
                             getSharedPreferences("UserPrefs", MODE_PRIVATE).edit().apply {
@@ -311,7 +313,7 @@ class SignupActivity2 : AppCompatActivity() {
                                 apply()
                             }
                             Toast.makeText(this@SignupActivity2, "Signup successful. Please Login", Toast.LENGTH_SHORT).show()
-                            // 🔄 Redirect to SignupActivity (or LoginActivity if you meant that)
+
                             val intent = Intent(this@SignupActivity2, LoginActivity::class.java)
                             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                             startActivity(intent)
@@ -326,14 +328,14 @@ class SignupActivity2 : AppCompatActivity() {
                     }
 
                     override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
-
+                        loadingDialog.dismiss()
                         verifyOtpButton.alpha = 1f
                         verifyOtpButton.isEnabled = true
                         Toast.makeText(this@SignupActivity2, "Error: ${t.message}", Toast.LENGTH_LONG).show()
                     }
                 })
         } ?: run {
-
+            loadingDialog.dismiss()
             verifyOtpButton.alpha = 1f
             verifyOtpButton.isEnabled = true
             Toast.makeText(this, "Failed to get Firebase token", Toast.LENGTH_SHORT).show()

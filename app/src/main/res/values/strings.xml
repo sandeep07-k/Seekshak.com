@@ -10,7 +10,6 @@
     <string name="email_optional">Email (Optional)</string>
     <string name="select_role">Select Role</string>
     <string name="_91">+91</string>
-    <string name="don_t_have_an_account_sign_up">Don\'t have an account? Sign Up</string>
     <string name="login">Login</string>
     <string name="email_Mobile_Number_user_id">Email / Mobile Number / User ID</string>
     <string name="password">Password</string>
@@ -37,7 +36,7 @@
     <string name="login_as">Login</string>
     <string name="mobile_number_10_digits">Mobile Number (10 digits)</string>
     <string name="confirm_password">Confirm Password</string>
-    <string name="already_have_an_account_login_login">already_have_an_account_login_?_Login</string>
+
     <string name="student">Student</string>
     <string name="institute">Institute</string>
     <string name="Tutor">Tutor\n</string>

@@ -88,6 +88,8 @@
 
         <activity android:name=".SignupActivity2"
             android:windowSoftInputMode="adjustResize"/>
+        <activity android:name=".LoginActivity2"
+            android:windowSoftInputMode="adjustResize"/>
 
         <activity android:name=".AddPostActivity"
             android:windowSoftInputMode="adjustPan"/>
@@ -99,10 +101,14 @@
             android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".FullImageActivity" />
         <activity android:name=".EditProfileActivity"/>
-        <activity android:name=".OtpVerificationActivity"/>
-        <activity android:name=".PhoneVerificationActivity"/>
-        <activity android:name=".EnterEmailActivity"/>
-        <activity android:name=".EmailVerificationActivity"/>
+        <activity android:name=".OtpVerificationActivity"
+            android:windowSoftInputMode="adjustResize"/>
+        <activity android:name=".PhoneVerificationActivity"
+            android:windowSoftInputMode="adjustResize"/>
+        <activity android:name=".EnterEmailActivity"
+            android:windowSoftInputMode="adjustResize"/>
+        <activity android:name=".EmailVerificationActivity"
+            android:windowSoftInputMode="adjustResize"/>
 
 
 
