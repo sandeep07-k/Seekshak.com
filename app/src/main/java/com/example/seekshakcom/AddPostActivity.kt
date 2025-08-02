@@ -23,6 +23,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.lifecycleScope
@@ -52,7 +53,6 @@ class AddPostActivity : AppCompatActivity() {
     private lateinit var minQualificationEditText: AutoCompleteTextView
     private lateinit var specialRequirementEditText: EditText
     private lateinit var submitButton: Button
-    private lateinit var progressBar: ProgressBar
     private var selectedLat: Double? = null
     private var selectedLon: Double? = null
     private var selectedSublocality: String? = null
@@ -68,14 +68,14 @@ class AddPostActivity : AppCompatActivity() {
 
 
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_post)
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
-        window.statusBarColor = Color.TRANSPARENT
-        val insetsController = WindowInsetsControllerCompat(window, window.decorView)
-        insetsController.isAppearanceLightStatusBars = true
+        window.statusBarColor = ContextCompat.getColor(this, R.color.soft_blue)
+        WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightStatusBars = true
 
         // Initialize views
         backArrow = findViewById(R.id.backArrow)
@@ -94,7 +94,6 @@ class AddPostActivity : AppCompatActivity() {
         minQualificationEditText = findViewById(R.id.minQualificationEditText)
         specialRequirementEditText = findViewById(R.id.specialRequirementEditText)
         submitButton = findViewById(R.id.submitButton)
-        progressBar = findViewById(R.id.progressBar)
 
 
 
@@ -169,7 +168,7 @@ class AddPostActivity : AppCompatActivity() {
     }
     private fun setupSubjectSuggestions() {
         val subjects = listOf(
-            "All Subjects", "Mathematics","Science", "Social Science","English", "Hindi",
+            "All main subjects", "Mathematics","Science", "Social Science","English", "Hindi",
             "Physics", "Chemistry", "Biology", "Social Studies", "History", "Geography", "Civics",
             "Economics (Basic)", "Computer Science",
 
@@ -391,7 +390,7 @@ class AddPostActivity : AppCompatActivity() {
         val qualification = minQualificationEditText.text.toString().trim()
         val specialReq = specialRequirementEditText.text.toString().trim()
 
-        val rootView = findViewById<LinearLayout>(R.id.rootLayout) ?: return
+        val rootView = findViewById<View>(R.id.rootLayout) ?: return
 
         if (className.isEmpty()) { classEditText.error = "Please enter class"; classEditText.requestFocus(); return }
         if (subject.isEmpty()) { subjectEditText.error = "Please enter subjects"; subjectEditText.requestFocus(); return }
@@ -442,26 +441,34 @@ class AddPostActivity : AppCompatActivity() {
 
 
         )
+        val dialogView = layoutInflater.inflate(R.layout.dialog_submit, null)
+        val loadingDialog = AlertDialog.Builder(this)
+            .setView(dialogView)
+            .setCancelable(false)
+            .create()
+        loadingDialog.show()
 
 
         val user = FirebaseAuth.getInstance().currentUser
         if (user == null) {
             Snackbar.make(rootView, "You're not logged in", Snackbar.LENGTH_LONG).show()
+            loadingDialog.dismiss()
             return
         }
 
         submitButton.isEnabled = false
         submitButton.animate().alpha(0.5f).setDuration(300).start()
-        progressBar.visibility = View.VISIBLE
+
 
         user.getIdToken(true)
             .addOnSuccessListener { result ->
                 val token = result.token
                 if (token.isNullOrEmpty()) {
-                    progressBar.visibility = View.GONE
+
                     Snackbar.make(rootView, "Token generation failed", Snackbar.LENGTH_LONG).show()
                     submitButton.animate().alpha(1f).setDuration(300).withEndAction {
                         submitButton.isEnabled = true
+                        loadingDialog.dismiss()
                     }.start()
                     return@addOnSuccessListener
                 }
@@ -469,13 +476,16 @@ class AddPostActivity : AppCompatActivity() {
                 lifecycleScope.launch {
                     try {
                         val response = ApiClient.instance.addPost("Bearer $token", post)
-                        progressBar.visibility = View.GONE
+                        loadingDialog.dismiss()
+
 
                         if (response.isSuccessful) {
                             AlertDialog.Builder(this@AddPostActivity)
                                 .setTitle("Success")
                                 .setMessage("Post submitted successfully!")
-                                .setPositiveButton("OK", null)
+                                .setPositiveButton("OK") { _, _ ->
+                                    finish() // finish activity after OK
+                                }
                                 .show()
 
                             clearFormFields()
@@ -493,7 +503,7 @@ class AddPostActivity : AppCompatActivity() {
                             }.start()
                         }
                     } catch (e: Exception) {
-                        progressBar.visibility = View.GONE
+                        loadingDialog.dismiss()
                         AlertDialog.Builder(this@AddPostActivity)
                             .setTitle("Network Error")
                             .setMessage("Something went wrong: ${e.localizedMessage}")
@@ -507,7 +517,7 @@ class AddPostActivity : AppCompatActivity() {
                 }
             }
             .addOnFailureListener {
-                progressBar.visibility = View.GONE
+                loadingDialog.dismiss()
                 AlertDialog.Builder(this@AddPostActivity)
                     .setTitle("Authentication Failed")
                     .setMessage("Something went wrong: ${it.message}")

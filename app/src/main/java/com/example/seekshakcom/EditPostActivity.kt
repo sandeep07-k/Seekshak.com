@@ -22,6 +22,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import com.example.seekshakcom.model.MyPost
@@ -53,7 +54,6 @@ class EditPostActivity : AppCompatActivity() {
     private lateinit var minQualificationEditText: AutoCompleteTextView
     private lateinit var specialRequirementEditText: MaterialAutoCompleteTextView
     private lateinit var updateButton: Button
-    private lateinit var progressBar: ProgressBar
     private lateinit var locationEditText: AutoCompleteTextView
     private lateinit var fetchLocationButton: TextView
     private var selectedLat: Double? = null
@@ -64,6 +64,8 @@ class EditPostActivity : AppCompatActivity() {
     private var selectedState: String? = null
     private var selectedCountry: String? = null
     private lateinit var locationResultLauncher: ActivityResultLauncher<Intent>
+    private var loadingDialog: AlertDialog? = null
+
 
 
     private var postId: String? = null
@@ -77,7 +79,7 @@ class EditPostActivity : AppCompatActivity() {
         setContentView(R.layout.activity_edit_post)
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
-        window.statusBarColor = Color.TRANSPARENT
+        window.statusBarColor = ContextCompat.getColor(this, R.color.soft_blue)
         WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightStatusBars = true
 
         // Init Views
@@ -95,7 +97,6 @@ class EditPostActivity : AppCompatActivity() {
         minQualificationEditText = findViewById(R.id.minQualificationEditText)
         specialRequirementEditText = findViewById(R.id.specialRequirementEditText)
         updateButton = findViewById(R.id.updateButton)
-        progressBar = findViewById(R.id.progressBar)
         locationEditText = findViewById(R.id.locationEditText)
         fetchLocationButton = findViewById(R.id.fetchLocationButton)
 
@@ -261,6 +262,23 @@ class EditPostActivity : AppCompatActivity() {
             .setNegativeButton("Cancel", null)
             .show()
     }
+    private fun showLoadingDialog() {
+        val dialogView = layoutInflater.inflate(R.layout.dialog_updating, null)
+        val textView = dialogView.findViewById<TextView>(R.id.loading_text)
+        textView.text = "Updating..."
+
+        loadingDialog = AlertDialog.Builder(this)
+            .setView(dialogView)
+            .setCancelable(false)
+            .create()
+        loadingDialog?.show()
+    }
+
+    private fun dismissLoadingDialog() {
+        loadingDialog?.dismiss()
+        loadingDialog = null
+    }
+
 
     private fun updatePost() {
         val className = classEditText.text.toString().trim()
@@ -309,14 +327,13 @@ class EditPostActivity : AppCompatActivity() {
             country = selectedCountry ?: ""
         )
 
-
-        progressBar.visibility = View.VISIBLE
         updateButton.isEnabled = false
+        showLoadingDialog()
 
         ApiClient.instance.updatePost(postId!!, updatedPost)
             .enqueue(object : Callback<ApiResponse> {
                 override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
-                    progressBar.visibility = View.GONE
+                    dismissLoadingDialog()
                     updateButton.isEnabled = true
                     if (response.isSuccessful && response.body()?.success == true) {
                         Toast.makeText(this@EditPostActivity, "Post updated successfully", Toast.LENGTH_SHORT).show()
@@ -328,7 +345,7 @@ class EditPostActivity : AppCompatActivity() {
                 }
 
                 override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
-                    progressBar.visibility = View.GONE
+                    dismissLoadingDialog()
                     updateButton.isEnabled = true
                     Toast.makeText(this@EditPostActivity, "Error: ${t.localizedMessage}", Toast.LENGTH_LONG).show()
                 }
