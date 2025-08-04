@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:paddingTop="30dp"
     android:background="#B3E5FC">
 
     <LinearLayout
@@ -53,31 +54,39 @@
             <ImageView
                 android:layout_width="18dp"
                 android:layout_height="18dp"
+                android:layout_marginBottom="15dp"
                 android:src="@drawable/ic_use_location" />
 
-            <TextView
-                android:id="@+id/currentLocationText"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Use Current Location"
-                android:layout_marginStart="8dp"
-                android:textColor="#007BFF"
-                android:textStyle="bold" />
+                android:orientation="vertical"
+                android:layout_marginStart="8dp">
+
+                <TextView
+                    android:id="@+id/currentLocationText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Use Current Location"
+                    android:textColor="#007BFF"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/fetchingLocationText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Fetching Location..."
+                    android:layout_marginBottom="15dp"
+                    android:textSize="12sp"
+                    android:textColor="#777" />
+            </LinearLayout>
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/fetchingLocationText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Fetching Location..."
-            android:textSize="12sp"
-            android:layout_marginStart="28dp"
-            android:textColor="#777" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginTop="14dp"
+            android:layout_marginTop="2dp"
             android:background="#DDD"/>
 
         <LinearLayout

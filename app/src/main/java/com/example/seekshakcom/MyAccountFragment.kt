@@ -70,6 +70,9 @@ class MyAccountFragment : Fragment() {
         view.findViewById<LinearLayout>(R.id.logout_layout).setOnClickListener {
             showLogoutDialog()
         }
+        binding.logoutButton.setOnClickListener{
+            showLogoutDialog()
+        }
     }
 
     override fun onResume() {

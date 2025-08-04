@@ -178,7 +178,7 @@ class EditProfileActivity : AppCompatActivity() {
                     } else {
                         val errorBody = response.errorBody()?.string()
                         Log.e("EditProfile", "Update failed: ${response.code()} - $errorBody")
-                        Toast.makeText(this@EditProfileActivity, "Update failed", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@EditProfileActivity, "Update failed: Something went wrong", Toast.LENGTH_SHORT).show()
                     }
                 }
 

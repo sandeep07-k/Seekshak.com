@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="#B3E5FC"
+    android:layout_height="match_parent"
+    android:background="@color/soft_blue"
+    android:fitsSystemWindows="true"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
@@ -10,8 +11,8 @@
         android:id="@+id/student_home"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#B3E5FC">
+        android:layout_height="match_parent"
+        android:background="#FFFFFF">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -20,18 +21,18 @@
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingHorizontal="6dp"
-            android:background="#B3E5FC"
-            android:paddingStart="2dp"
+            android:background="#FFFFFF"
+            android:paddingStart="6dp"
             android:paddingEnd="0dp">
 
 
             <ImageView
                 android:id="@+id/imageView"
                 android:layout_width="100dp"
-                android:layout_height="45dp"
+                android:layout_height="32dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginTop="0dp"
+                android:layout_marginTop="6dp"
                 android:contentDescription="@string/seekshak_com"
                 android:src="@drawable/seekshak_com" />
 
@@ -187,6 +188,7 @@
             android:layout_height="match_parent"
             android:fillViewport="true"
             android:background="#FFFFFF"
+            android:layout_marginBottom="0dp"
             android:paddingBottom="80dp"
             android:clipToPadding="false">
 
@@ -201,7 +203,7 @@
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="248dp"
-                    android:layout_marginTop="40dp"
+                    android:layout_marginTop="20dp"
                     android:background="@drawable/poster_stdhome"
                     android:contentDescription="@string/poster" />
 
@@ -209,7 +211,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:background="@drawable/rectangle_2"
-                    android:paddingVertical="10dp"
+                    android:paddingVertical="0dp"
                     android:paddingStart="12dp"
                     android:paddingEnd="12dp">
 
@@ -239,17 +241,18 @@
                 </RelativeLayout>
                 <HorizontalScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:scrollbars="none">
 
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
+
                         <androidx.cardview.widget.CardView
                             android:id="@+id/teacher_card1"
                             android:layout_width="291dp"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:layout_margin="15dp"
                             android:clickable="true"
                             android:focusable="true"
@@ -332,7 +335,7 @@
                                     android:gravity="center"
                                     android:text="Teaching Experience: XXXXX"
                                     android:textColor="#00213D"
-                                    android:textSize="13sp"
+                                    android:textSize="16sp"
                                     android:textStyle="bold" />
 
                                 <!-- Info Section -->
@@ -343,7 +346,7 @@
                                     android:lineSpacingExtra="2dp"
                                     android:text="Gender: XXXX\nHighest Qualification: XXXXXXX\nExpertise Subject: XXX, XXX\nFee: XXX rs/hr"
                                     android:textColor="#FFFFFF"
-                                    android:textSize="12sp" />
+                                    android:textSize="14sp" />
 
                                 <!-- View Button -->
                                 <Button
@@ -352,18 +355,18 @@
                                     android:layout_gravity="center"
                                     android:layout_marginTop="0dp"
                                     android:backgroundTint="#F2A007"
-                                    android:paddingHorizontal="0dp"
                                     android:text="View >>"
-                                    android:textSize="10sp"
+                                    android:textSize="12sp"
                                     android:textColor="#000000"
-                                    android:textStyle="bold" />
+                                    android:textStyle="bold"
+                                    />
                             </LinearLayout>
                         </androidx.cardview.widget.CardView>
 
                         <androidx.cardview.widget.CardView
                             android:id="@+id/teacher_card"
                             android:layout_width="291dp"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:layout_margin="15dp"
                             android:clickable="true"
                             android:focusable="true"
@@ -372,7 +375,7 @@
 
                             <LinearLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="match_parent"
                                 android:orientation="vertical"
                                 android:background="#0A2540"
                                 android:padding="12dp">
@@ -443,7 +446,7 @@
                                     android:background="@drawable/rectangle_p"
                                     android:text="Teaching Experience: XXXXX"
                                     android:textColor="#00213D"
-                                    android:textSize="13sp"
+                                    android:textSize="16sp"
                                     android:textStyle="bold"
                                     android:gravity="center" />
 
@@ -454,7 +457,7 @@
                                     android:layout_height="wrap_content"
                                     android:text="Gender: XXXX\nHighest Qualification: XXXXXXX\nExpertise Subject: XXX, XXX\nFee: XXX rs/hr"
                                     android:textColor="#FFFFFF"
-                                    android:textSize="12sp"
+                                    android:textSize="14sp"
                                     android:lineSpacingExtra="2dp" />
 
                                 <!-- View Button -->
@@ -466,7 +469,7 @@
                                     android:backgroundTint="#F2A007"
                                     android:paddingHorizontal="0dp"
                                     android:text="View >>"
-                                    android:textSize="10sp"
+                                    android:textSize="12sp"
                                     android:textColor="#000000"
                                     android:textStyle="bold" />
                             </LinearLayout>

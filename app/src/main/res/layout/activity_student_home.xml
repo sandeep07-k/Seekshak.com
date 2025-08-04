@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:fillViewport="true"
-    android:background="#B3E5FC"
+    android:background="@color/soft_blue"
     android:fitsSystemWindows="true">
 
 
@@ -70,10 +69,13 @@
 
             <!-- My Post -->
             <LinearLayout
+                android:id="@+id/myPostbtn_layout"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_marginTop="2dp"
                 android:layout_height="match_parent"
+                android:clickable="true"
+                android:focusable="true"
                 android:orientation="vertical"
                 android:gravity="center">
 
@@ -107,10 +109,13 @@
 
             <!-- Chats -->
             <LinearLayout
+                android:id="@+id/chatbtn_layout"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_marginTop="2dp"
                 android:layout_height="match_parent"
+                android:clickable="true"
+                android:focusable="true"
                 android:orientation="vertical"
                 android:gravity="center">
 
@@ -137,10 +142,13 @@
             <!-- My Account -->
 
             <LinearLayout
+                android:id="@+id/my_account_layout"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_marginTop="2dp"
                 android:layout_height="match_parent"
+                android:clickable="true"
+                android:focusableInTouchMode="true"
                 android:orientation="vertical"
                 android:gravity="center">
 
@@ -195,6 +203,15 @@
             android:scaleType="centerInside" />
 
     </RelativeLayout>
+
+    <View
+        android:id="@+id/whiteBackgroundBottom"
+        android:layout_width="0dp"
+        android:layout_height="70dp"
+        android:background="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 
 
