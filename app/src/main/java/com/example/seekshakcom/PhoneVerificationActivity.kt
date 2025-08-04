@@ -11,7 +11,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import com.example.seekshakcom.model.UserExistsResponse
 import com.example.seekshakcom.network.ApiClient
@@ -41,9 +43,12 @@ class PhoneVerificationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_phone_verification)
 
-        WindowCompat.setDecorFitsSystemWindows(window, true)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         window.statusBarColor = ContextCompat.getColor(this, R.color.soft_blue)
         WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightStatusBars = true
+
+
+
 
         mobileEditText = findViewById(R.id.mobile_no)
         nextButton = findViewById(R.id.next_button)

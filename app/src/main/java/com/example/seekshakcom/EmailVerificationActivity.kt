@@ -28,6 +28,7 @@ class EmailVerificationActivity : AppCompatActivity() {
     private lateinit var emailText: TextView
     private var resendJob: Job? = null
     private lateinit var editEmailIcon: ImageView
+    private lateinit var backArrow: ImageView
 
     private lateinit var email: String
 
@@ -35,7 +36,7 @@ class EmailVerificationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_email_verification)
 
-        WindowCompat.setDecorFitsSystemWindows(window, true)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         window.statusBarColor = ContextCompat.getColor(this, R.color.soft_blue)
         WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightStatusBars = true
 
@@ -50,16 +51,22 @@ class EmailVerificationActivity : AppCompatActivity() {
 
         verifyOtpButton = findViewById(R.id.verifyOtpButton)
         resendTimerText = findViewById(R.id.resend_timer)
+        backArrow = findViewById(R.id.back_arrow)
+        editEmailIcon = findViewById(R.id.edit_email)
 
         setupOtpInputNavigation()
         startResendCountdown()
 
-        editEmailIcon = findViewById(R.id.edit_email)
+
 
         editEmailIcon.setOnClickListener {
             // 👇 Simply finish to go back to EnterEmailActivity
             finish()
         }
+        backArrow.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
+
 
 
 
@@ -111,6 +118,7 @@ class EmailVerificationActivity : AppCompatActivity() {
             }
             resendTimerText.text = "Resend code"
             resendTimerText.isEnabled = true
+            resendTimerText.alpha = 1f
         }
     }
 

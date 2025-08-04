@@ -4,16 +4,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:fitsSystemWindows="true"
+    android:paddingTop="30dp"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:background="@color/soft_blue">
 
     <!-- Scrollable content -->
     <ScrollView
         android:id="@+id/scrollView"
+        android:background="@color/white"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fillViewport="true"
-        android:paddingTop="30dp"
+        android:paddingTop="10dp"
         android:paddingBottom="20dp"
         android:paddingHorizontal="16dp"
         app:layout_constraintTop_toTopOf="parent"
@@ -92,19 +94,26 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
-
-    <!-- Fixed Bottom Button -->
-    <Button
-        android:id="@+id/next_button"
+    <View
+        android:id="@+id/whiteBackgroundBottom"
         android:layout_width="0dp"
-        android:layout_height="60dp"
-        android:backgroundTint="#003B84"
-        android:text="NEXT"
-        android:textColor="#FFFFFF"
-        android:textSize="16sp"
-        android:layout_margin="10dp"
+        android:layout_height="70dp"
+        android:background="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+        <Button
+            android:id="@+id/next_button"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:backgroundTint="#003B84"
+            android:text="NEXT"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:layout_margin="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

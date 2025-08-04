@@ -2,16 +2,18 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
+    android:background="@color/soft_blue"
     android:orientation="vertical"
-    android:padding="0dp">
+    android:fitsSystemWindows="true"
+    android:paddingTop="30dp">
 
     <!-- Toolbar/Header -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:padding="12dp"
-        android:layout_marginTop="18dp">
+        android:layout_marginTop="0dp"
+        android:background="@color/white">
 
         <ImageView
             android:id="@+id/icClose"
@@ -40,10 +42,11 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="#9E9E9E"
-        android:layout_marginTop="4dp" />
+        android:layout_marginTop="0dp" />
 
     <ScrollView
         android:layout_width="match_parent"
+        android:background="@color/white"
         android:layout_height="0dp"
         android:paddingHorizontal="16dp"
         android:layout_weight="1"

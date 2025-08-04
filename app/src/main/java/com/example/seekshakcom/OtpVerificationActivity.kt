@@ -38,7 +38,7 @@ class OtpVerificationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_otp_verification)
 
-        WindowCompat.setDecorFitsSystemWindows(window, true)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         window.statusBarColor = ContextCompat.getColor(this, R.color.soft_blue)
         WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightStatusBars = true
 
@@ -154,6 +154,7 @@ class OtpVerificationActivity : AppCompatActivity() {
 
     private fun startResendCountdown() {
         canResend = false
+        resendTimer.alpha = 0.5f
         resendTimer.text = "Resend code in 30s"
         countDownTimer?.cancel()
         countDownTimer = object : CountDownTimer(30000, 1000) {
@@ -163,6 +164,7 @@ class OtpVerificationActivity : AppCompatActivity() {
 
             override fun onFinish() {
                 resendTimer.text = "Resend code"
+                resendTimer.alpha = 1f
                 canResend = true
             }
         }.start()
