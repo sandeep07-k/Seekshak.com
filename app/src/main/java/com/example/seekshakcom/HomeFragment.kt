@@ -37,7 +37,7 @@ class HomeFragment : Fragment() {
 
                 // 🆕 Prefer showing sublocality if available
                 locationText.text = if (selectedSublocality.isNotEmpty())
-                    "$selectedSublocality, $selectedCity"
+                    "$selectedArea, $selectedCity"
                 else
                     "$selectedArea, $selectedCity"
             }
@@ -101,7 +101,7 @@ class HomeFragment : Fragment() {
         if (!city.isNullOrEmpty() && !area.isNullOrEmpty() && lat != null && lon != null) {
             // 🆕 Prefer showing sublocality if available
             locationText.text = if (!sublocality.isNullOrEmpty())
-                "$sublocality, $city"
+                "$area, $city"
             else
                 "$area, $city"
 

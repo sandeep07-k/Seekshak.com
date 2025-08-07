@@ -8,6 +8,7 @@
     android:layout_height="match_parent"
     android:background="@android:color/white"
     android:paddingTop="30dp"
+    android:fitsSystemWindows="true"
     tools:context=".SignupActivity">
 
     <!-- Scrollable Content -->

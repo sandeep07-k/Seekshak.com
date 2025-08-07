@@ -230,7 +230,7 @@ class EditPostActivity : AppCompatActivity() {
         )))
 
         genderSpinner.setAdapter(ArrayAdapter(context, android.R.layout.simple_dropdown_item_1line, listOf(
-            "Male Tutor Only", "Female Tutor Only", "Any Available Tutor"
+            "Male or Female (any)", "Male Tutor Only", "Female Tutor Only"
         )))
 
         modeOfClassesSpinner.setAdapter(ArrayAdapter(context, android.R.layout.simple_dropdown_item_1line, listOf(

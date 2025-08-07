@@ -339,7 +339,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Special Requirements (if any)"
-                android:layout_marginBottom="80dp">
+                android:layout_marginBottom="130dp">
 
                 <com.google.android.material.textfield.MaterialAutoCompleteTextView
                     android:id="@+id/specialRequirementEditText"

@@ -276,13 +276,13 @@ class AddPostActivity : AppCompatActivity() {
 
     private fun setupGenderSpinner() {
         val genderOptions = listOf(
+            "Male or Female (any)",
             "Male Tutor Only",
-            "Female Tutor Only",
-            "Any Available Tutor"
+            "Female Tutor Only"
         )
         val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, genderOptions)
         genderSpinner.setAdapter(adapter)
-        genderSpinner.setText("Any Available tutor", true)
+//        genderSpinner.setText("Any Available tutor", true)
     }
 
     private fun setupModeOfClassesSpinner() {

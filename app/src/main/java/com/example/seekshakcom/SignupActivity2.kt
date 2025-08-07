@@ -45,7 +45,7 @@ class SignupActivity2 : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signup2)
 
-        WindowCompat.setDecorFitsSystemWindows(window, true)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         window.statusBarColor = ContextCompat.getColor(this, R.color.soft_blue)
         WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightStatusBars = true
 
