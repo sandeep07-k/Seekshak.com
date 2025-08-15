@@ -1,4 +1,4 @@
-package com.example.seekshakcom
+package com.example.seekshakcom.student
 
 import android.app.Activity
 import android.content.Context
@@ -10,16 +10,14 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
-import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.example.seekshakcom.R
 import com.example.seekshakcom.model.MyPost
 import com.example.seekshakcom.network.ApiClient
 import com.example.seekshakcom.network.ApiResponse

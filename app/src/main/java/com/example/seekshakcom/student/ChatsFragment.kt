@@ -1,4 +1,4 @@
-package com.example.seekshakcom
+package com.example.seekshakcom.student
 
 import android.os.Bundle
 import android.view.View
@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.seekshakcom.R
 import com.example.seekshakcom.model.ChatItem
 import com.google.android.material.tabs.TabLayout
 

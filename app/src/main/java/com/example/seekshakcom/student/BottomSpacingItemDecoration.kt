@@ -1,4 +1,4 @@
-package com.example.seekshakcom
+package com.example.seekshakcom.student
 
 import android.graphics.Rect
 import android.view.View

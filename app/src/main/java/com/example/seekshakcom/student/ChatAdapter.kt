@@ -1,10 +1,11 @@
-package com.example.seekshakcom
+package com.example.seekshakcom.student
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.seekshakcom.R
 import com.example.seekshakcom.model.ChatItem
 
 class ChatAdapter(private var chatList: List<ChatItem>) :

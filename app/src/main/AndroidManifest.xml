@@ -81,34 +81,34 @@
             />
 
 
-        <activity android:name=".StudentHomeActivity"
+        <activity android:name=".student.StudentHomeActivity"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".TutorHomeActivity" />
-        <activity android:name=".InstituteHomeActivity" />
+        <activity android:name=".tutor.TutorHomeActivity" />
+        <activity android:name=".institute.InstituteHomeActivity" />
 
         <activity android:name=".SignupActivity2"
             android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".LoginActivity2"
             android:windowSoftInputMode="adjustResize"/>
 
-        <activity android:name=".AddPostActivity"
+        <activity android:name=".student.AddPostActivity"
             android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".LocationSelectActivity"
+        <activity android:name=".student.LocationSelectActivity"
             android:windowSoftInputMode="adjustResize"/>
-        <activity android:name=".PostLocationSelectActivity"
+        <activity android:name=".student.PostLocationSelectActivity"
             android:windowSoftInputMode="adjustResize"/>
 
-        <activity android:name=".EditPostActivity"
+        <activity android:name=".student.EditPostActivity"
             android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".FullImageActivity" />
-        <activity android:name=".EditProfileActivity"/>
-        <activity android:name=".OtpVerificationActivity"
+        <activity android:name=".student.FullImageActivity" />
+        <activity android:name=".student.EditProfileActivity"/>
+        <activity android:name=".student.OtpVerificationActivity"
             android:windowSoftInputMode="adjustResize"/>
-        <activity android:name=".PhoneVerificationActivity"
+        <activity android:name=".student.PhoneVerificationActivity"
             android:windowSoftInputMode="adjustResize"/>
-        <activity android:name=".EnterEmailActivity"
+        <activity android:name=".student.EnterEmailActivity"
             android:windowSoftInputMode="adjustResize"/>
-        <activity android:name=".EmailVerificationActivity"
+        <activity android:name=".student.EmailVerificationActivity"
             android:windowSoftInputMode="adjustResize"/>
 
 

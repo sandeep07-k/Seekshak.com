@@ -1,4 +1,4 @@
-package com.example.seekshakcom
+package com.example.seekshakcom.student
 
 import android.content.Intent
 import android.view.LayoutInflater
@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
+import com.example.seekshakcom.R
 import com.example.seekshakcom.model.MyPost
 import java.text.SimpleDateFormat
 import java.util.*

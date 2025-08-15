@@ -1,5 +1,5 @@
 
-package com.example.seekshakcom
+package com.example.seekshakcom.student
 
 import android.app.Activity
 import android.content.Intent
@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import com.example.seekshakcom.R
 import com.example.seekshakcom.databinding.ActivityEditProfileBinding
 import com.example.seekshakcom.model.UpdateProfileResponse
 import com.example.seekshakcom.network.ApiClient

@@ -1,8 +1,9 @@
-package com.example.seekshakcom
+package com.example.seekshakcom.student
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
+import com.example.seekshakcom.R
 import com.example.seekshakcom.databinding.ActivityFullImageBinding
 
 class FullImageActivity : AppCompatActivity() {

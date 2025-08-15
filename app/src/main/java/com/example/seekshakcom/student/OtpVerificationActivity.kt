@@ -1,4 +1,4 @@
-package com.example.seekshakcom
+package com.example.seekshakcom.student
 
 import android.app.Activity
 import android.content.Intent
@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import com.example.seekshakcom.R
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.*
 import java.util.concurrent.TimeUnit

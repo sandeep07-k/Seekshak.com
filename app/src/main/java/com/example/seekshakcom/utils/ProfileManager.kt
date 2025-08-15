@@ -18,6 +18,7 @@ import com.example.seekshakcom.databinding.FragmentMyaccountBinding
 import com.example.seekshakcom.model.GenericResponse
 import com.example.seekshakcom.model.ImageRemoveRequest
 import com.example.seekshakcom.network.ApiClient
+import com.example.seekshakcom.student.FullImageActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.yalantis.ucrop.UCrop
 import kotlinx.coroutines.launch
@@ -37,20 +38,26 @@ class ProfileManager(
 ) {
 
     private var cameraImageUri: Uri? = null
+    private var galleryLauncher: ActivityResultLauncher<String>? = null
+    private var cameraLauncher: ActivityResultLauncher<Uri>? = null
 
     fun initProfile(
         pickImageLauncher: ActivityResultLauncher<String>,
         takePictureLauncher: ActivityResultLauncher<Uri>
     ) {
+        // store for later use
+        galleryLauncher = pickImageLauncher
+        cameraLauncher = takePictureLauncher
+
         binding.icCamera.setOnClickListener {
-            showImagePickerDialog(pickImageLauncher, takePictureLauncher)
+            showImagePickerDialog()
         }
 
         binding.profileIcon.setOnClickListener {
             val imageUrl = SharedPrefManager.getUser(fragment.requireContext())?.profileImage
                 ?: SharedPrefManager.getImageUrl(fragment.requireContext())
             if (!imageUrl.isNullOrEmpty()) {
-                val intent = Intent(fragment.requireContext(), com.example.seekshakcom.FullImageActivity::class.java)
+                val intent = Intent(fragment.requireContext(), FullImageActivity::class.java)
                 intent.putExtra("imageUrl", imageUrl)
                 fragment.startActivity(intent)
             }
@@ -68,7 +75,9 @@ class ProfileManager(
     }
 
     fun launchImageCropper(sourceUri: Uri) {
-        val destinationUri = Uri.fromFile(File(fragment.requireContext().cacheDir, "cropped_${System.currentTimeMillis()}.jpg"))
+        val destinationUri = Uri.fromFile(
+            File(fragment.requireContext().cacheDir, "cropped_${System.currentTimeMillis()}.jpg")
+        )
         val options = UCrop.Options().apply {
             setCompressionQuality(90)
             setCircleDimmedLayer(true)
@@ -115,17 +124,14 @@ class ProfileManager(
         uri?.let { launchImageCropper(it) }
     }
 
-    private fun showImagePickerDialog(
-        galleryLauncher: ActivityResultLauncher<String>,
-        cameraLauncher: ActivityResultLauncher<Uri>
-    ) {
+    private fun showImagePickerDialog() {
         val options = arrayOf("Take Photo", "Choose from Gallery", "Remove Photo")
         AlertDialog.Builder(fragment.requireContext())
             .setTitle("Change Profile Picture")
             .setItems(options) { _, which ->
                 when (which) {
-                    0 -> cameraLauncher.launch(getCameraImageUri())
-                    1 -> galleryLauncher.launch("image/*")
+                    0 -> cameraLauncher?.launch(getCameraImageUri())
+                    1 -> galleryLauncher?.launch("image/*")
                     2 -> removeProfileImage()
                 }
             }
@@ -260,7 +266,7 @@ class ProfileManager(
             phoneField: EditText,
             emailField: EditText,
             profileImage: ImageView,
-            onLoaded: (() -> Unit)? = null // ✅ Allow optional callback
+            onLoaded: (() -> Unit)? = null
         ) {
             val user = SharedPrefManager.getUser(context)
             if (user != null) {
@@ -280,9 +286,8 @@ class ProfileManager(
                         .circleCrop()
                         .into(profileImage)
                 }
-                onLoaded?.invoke() // ✅ Call the callback after UI update
+                onLoaded?.invoke()
             }
         }
-
     }
 }

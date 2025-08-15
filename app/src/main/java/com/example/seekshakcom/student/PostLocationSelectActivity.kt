@@ -1,4 +1,4 @@
-package com.example.seekshakcom
+package com.example.seekshakcom.student
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -19,6 +19,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.seekshakcom.R
 import com.example.seekshakcom.adapter.RecentLocationAdapter
 import com.example.seekshakcom.databinding.ActivityLocationSelectBinding
 import com.example.seekshakcom.model.LocationRequest

@@ -10,8 +10,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import com.example.seekshakcom.institute.InstituteHomeActivity
+import com.example.seekshakcom.tutor.TutorHomeActivity
 import com.example.seekshakcom.model.UserExistsResponse
 import com.example.seekshakcom.network.ApiClient
+import com.example.seekshakcom.student.StudentHomeActivity
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.*
 import retrofit2.Call

@@ -1,4 +1,4 @@
-package com.example.seekshakcom
+package com.example.seekshakcom.student
 
 import android.Manifest
 import android.app.Activity
@@ -21,6 +21,7 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.seekshakcom.R
 import com.example.seekshakcom.adapter.RecentLocationAdapter
 import com.example.seekshakcom.databinding.ActivityLocationSelectBinding
 import com.example.seekshakcom.model.LocationRequest

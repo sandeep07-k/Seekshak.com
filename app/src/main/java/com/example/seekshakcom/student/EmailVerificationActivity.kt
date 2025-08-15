@@ -1,4 +1,4 @@
-package com.example.seekshakcom
+package com.example.seekshakcom.student
 
 import android.app.Activity
 import android.app.AlertDialog
@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import com.example.seekshakcom.R
 import com.example.seekshakcom.model.EmailRequest
 import com.example.seekshakcom.model.OtpVerificationRequest
 import com.example.seekshakcom.network.ApiResponse

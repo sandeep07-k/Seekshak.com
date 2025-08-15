@@ -1,4 +1,4 @@
-package com.example.seekshakcom
+package com.example.seekshakcom.student
 
 import android.app.Activity
 import android.content.Context
@@ -10,6 +10,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import com.example.seekshakcom.R
 import com.example.seekshakcom.utils.LocationHelper
 import kotlinx.coroutines.launch
 

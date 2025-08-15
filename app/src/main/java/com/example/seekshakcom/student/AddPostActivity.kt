@@ -1,13 +1,11 @@
 
-package com.example.seekshakcom
+package com.example.seekshakcom.student
 
 
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
-import android.text.InputType
 import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
@@ -15,8 +13,6 @@ import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.ProgressBar
 import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
@@ -27,6 +23,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.lifecycleScope
+import com.example.seekshakcom.R
 import com.example.seekshakcom.model.PostRequest
 import com.example.seekshakcom.network.ApiClient
 import com.google.android.material.snackbar.Snackbar

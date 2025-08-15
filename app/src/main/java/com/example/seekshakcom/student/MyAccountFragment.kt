@@ -1,4 +1,4 @@
-package com.example.seekshakcom
+package com.example.seekshakcom.student
 
 import android.app.Activity
 import android.content.Context
@@ -13,6 +13,8 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import com.example.seekshakcom.LoginActivity
+import com.example.seekshakcom.R
 import com.example.seekshakcom.databinding.FragmentMyaccountBinding
 import com.example.seekshakcom.utils.ProfileManager
 import com.google.firebase.auth.FirebaseAuth
@@ -26,20 +28,34 @@ class MyAccountFragment : Fragment() {
     private lateinit var profileManager: ProfileManager
 
     private lateinit var editProfileLauncher: ActivityResultLauncher<Intent>
+    private lateinit var cropImageLauncher: ActivityResultLauncher<Intent>
+    private lateinit var pickImageLauncher: ActivityResultLauncher<String>
+    private lateinit var takePictureLauncher: ActivityResultLauncher<Uri>
 
-    private val cropImageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val resultUri = UCrop.getOutput(result.data!!)
-            resultUri?.let { profileManager.handleCropResult(it) }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // ✅ Move all registrations here to avoid lifecycle errors
+        cropImageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK && result.data != null) {
+                val resultUri = UCrop.getOutput(result.data!!)
+                resultUri?.let { profileManager.handleCropResult(it) }
+            }
         }
-    }
 
-    private val pickImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-        profileManager.handleGalleryImage(uri)
-    }
+        pickImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+            profileManager.handleGalleryImage(uri)
+        }
 
-    private val takePictureLauncher = registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
-        profileManager.handleCameraImageResult(success)
+        takePictureLauncher = registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
+            profileManager.handleCameraImageResult(success)
+        }
+
+        editProfileLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                profileManager.loadUserData()
+            }
+        }
     }
 
     override fun onCreateView(
@@ -56,12 +72,6 @@ class MyAccountFragment : Fragment() {
         profileManager = ProfileManager(this, binding, cropImageLauncher)
         profileManager.initProfile(pickImageLauncher, takePictureLauncher)
 
-        editProfileLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                profileManager.loadUserData()
-            }
-        }
-
         binding.editProfile.setOnClickListener {
             val intent = Intent(requireContext(), EditProfileActivity::class.java)
             editProfileLauncher.launch(intent)
@@ -70,7 +80,7 @@ class MyAccountFragment : Fragment() {
         view.findViewById<LinearLayout>(R.id.logout_layout).setOnClickListener {
             showLogoutDialog()
         }
-        binding.logoutButton.setOnClickListener{
+        binding.logoutButton.setOnClickListener {
             showLogoutDialog()
         }
     }
@@ -104,6 +114,4 @@ class MyAccountFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
-
 }
