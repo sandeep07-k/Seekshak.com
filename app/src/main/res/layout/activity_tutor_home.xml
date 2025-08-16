@@ -197,7 +197,7 @@
             android:layout_height="23dp"
             android:layout_centerHorizontal="true"
             android:layout_alignParentBottom="true"
-            android:text="Create Profile"
+            android:text="Profile"
             android:textSize="12sp"
             android:textColor="#174EA6"
             android:scaleType="centerInside" />

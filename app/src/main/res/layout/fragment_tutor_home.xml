@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/soft_blue"
+    android:fitsSystemWindows="true">
+
+    <LinearLayout
+        android:id="@+id/tutor_home"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+        <!-- Top Bar: Logo + Location -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="6dp"
+            android:background="@color/white">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="100dp"
+                android:layout_height="32dp"
+                android:contentDescription="@string/seekshak_com"
+                android:src="@drawable/seekshak_com" />
+
+            <LinearLayout
+                android:id="@+id/locationSelector"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="2dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:clickable="true"
+                android:focusable="true">
+
+                <ImageView
+                    android:id="@+id/dropdownArrow"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_dropdown_arrow" />
+
+                <TextView
+                    android:id="@+id/locationText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Select LOCATION"
+                    android:textColor="#555555"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:textAllCaps="true"
+                    android:maxLines="1"
+                    android:ellipsize="end"/>
+
+                <ImageView
+                    android:id="@+id/locationIcon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/logo_map" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <!-- Search Bar + Notifications + Credits -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:background="@color/white">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_search_rounded"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="8dp">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_search"
+                    app:tint="#999999" />
+
+                <EditText
+                    android:id="@+id/searchEditText"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:hint="@string/search"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:textColor="#000000"
+                    android:textColorHint="#999999"/>
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/notification_Btn"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_notification" />
+
+            <LinearLayout
+                android:id="@+id/creditContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical|end"
+                android:orientation="horizontal"
+                android:clickable="true"
+                android:focusable="true">
+
+                <ImageView
+                    android:id="@+id/credit_coin"
+                    android:layout_width="28dp"
+                    android:layout_height="24dp"
+                    android:layout_marginEnd="6dp"
+                    android:src="@drawable/credit_coin" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/credit_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Balance"
+                        android:textColor="@color/black"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/credit_balance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="7.08"
+                        android:textColor="@android:color/black"
+                        android:textSize="10sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- SwipeRefreshLayout for Pull-to-Refresh -->
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefresh"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fillViewport="true"
+                android:background="@color/white"
+                android:clipToPadding="false">
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="80dp">
+
+                    <!-- Home Tuitions Header -->
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:background="@drawable/rectangle_2"
+                        android:layout_marginTop="15dp"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp">
+
+                        <TextView
+                            android:id="@+id/label_teachers_near"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Home Tuitions :"
+                            android:textSize="18sp"
+                            android:textColor="#071E64"
+                            android:textStyle="bold"
+                            android:layout_centerVertical="true" />
+
+                        <TextView
+                            android:id="@+id/view_all_tuition"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:text="View All >>"
+                            android:textColor="@color/orange"
+                            android:textSize="12sp"
+                            android:textStyle="bold"/>
+                    </RelativeLayout>
+
+                    <!-- Shimmer Placeholder -->
+                    <com.facebook.shimmer.ShimmerFrameLayout
+                        android:id="@+id/shimmerLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:shimmer_auto_start="true"
+                        app:shimmer_duration="1000">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:paddingHorizontal="8dp"
+                            android:clipToPadding="false">
+
+                            <!-- Repeat item_tuition_card placeholders here -->
+                            <include layout="@layout/item_tuition_card"/>
+                            <include layout="@layout/item_tuition_card"/>
+                            <include layout="@layout/item_tuition_card"/>
+                        </LinearLayout>
+                    </com.facebook.shimmer.ShimmerFrameLayout>
+
+                    <!-- Dynamic Tuition RecyclerView -->
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerTuitionPosts"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:nestedScrollingEnabled="false"
+                        android:clipToPadding="false"
+                        android:paddingHorizontal="8dp"
+                        android:visibility="gone"
+                        tools:listitem="@layout/item_tuition_card"/>
+
+                    <!-- Empty/Error State Text -->
+                    <TextView
+                        android:id="@+id/emptyText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Tuitions are not available near you"
+                        android:textColor="#999999"
+                        android:textSize="14sp"
+                        android:gravity="center"
+                        android:visibility="gone"
+                        android:padding="16dp"/>
+
+                    <!-- Institute Vacancy Header -->
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:background="@drawable/rectangle_2"
+                        android:layout_marginTop="20dp"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp">
+
+                        <TextView
+                            android:id="@+id/label_institute_vacancy"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Institute Vacancy :"
+                            android:textSize="18sp"
+                            android:textColor="#071E64"
+                            android:textStyle="bold"
+                            android:layout_centerVertical="true" />
+
+                        <TextView
+                            android:id="@+id/view_all_button_institute"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:text="View All >>"
+                            android:textColor="@color/orange"
+                            android:textSize="10sp"
+                            android:textStyle="bold"/>
+                    </RelativeLayout>
+
+                    <!-- Institute Vacancy RecyclerView -->
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerInstituteVacancy"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:nestedScrollingEnabled="false"
+                        android:clipToPadding="false"
+                        android:paddingHorizontal="8dp"
+                        tools:listitem="@layout/item_institute_card"/>
+                </LinearLayout>
+            </androidx.core.widget.NestedScrollView>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </LinearLayout>
+</FrameLayout>

@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    app:cardCornerRadius="25dp"
+    app:cardElevation="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#0A2540"
+        android:orientation="vertical"
+        android:padding="12dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:layout_marginTop="0dp">
+
+        <TextView
+            android:id="@+id/posting_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:layout_weight="1"
+            android:text="Posting date:"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tuition_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:layout_weight="1.2"
+            android:text="status:"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
+
+
+        <!-- Header Row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:layout_marginTop="0dp">
+
+
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tuition_Code"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tuition Code: XXXX"
+                    android:textColor="#FFFFFF"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/favourite_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:contentDescription="@string/space"
+                android:src="@drawable/ic_favorite"
+                app:tint="#ffffff" />
+        </LinearLayout>
+
+        <!-- Section: Class Info -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/rectangle_p"
+            android:gravity="center"
+            android:padding="2dp"
+            android:text="Class Info"
+            android:textColor="#00213D"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/class_Details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="Class:"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/subject_Details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Subject:"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/board_Details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Education Board:"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/fee_Details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Expected Fee:"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp" />
+
+        <!-- Section: Schedule & Timing -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/rectangle_p"
+            android:gravity="center"
+            android:padding="2dp"
+            android:text="Schedule &amp; Timing"
+            android:textColor="#00213D"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/class_Timing"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="Time:"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/class_Schedule"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Schedule:"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp" />
+
+        <!-- Section: Location & Preferences -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/rectangle_p"
+            android:gravity="center"
+            android:padding="2dp"
+            android:text="Location &amp; Preferences"
+            android:textColor="#00213D"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/location_details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="Address: "
+            android:textColor="#FFFFFF"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/gender_Preference"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Gender Preference:"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/min_Qualification"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Min. Qualification:"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/mode_Of_Class"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Mode: "
+            android:textColor="#FFFFFF"
+            android:textSize="14sp" />
+
+        <!-- Section: Additional Info -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/rectangle_p"
+            android:gravity="center"
+            android:padding="2dp"
+            android:text="Additional Info"
+            android:textColor="#00213D"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/demo_Class_Date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="Demo Class Date: N/A"
+            android:textColor="#FFFFFF"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/special_Requirement"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Special Req:"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/distance_Details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Distance:"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp" />
+
+        <!-- View Button -->
+        <Button
+            android:id="@+id/applyBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="8dp"
+            android:backgroundTint="#F2A007"
+            android:padding="8dp"
+            android:text="Apply"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

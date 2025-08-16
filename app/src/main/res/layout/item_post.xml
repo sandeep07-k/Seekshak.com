@@ -14,6 +14,7 @@
     app:cardUseCompatPadding="true">
 
     <LinearLayout
+        android:id="@+id/layout_post"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
@@ -228,7 +229,7 @@
             android:id="@+id/min_Qualification"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Min Qualification: B.Sc"
+            android:text="Min. Qualification: B.Sc"
             android:textColor="#000000"
             android:textSize="14sp"
             android:layout_marginTop="4dp" />
@@ -262,6 +263,7 @@
 
         <!-- Action Buttons -->
         <LinearLayout
+            android:id="@+id/layout_active_actions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -276,8 +278,8 @@
                 android:text="Edit Details"
                 android:backgroundTint="#FFA500"
                 android:textColor="#FFFFFF"
-                android:textSize="10sp"
-                android:paddingHorizontal="8dp" />
+                android:textSize="12sp"
+                android:paddingHorizontal="12dp" />
 
             <Space
                 android:layout_width="10dp"
@@ -290,43 +292,51 @@
                 android:text="Applications"
                 android:backgroundTint="#0F427C"
                 android:textColor="#FFFFFF"
-                android:textSize="10sp"
-                android:paddingHorizontal="8dp" />
+                android:textSize="12sp"
+                android:paddingHorizontal="12dp" />
         </LinearLayout>
-        <!-- Expired Actions -->
-        <LinearLayout
-            android:id="@+id/layout_expired_actions"
-            android:layout_width="match_parent"
+        <View
+            android:id="@+id/whiteBackgroundBottom"
+            android:layout_width="0dp"
+            android:layout_height="55dp"
+            android:background="@android:color/white"
+            android:visibility="gone"/>
+
+
+    </LinearLayout>
+    <!-- Expired Actions -->
+    <LinearLayout
+        android:id="@+id/layout_expired_actions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end"
+        android:visibility="gone"
+        android:paddingEnd="12dp"
+        android:layout_marginTop="505dp">
+
+        <Button
+            android:id="@+id/btn_mark_filled"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:visibility="gone"
-            android:layout_marginTop="12dp">
+            android:text="Mark as Filled"
+            android:backgroundTint="#1976D2"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp"
+            android:paddingHorizontal="12dp" />
 
-            <Button
-                android:id="@+id/btn_mark_filled"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Mark as Filled"
-                android:backgroundTint="#1976D2"
-                android:textColor="#FFFFFF"
-                android:textSize="12sp"
-                android:paddingHorizontal="12dp" />
+        <Space
+            android:layout_width="12dp"
+            android:layout_height="wrap_content" />
 
-            <Space
-                android:layout_width="12dp"
-                android:layout_height="wrap_content" />
-
-            <Button
-                android:id="@+id/btn_repost"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Repost"
-                android:backgroundTint="#388E3C"
-                android:textColor="#FFFFFF"
-                android:textSize="12sp"
-                android:paddingHorizontal="12dp" />
-        </LinearLayout>
-
+        <Button
+            android:id="@+id/btn_repost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Repost"
+            android:backgroundTint="#388E3C"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp"
+            android:paddingHorizontal="12dp" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>

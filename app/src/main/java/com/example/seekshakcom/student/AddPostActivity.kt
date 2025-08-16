@@ -216,8 +216,8 @@ class AddPostActivity : AppCompatActivity() {
             "Mon-Wed-Fri (MWF)",
             "Tue-Thu-Sat (TTS)",
             "Mon to Fri",
-            "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun",
             "Mon-Wed", "Tue-Thu", "Wed-Fri", "Thu-Sat", "Sat-Sun",
+            "6 days/week","5 days/week","4 days/week","3 days/week","2 days/week","1 day/week",
             "Daily (7 Days)",
             "Alternate Days",
             "Weekends Only",
@@ -230,31 +230,16 @@ class AddPostActivity : AppCompatActivity() {
     }
     private fun setupClassTimingDropdown() {
         val timingOptions = listOf(
-            "7 AM – 8 AM ",
-            "8 AM – 9 AM",
-            "9 AM – 10 AM",
-            "10 AM – 11 AM",
-            "11 AM – 12 PM",
-            "12 PM – 1 PM",
-            "1 PM – 2 PM",
-            "2 PM – 3 PM",
-            "3 PM – 4 PM",
-            "4 PM – 5 PM",
-            "5 PM – 6 PM",
-            "6 PM – 7 PM",
-            "7 PM – 8 PM",
-            "8 PM – 9 PM",
-            "7 AM – 9 AM",
-            "9 AM – 11 AM",
-            "11 AM – 1 PM",
-            "1 PM – 3 PM",
-            "3 PM – 5 PM",
-            "5 PM – 7 PM",
-            "7 PM – 9 PM",
-            "Morning Shift",
-            "Evening Shift",
-            "Flexible Timing",
-            "Custom Timing"
+            "1 hour",
+            "1.5 hours",
+            "2 hours",
+            "2.5 hours",
+            "3 hours",
+            "3.5 hours",
+            "4 hours",
+            "4.5 hours",
+            "5 hours",
+            "6 hours",
         )
 
         val timingAdapter = ArrayAdapter(
@@ -382,10 +367,10 @@ class AddPostActivity : AppCompatActivity() {
         val classSchedule = classScheduleEditText.text.toString().trim()
         val classTiming = classTimingEditText.text.toString().trim()
         val gender = genderSpinner.text.toString()
-        val demoClassDate = demoClassDateEditText.text.toString().trim()
+        var demoClassDate = demoClassDateEditText.text.toString().trim()
         val modeOfClass = modeOfClassesSpinner.text.toString()
         val qualification = minQualificationEditText.text.toString().trim()
-        val specialReq = specialRequirementEditText.text.toString().trim()
+        var specialReq = specialRequirementEditText.text.toString().trim()
 
         val rootView = findViewById<View>(R.id.rootLayout) ?: return
 
@@ -401,10 +386,13 @@ class AddPostActivity : AppCompatActivity() {
 
         if (feeAmount.isEmpty() || feeType.isEmpty()) { feeEditText.error = "Enter fee and select type"; feeEditText.requestFocus(); return }
         if (classSchedule.isEmpty()) { classScheduleEditText.error = "Enter days"; classScheduleEditText.requestFocus(); return }
+        if (classTiming.isEmpty()) { classTimingEditText.error = "Enter duration"; classTimingEditText.requestFocus(); return }
         if (gender.isEmpty()) { Snackbar.make(rootView, "Please select preferred gender", Snackbar.LENGTH_SHORT).show(); return }
         if (modeOfClass.isEmpty()) { Snackbar.make(rootView, "Please select mode of class", Snackbar.LENGTH_SHORT).show(); return }
         if (qualification.isEmpty()) { minQualificationEditText.error = "Enter minimum qualification"; minQualificationEditText.requestFocus(); return }
         if (specialReq.length > 200) { specialRequirementEditText.error = "Too long – max 200 characters"; specialRequirementEditText.requestFocus(); return }
+        if(specialReq.isEmpty()){ specialReq = "None"}
+        if(demoClassDate.isEmpty()){ demoClassDate = "N/A"}
 
         val feeInput = feeEditText.text.toString().trim()
 

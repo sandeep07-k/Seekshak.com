@@ -120,7 +120,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Tuition Fee (₹) *"
+                android:text="Tuition Fee (₹ amount or range ) *"
                 android:textStyle="bold"
                 android:textSize="16sp" />
 
@@ -135,7 +135,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:hint="e.g. 500–1000">
+                    android:hint="(e.g.3000 or 2000–3000)">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/feeEditText"
@@ -248,7 +248,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Class Timing *"
+                android:hint="Class Duration (per day) *"
                 android:layout_marginBottom="12dp">
 
                 <com.google.android.material.textfield.MaterialAutoCompleteTextView
@@ -279,24 +279,6 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Mode of Class -->
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Mode of Class *"
-                android:layout_marginBottom="12dp">
-
-                <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                    android:id="@+id/modeOfClassesSpinner"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:maxLines="1"
-                    android:inputType="text"
-                    android:imeOptions="actionNext"
-                    android:completionThreshold="0"/>
-            </com.google.android.material.textfield.TextInputLayout>
-
             <!-- Qualification -->
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
@@ -310,6 +292,23 @@
                     android:layout_height="wrap_content"
                     android:inputType="text"
                     android:maxLines="1"
+                    android:imeOptions="actionNext"
+                    android:completionThreshold="0"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Mode of Class -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Mode of Class *"
+                android:layout_marginBottom="12dp">
+
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:id="@+id/modeOfClassesSpinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:inputType="text"
                     android:imeOptions="actionNext"
                     android:completionThreshold="0"/>
             </com.google.android.material.textfield.TextInputLayout>

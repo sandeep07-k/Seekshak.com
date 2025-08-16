@@ -15,9 +15,8 @@ import java.util.*
 class MyPostAdapter(
     private val postList: List<MyPost>,
     private val onRepost: (MyPost) -> Unit,
-    private val onMarkFilled: (MyPost) -> Unit,
     private val onRemove: (MyPost) -> Unit,
-    private val onEdit: (MyPost) -> Unit
+    private val onMarkFilled: (MyPost) -> Unit,
 ) : RecyclerView.Adapter<MyPostAdapter.PostViewHolder>() {
 
     class PostViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -41,6 +40,9 @@ class MyPostAdapter(
         val btnRepost: Button = itemView.findViewById(R.id.btn_repost)
         val btnMarkFilled: Button = itemView.findViewById(R.id.btn_mark_filled)
 
+        val viewPost: View = itemView.findViewById(R.id.whiteBackgroundBottom)
+        val layoutPost: LinearLayout = itemView.findViewById(R.id.layout_post)
+        val layoutActive: LinearLayout = itemView.findViewById(R.id.layout_active_actions)
         val layoutExpired: LinearLayout = itemView.findViewById(R.id.layout_expired_actions)
         val moreOptions: ImageButton = itemView.findViewById(R.id.moreOptionsButton)
     }
@@ -93,12 +95,24 @@ class MyPostAdapter(
         holder.locationDetails.text = "Address: $locationDisplay"
 
         // Status logic
-        if (post.status == "expired") {
-            holder.itemView.alpha = 0.5f
-            holder.layoutExpired.visibility = View.VISIBLE
-        } else {
-            holder.itemView.alpha = 1f
-            holder.layoutExpired.visibility = View.GONE
+        when (post.status) {
+            "expired" -> {
+                holder.layoutPost.alpha = 0.5f
+                holder.viewPost.visibility = View.VISIBLE
+                holder.layoutExpired.visibility = View.VISIBLE
+                holder.layoutActive.visibility = View.GONE
+            }
+            "filled" -> {
+                holder.layoutPost.alpha = 0.5f
+                holder.viewPost.visibility = View.VISIBLE
+                holder.layoutExpired.visibility = View.GONE
+                holder.layoutActive.visibility = View.GONE
+            }
+            "active" -> {
+                holder.itemView.alpha = 1f
+                holder.layoutExpired.visibility = View.GONE
+                holder.layoutActive.visibility = View.VISIBLE
+            }
         }
 
         // Button actions

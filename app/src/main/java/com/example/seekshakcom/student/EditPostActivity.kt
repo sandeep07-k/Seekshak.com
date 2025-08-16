@@ -170,10 +170,10 @@ class EditPostActivity : AppCompatActivity() {
 
 
         // ✅ Pre-fill location
-        val locationDisplay = listOfNotNull(post.sublocality, post.area, post.city)
-            .filter { it.isNotBlank() }
-            .joinToString(", ")
-        locationEditText.setText(locationDisplay)
+//        val locationDisplay = listOfNotNull(post.sublocality, post.area, post.city)
+//            .filter { it.isNotBlank() }
+//            .joinToString(", ")
+//        locationEditText.setText(locationDisplay)
 
 
 
@@ -217,14 +217,29 @@ class EditPostActivity : AppCompatActivity() {
 
 
         classScheduleEditText.setAdapter(ArrayAdapter(context, android.R.layout.simple_dropdown_item_1line, listOf(
-            "Mon-Wed-Fri (MWF)", "Tue-Thu-Sat (TTS)", "Mon to Fri", "Mon to Sat", "Weekends Only", "Daily (7 Days)",
-            "Alternate Days", "Only Mondays", "Custom Days"
+            "Mon to Sat",
+            "Mon-Wed-Fri (MWF)",
+            "Tue-Thu-Sat (TTS)",
+            "Mon to Fri",
+            "Mon-Wed", "Tue-Thu", "Wed-Fri", "Thu-Sat", "Sat-Sun",
+            "6 days/week","5 days/week","4 days/week","3 days/week","2 days/week","1 day/week",
+            "Daily (7 Days)",
+            "Alternate Days",
+            "Weekends Only",
+            "Custom Days"
         )))
 
         classTimingEditText.setAdapter(ArrayAdapter(context, android.R.layout.simple_dropdown_item_1line, listOf(
-            "7 AM – 8 AM", "8 AM – 9 AM", "9 AM – 10 AM", "10 AM – 11 AM", "11 AM – 12 PM", "12 PM – 1 PM",
-            "1 PM – 2 PM", "2 PM – 3 PM", "3 PM – 4 PM", "4 PM – 5 PM", "5 PM – 6 PM", "6 PM – 7 PM",
-            "7 PM – 8 PM", "8 PM – 9 PM", "Flexible Timing", "Custom Timing"
+            "1 hour",
+            "1.5 hours",
+            "2 hours",
+            "2.5 hours",
+            "3 hours",
+            "3.5 hours",
+            "4 hours",
+            "4.5 hours",
+            "5 hours",
+            "6 hours",
         )))
 
         genderSpinner.setAdapter(ArrayAdapter(context, android.R.layout.simple_dropdown_item_1line, listOf(
@@ -297,7 +312,7 @@ class EditPostActivity : AppCompatActivity() {
         val specialReq = specialRequirementEditText.text.toString().trim()
 
         if (className.isEmpty() || subject.isEmpty() || educationBoard.isEmpty() ||
-            feeAmount.isEmpty() || feeType.isEmpty() ||
+            feeAmount.isEmpty() || feeType.isEmpty() || classTiming.isEmpty() ||
             classSchedule.isEmpty() || gender.isEmpty() || modeOfClass.isEmpty() ||
             qualification.isEmpty()
         ) {

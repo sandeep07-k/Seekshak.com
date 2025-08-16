@@ -16,7 +16,6 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import com.example.seekshakcom.student.AddPostActivity
 import com.example.seekshakcom.student.ChatsFragment
-import com.example.seekshakcom.student.HomeFragment
 import com.example.seekshakcom.student.MyAccountFragment
 import com.example.seekshakcom.student.MyPostsFragment
 import com.example.seekshakcom.R
@@ -41,7 +40,7 @@ class TutorHomeActivity : AppCompatActivity() {
     private lateinit var fragmentContainer: FrameLayout
 
     // Cached fragment instances
-    private val homeFragment = HomeFragment()
+    private val tutorHomeFragment = TutorHomeFragment()
     private val myPostsFragment = MyPostsFragment()
     private val chatsFragment = ChatsFragment()
     private val myAccountFragment = MyAccountFragment()
@@ -72,7 +71,7 @@ class TutorHomeActivity : AppCompatActivity() {
 
         fragmentContainer.visibility = View.VISIBLE
         selectHomeTab()
-        showFragment(homeFragment)
+        showFragment(tutorHomeFragment)
 
         homeBtn.setOnClickListener {
             handleHomeClick()
@@ -109,11 +108,11 @@ class TutorHomeActivity : AppCompatActivity() {
 
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                val currentFragment = supportFragmentManager.findFragmentById(R.id.student_home_fragment_container)
-                if (currentFragment !is HomeFragment) {
+                val currentFragment = supportFragmentManager.findFragmentById(R.id.tutor_home_fragment_container)
+                if (currentFragment !is TutorHomeFragment) {
                     resetAllTabs()
                     selectHomeTab()
-                    showFragment(homeFragment)
+                    showFragment(tutorHomeFragment)
                 } else {
                     AlertDialog.Builder(this@TutorHomeActivity)
                         .setTitle("Exit App")
@@ -127,7 +126,7 @@ class TutorHomeActivity : AppCompatActivity() {
     }
 
     private fun handleHomeClick() {
-        ifNotVisibleThenShow(homeFragment) {
+        ifNotVisibleThenShow(tutorHomeFragment) {
             resetAllTabs()
             window.statusBarColor = ContextCompat.getColor(this, R.color.soft_blue)
             WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightStatusBars = true
@@ -172,7 +171,7 @@ class TutorHomeActivity : AppCompatActivity() {
     }
 
     private fun ifNotVisibleThenShow(fragment: androidx.fragment.app.Fragment, onSelected: () -> Unit) {
-        val current = supportFragmentManager.findFragmentById(R.id.student_home_fragment_container)
+        val current = supportFragmentManager.findFragmentById(R.id.tutor_home_fragment_container)
         if (current?.javaClass != fragment.javaClass) {
             onSelected()
             showFragment(fragment)
@@ -181,7 +180,7 @@ class TutorHomeActivity : AppCompatActivity() {
 
     private fun showFragment(fragment: androidx.fragment.app.Fragment) {
         supportFragmentManager.beginTransaction()
-            .replace(R.id.student_home_fragment_container, fragment)
+            .replace(R.id.tutor_home_fragment_container, fragment)
             .commit()
     }
 

@@ -67,8 +67,7 @@ class MyPostsFragment : Fragment() {
             postList,
             onRepost = { post -> repostPost(post._id) },
             onMarkFilled = { post -> markAsFilled(post._id) },
-            onRemove = { post -> removePost(post._id) },
-            onEdit = { post -> editPost(post) }
+            onRemove = { post -> removePost(post._id) }
         )
         recyclerView.adapter = myPostAdapter
         val bottomPadding = resources.getDimensionPixelSize(R.dimen.extra_bottom_spacing)

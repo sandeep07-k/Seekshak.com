@@ -8,6 +8,7 @@ import com.example.seekshakcom.model.MyPost
 import com.example.seekshakcom.model.PostRequest
 import com.example.seekshakcom.model.RegisterRequest
 import com.example.seekshakcom.model.RegisterResponse
+import com.example.seekshakcom.model.TuitionPost
 import com.example.seekshakcom.model.UpdateProfileResponse
 import com.example.seekshakcom.model.UploadResponse
 import com.example.seekshakcom.model.UserExistsResponse
@@ -90,6 +91,15 @@ interface ApiService {
 
     @PUT("api/user/update")
     fun updateUserProfilePartial(@Body updates: Map<String, String>): Call<UpdateProfileResponse>
+
+
+    interface TuitionApiService {
+        @GET("/api/tuitions/nearby-posts")
+        fun getNearbyPosts(
+            @Query("lat") lat: Double,
+            @Query("lon") lon: Double
+        ): Call<List<TuitionPost>>
+    }
 
 
 

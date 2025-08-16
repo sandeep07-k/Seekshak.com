@@ -41,7 +41,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="6dp"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center_vertical"
@@ -88,16 +88,17 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_marginTop="0dp"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
             android:background="@color/white">
 
+            <!-- Search Bar -->
             <LinearLayout
-                android:layout_width="185dp"
+                android:layout_width="0dp"
                 android:layout_height="40dp"
+                android:layout_weight="1"
                 android:background="@drawable/bg_search_rounded"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
@@ -125,37 +126,36 @@
                     android:textColorHint="#999999" />
             </LinearLayout>
 
-
+            <!-- Notification Button -->
             <ImageButton
                 android:id="@+id/notification_Btn"
-                android:layout_width="wrap_content"
+                android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:layout_marginStart="12dp"
-                android:layout_marginEnd="8dp"
-                android:background="@null"
+                android:layout_marginStart="8dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
                 android:contentDescription="@string/notification"
                 android:focusable="true"
                 android:src="@drawable/ic_notification"
                 tools:ignore="TouchTargetSizeCheck" />
 
-
+            <!-- Credit Section -->
             <LinearLayout
                 android:id="@+id/creditContainer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="7dp"
-                android:layout_marginTop="0dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginStart="8dp"
+                android:gravity="center_vertical|end"
                 android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:clickable="true"
+                android:focusable="true">
 
                 <ImageView
                     android:id="@+id/credit_coin"
                     android:layout_width="28dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/credit_coin"
-                    android:layout_marginEnd="6dp" />
+                    android:layout_marginEnd="6dp"
+                    android:src="@drawable/credit_coin" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -181,6 +181,7 @@
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
+
 
         <ScrollView
             android:id="@+id/student_home_scroll"
@@ -273,14 +274,6 @@
                                     android:gravity="center_vertical"
                                     android:orientation="horizontal">
 
-                                    <ImageView
-                                        android:layout_width="50dp"
-                                        android:layout_height="50dp"
-                                        android:layout_marginEnd="8dp"
-                                        android:background="@drawable/bg_profile"
-                                        android:contentDescription="@string/todo"
-                                        android:padding="4dp"
-                                        android:src="@drawable/ic_user" />
 
                                     <LinearLayout
                                         android:layout_width="0dp"
@@ -311,7 +304,7 @@
                                             android:layout_marginTop="2dp"
                                             android:isIndicator="true"
                                             android:numStars="5"
-                                            android:rating="4"
+                                            android:rating="5"
                                             android:scaleX="0.8"
                                             android:scaleY="0.8"
                                             android:stepSize="1" />
@@ -333,7 +326,7 @@
                                     android:layout_marginTop="8dp"
                                     android:background="@drawable/rectangle_p"
                                     android:gravity="center"
-                                    android:text="Teaching Experience: XXXXX"
+                                    android:text="Details"
                                     android:textColor="#00213D"
                                     android:textSize="16sp"
                                     android:textStyle="bold" />
@@ -344,7 +337,34 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="6dp"
                                     android:lineSpacingExtra="2dp"
-                                    android:text="Gender: XXXX\nHighest Qualification: XXXXXXX\nExpertise Subject: XXX, XXX\nFee: XXX rs/hr"
+                                    android:text="Gender: XXXX"
+                                    android:textColor="#FFFFFF"
+                                    android:textSize="14sp" />
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="2dp"
+                                    android:lineSpacingExtra="2dp"
+                                    android:text="Highest Qualification: XXXXXXX"
+                                    android:textColor="#FFFFFF"
+                                    android:textSize="14sp" />
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="2dp"
+                                    android:lineSpacingExtra="2dp"
+                                    android:text="Expertise Subject: XXX"
+                                    android:textColor="#FFFFFF"
+                                    android:textSize="14sp" />
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="2dp"
+                                    android:lineSpacingExtra="2dp"
+                                    android:text="Fee: Rs.XXX"
                                     android:textColor="#FFFFFF"
                                     android:textSize="14sp" />
 
