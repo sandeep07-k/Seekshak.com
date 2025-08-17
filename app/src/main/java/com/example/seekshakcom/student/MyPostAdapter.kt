@@ -11,6 +11,7 @@ import com.example.seekshakcom.R
 import com.example.seekshakcom.model.MyPost
 import java.text.SimpleDateFormat
 import java.util.*
+import com.example.seekshakcom.utils.TextUtilsHelper.setBoldLabel
 
 class MyPostAdapter(
     private val postList: List<MyPost>,
@@ -39,12 +40,16 @@ class MyPostAdapter(
         val btnEditDetails: Button = itemView.findViewById(R.id.btn_Edit_Details)
         val btnRepost: Button = itemView.findViewById(R.id.btn_repost)
         val btnMarkFilled: Button = itemView.findViewById(R.id.btn_mark_filled)
+        val btnRemove: Button = itemView.findViewById(R.id.btn_remove)
 
         val viewPost: View = itemView.findViewById(R.id.whiteBackgroundBottom)
         val layoutPost: LinearLayout = itemView.findViewById(R.id.layout_post)
         val layoutActive: LinearLayout = itemView.findViewById(R.id.layout_active_actions)
         val layoutExpired: LinearLayout = itemView.findViewById(R.id.layout_expired_actions)
+        val layoutFilled: LinearLayout = itemView.findViewById(R.id.layout_filled_actions)
         val moreOptions: ImageButton = itemView.findViewById(R.id.moreOptionsButton)
+        val filledText: TextView = itemView.findViewById(R.id.filledText)
+        val expiredText: TextView = itemView.findViewById(R.id.expiredText)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
@@ -60,6 +65,24 @@ class MyPostAdapter(
         inputFormat.timeZone = TimeZone.getTimeZone("UTC")
         val outputFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
 
+//        try {
+//            val date = inputFormat.parse(post.createdAt)
+//            val calendar = Calendar.getInstance()
+//            calendar.time = date!!
+//            val fromDate = outputFormat.format(calendar.time)
+//            calendar.add(Calendar.MONTH, 1)
+//            val toDate = outputFormat.format(calendar.time)
+//
+//            // Label bold, value also bold
+//            holder.postedDate.text = setBoldLabel(
+//                "FROM: ",
+//                "$fromDate  TO: $toDate",
+//                isValueBold = false
+//            )
+//        } catch (e: Exception) {
+//            holder.postedDate.text = setBoldLabel("FROM: ", "Invalid Date", isValueBold = true)
+//        }
+
         try {
             val date = inputFormat.parse(post.createdAt)
             val calendar = Calendar.getInstance()
@@ -72,27 +95,36 @@ class MyPostAdapter(
             holder.postedDate.text = "Invalid Date"
         }
 
-        // Set field values
-        holder.tuitionCode.text = "Tuition Code: ${post.tuitionCode}"
-        holder.classDetails.text = "Class: ${post.className}"
-        holder.subjectDetails.text = "Subject: ${post.subject}"
-        holder.boardDetails.text = "Education Board: ${post.educationBoard}"
-        holder.genderPreference.text = "Gender Preference: ${post.gender}"
-        holder.expectedFee.text = "Expected Fee: ${post.fee} "
-        holder.classTiming.text = "Class Timing: ${post.classTiming}"
-        holder.classSchedule.text = "Class Schedule: ${post.classSchedule}"
-        holder.modeOfClass.text = "Mode: ${post.modeOfClass}"
-        holder.qualification.text = "Min Qualification: ${post.qualification}"
-        holder.demoClassDate.text = "Demo Class Date: ${if (post.demoClassDate.isBlank()) "None" else post.demoClassDate}"
-        holder.specialReq.text = "Special Req: ${if (post.specialReq.isBlank()) "None" else post.specialReq}"
 
-        // Address: sublocality, area, city
+
+        // Set field values
+        holder.tuitionCode.text = setBoldLabel("Tuition Code: ", post.tuitionCode.toString())
+        holder.classDetails.text = setBoldLabel("Class: ", post.className)
+        holder.subjectDetails.text = setBoldLabel("Subject: ", post.subject)
+        holder.boardDetails.text = setBoldLabel("Education Board: ", post.educationBoard)
+        holder.genderPreference.text = setBoldLabel("Gender Preference: ", post.gender)
+        holder.expectedFee.text = setBoldLabel("Expected Fee: ", post.fee)
+        holder.classTiming.text = setBoldLabel("Class Timing: ", post.classTiming)
+        holder.classSchedule.text = setBoldLabel("Class Schedule: ", post.classSchedule)
+        holder.modeOfClass.text = setBoldLabel("Mode: ", post.modeOfClass)
+        holder.qualification.text = setBoldLabel("Min Qualification: ", post.qualification)
+        holder.demoClassDate.text = setBoldLabel(
+            "Demo Class Date: ",
+            if (post.demoClassDate.isBlank()) "None" else post.demoClassDate
+        )
+        holder.specialReq.text = setBoldLabel(
+            "Special Req: ",
+            if (post.specialReq.isBlank()) "None" else post.specialReq
+        )
+
+
+        // Address: sublocality, area, city with bold label
         val locationDisplay = listOfNotNull(
             post.sublocality?.takeIf { it.isNotBlank() },
             post.area?.takeIf { it.isNotBlank() },
             post.city?.takeIf { it.isNotBlank() }
         ).joinToString(", ").ifBlank { "Unknown" }
-        holder.locationDetails.text = "Address: $locationDisplay"
+        holder.locationDetails.text = setBoldLabel("Address: ", locationDisplay)
 
         // Status logic
         when (post.status) {
@@ -101,17 +133,31 @@ class MyPostAdapter(
                 holder.viewPost.visibility = View.VISIBLE
                 holder.layoutExpired.visibility = View.VISIBLE
                 holder.layoutActive.visibility = View.GONE
+                holder.layoutFilled.visibility = View.GONE
+                holder.moreOptions.isEnabled = false
+                holder.expiredText.visibility = View.VISIBLE
+                holder.filledText.visibility = View.GONE
             }
             "filled" -> {
                 holder.layoutPost.alpha = 0.5f
                 holder.viewPost.visibility = View.VISIBLE
+                holder.filledText.visibility = View.VISIBLE
+                holder.layoutFilled.visibility = View.VISIBLE
                 holder.layoutExpired.visibility = View.GONE
                 holder.layoutActive.visibility = View.GONE
+                holder.moreOptions.isEnabled = false
+                holder.expiredText.visibility = View.GONE
             }
             "active" -> {
-                holder.itemView.alpha = 1f
-                holder.layoutExpired.visibility = View.GONE
+                holder.layoutPost.alpha = 1f
                 holder.layoutActive.visibility = View.VISIBLE
+                holder.viewPost.visibility = View.GONE
+                holder.layoutExpired.visibility = View.GONE
+                holder.layoutFilled.visibility = View.GONE
+                holder.moreOptions.isEnabled = true
+                holder.expiredText.visibility = View.GONE
+                holder.filledText.visibility = View.GONE
+
             }
         }
 
@@ -135,13 +181,21 @@ class MyPostAdapter(
             onMarkFilled(post)
         }
 
+        holder.btnRemove.setOnClickListener {
+            onRemove(post)
+        }
+
         holder.moreOptions.setOnClickListener { view ->
             val popup = PopupMenu(view.context, view)
             popup.menuInflater.inflate(R.menu.menu_post_options, popup.menu)
             popup.setOnMenuItemClickListener {
                 when (it.itemId) {
                     R.id.menu_remove -> {
-                        onRemove(post)
+                        onRemove(post) // existing logic
+                        true
+                    }
+                    R.id.menu_mark_filled -> {
+                        onMarkFilled(post) // new callback
                         true
                     }
                     else -> false
@@ -149,6 +203,7 @@ class MyPostAdapter(
             }
             popup.show()
         }
+
     }
 
     override fun getItemCount(): Int = postList.size

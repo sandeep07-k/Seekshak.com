@@ -223,6 +223,7 @@ class ProfileManager(
         } ?: ""
 
         binding.userEmail.text = user?.email ?: ""
+        if(binding.userEmail.text.isNullOrEmpty()){ binding.userEmail.text = "Update your email !!"}
 
         val imageUrl = user?.profileImage
         if (!imageUrl.isNullOrEmpty()) {

@@ -38,6 +38,8 @@ class TutorHomeFragment : Fragment() {
     private lateinit var swipeRefresh: SwipeRefreshLayout
     private lateinit var emptyText: TextView
     private lateinit var recyclerTuitionPosts: RecyclerView
+    private lateinit var viewAllTuition: LinearLayout
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,6 +91,7 @@ class TutorHomeFragment : Fragment() {
         shimmerLayout = view.findViewById(R.id.shimmerLayout)
         swipeRefresh = view.findViewById(R.id.swipeRefresh)
         emptyText = view.findViewById(R.id.emptyText)
+        viewAllTuition = view.findViewById(R.id.view_all_tuition)
 
         // RecyclerView setup
         recyclerTuitionPosts.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
@@ -111,6 +114,11 @@ class TutorHomeFragment : Fragment() {
         creditCoin.setOnClickListener {
             Toast.makeText(requireContext(), "Credits: ${creditBalance.text}", Toast.LENGTH_SHORT).show()
         }
+        viewAllTuition.setOnClickListener {
+            val intent = Intent(requireContext(), AllTuitionPostsActivity::class.java)
+            startActivity(intent)
+        }
+
 
         // Pull-to-refresh
         swipeRefresh.setOnRefreshListener { loadTuitionPosts() }
@@ -200,7 +208,7 @@ class TutorHomeFragment : Fragment() {
                 } else {
                     recyclerTuitionPosts.visibility = View.GONE
                     emptyText.visibility = View.VISIBLE
-                    emptyText.text = "Tuitions are not available near you"
+                    emptyText.text = "Tuitions are not available near you.\nPull to refresh."
                 }
             }
 

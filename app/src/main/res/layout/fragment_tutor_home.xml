@@ -190,16 +190,34 @@
                             android:textStyle="bold"
                             android:layout_centerVertical="true" />
 
-                        <TextView
+
+
+                        <LinearLayout
                             android:id="@+id/view_all_tuition"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="end|center_vertical"
                             android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true"
-                            android:text="View All >>"
-                            android:textColor="@color/orange"
-                            android:textSize="12sp"
-                            android:textStyle="bold"/>
+                            android:layout_centerInParent="true"
+                            android:paddingHorizontal="0dp"
+                            android:paddingTop="2dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="View All"
+                                android:textColor="@color/orange"
+                                android:textSize="12sp"
+                                android:textStyle="bold"/>
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:src="@drawable/ic_arrow_right"
+                                android:paddingStart="4dp"
+                                app:tint="@color/orange" />
+                        </LinearLayout>
                     </RelativeLayout>
 
                     <!-- Shimmer Placeholder -->
@@ -215,11 +233,10 @@
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
                             android:paddingHorizontal="8dp"
+                            android:layout_marginTop="4dp"
                             android:clipToPadding="false">
 
                             <!-- Repeat item_tuition_card placeholders here -->
-                            <include layout="@layout/item_tuition_card"/>
-                            <include layout="@layout/item_tuition_card"/>
                             <include layout="@layout/item_tuition_card"/>
                         </LinearLayout>
                     </com.facebook.shimmer.ShimmerFrameLayout>
@@ -231,9 +248,11 @@
                         android:layout_height="wrap_content"
                         android:nestedScrollingEnabled="false"
                         android:clipToPadding="false"
+                        android:layout_marginTop="4dp"
                         android:paddingHorizontal="8dp"
                         android:visibility="gone"
                         tools:listitem="@layout/item_tuition_card"/>
+
 
                     <!-- Empty/Error State Text -->
                     <TextView
@@ -242,7 +261,7 @@
                         android:layout_height="wrap_content"
                         android:text="Tuitions are not available near you"
                         android:textColor="#999999"
-                        android:textSize="14sp"
+                        android:textSize="16sp"
                         android:gravity="center"
                         android:visibility="gone"
                         android:padding="16dp"/>
