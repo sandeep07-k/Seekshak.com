@@ -65,23 +65,6 @@ class MyPostAdapter(
         inputFormat.timeZone = TimeZone.getTimeZone("UTC")
         val outputFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
 
-//        try {
-//            val date = inputFormat.parse(post.createdAt)
-//            val calendar = Calendar.getInstance()
-//            calendar.time = date!!
-//            val fromDate = outputFormat.format(calendar.time)
-//            calendar.add(Calendar.MONTH, 1)
-//            val toDate = outputFormat.format(calendar.time)
-//
-//            // Label bold, value also bold
-//            holder.postedDate.text = setBoldLabel(
-//                "FROM: ",
-//                "$fromDate  TO: $toDate",
-//                isValueBold = false
-//            )
-//        } catch (e: Exception) {
-//            holder.postedDate.text = setBoldLabel("FROM: ", "Invalid Date", isValueBold = true)
-//        }
 
         try {
             val date = inputFormat.parse(post.createdAt)

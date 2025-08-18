@@ -58,5 +58,138 @@
             android:layout_marginTop="12dp"
             android:background="@drawable/shimmer_placeholder_bg" />
 
+        <!-- Placeholder bars (fixed width instead of %) -->
+        <View
+            android:layout_width="180dp"
+            android:layout_height="12dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/shimmer_placeholder_bg" />
+
+        <View
+            android:layout_width="240dp"
+            android:layout_height="16dp"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/shimmer_placeholder_bg" />
+
+        <View
+            android:layout_width="120dp"
+            android:layout_height="12dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/shimmer_placeholder_bg" />
+
+        <View
+            android:layout_width="260dp"
+            android:layout_height="12dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/shimmer_placeholder_bg" />
+
+        <View
+            android:layout_width="200dp"
+            android:layout_height="12dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/shimmer_placeholder_bg" />
+
+        <View
+            android:layout_width="140dp"
+            android:layout_height="12dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/shimmer_placeholder_bg" />
+
+        <View
+            android:layout_width="260dp"
+            android:layout_height="36dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/shimmer_placeholder_bg" />
+
+        <!-- Placeholder bars (fixed width instead of %) -->
+        <View
+            android:layout_width="180dp"
+            android:layout_height="12dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/shimmer_placeholder_bg" />
+
+        <View
+            android:layout_width="240dp"
+            android:layout_height="16dp"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/shimmer_placeholder_bg" />
+
+        <View
+            android:layout_width="120dp"
+            android:layout_height="12dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/shimmer_placeholder_bg" />
+
+        <View
+            android:layout_width="260dp"
+            android:layout_height="12dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/shimmer_placeholder_bg" />
+
+        <View
+            android:layout_width="200dp"
+            android:layout_height="12dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/shimmer_placeholder_bg" />
+
+        <View
+            android:layout_width="140dp"
+            android:layout_height="12dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/shimmer_placeholder_bg" />
+
+        <View
+            android:layout_width="260dp"
+            android:layout_height="36dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/shimmer_placeholder_bg" />
+
+        <!-- Placeholder bars (fixed width instead of %) -->
+        <View
+            android:layout_width="180dp"
+            android:layout_height="12dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/shimmer_placeholder_bg" />
+
+        <View
+            android:layout_width="240dp"
+            android:layout_height="16dp"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/shimmer_placeholder_bg" />
+
+        <View
+            android:layout_width="120dp"
+            android:layout_height="12dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/shimmer_placeholder_bg" />
+
+        <View
+            android:layout_width="260dp"
+            android:layout_height="12dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/shimmer_placeholder_bg" />
+
+        <View
+            android:layout_width="200dp"
+            android:layout_height="12dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/shimmer_placeholder_bg" />
+
+        <View
+            android:layout_width="140dp"
+            android:layout_height="12dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/shimmer_placeholder_bg" />
+
+        <View
+            android:layout_width="260dp"
+            android:layout_height="36dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/shimmer_placeholder_bg" />
+
     </LinearLayout>
+
 </androidx.cardview.widget.CardView>
