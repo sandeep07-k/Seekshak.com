@@ -192,20 +192,33 @@ class TutorHomeFragment : Fragment() {
                 val tuitionPosts = response.body()
                 if (response.isSuccessful && !tuitionPosts.isNullOrEmpty()) {
 
+                    // Filter only active posts first
+                    val activePosts = tuitionPosts.filter { it.status == "active" }
+
+                    // Show only first 3 in home
+                    val limitedList = if (activePosts.size > 4) activePosts.take(4) else activePosts
+
                     val tuitionAdapter = MyHomeTuitionsAdapter(
-                        items = tuitionPosts,
+                        items = limitedList,
+                        showViewAll = true,
                         onApplyClick = { post ->
                             Toast.makeText(requireContext(), "Apply clicked: ${post.tuitionCode}", Toast.LENGTH_SHORT).show()
                         },
                         onFavouriteClick = { post ->
                             Toast.makeText(requireContext(), "Favourite clicked: ${post.tuitionCode}", Toast.LENGTH_SHORT).show()
+                        },
+                        onViewAllClick = {
+                            val intent = Intent(requireContext(), AllTuitionPostsActivity::class.java)
+                            intent.putParcelableArrayListExtra("all_tuitions", ArrayList(tuitionPosts))
+                            startActivity(intent)
                         }
                     )
 
                     recyclerTuitionPosts.adapter = tuitionAdapter
                     recyclerTuitionPosts.visibility = View.VISIBLE
                     emptyText.visibility = View.GONE
-                } else {
+                }
+                else {
                     recyclerTuitionPosts.visibility = View.GONE
                     emptyText.visibility = View.VISIBLE
                     emptyText.text = "Tuitions are not available near you.\nPull to refresh."
@@ -218,7 +231,7 @@ class TutorHomeFragment : Fragment() {
                 shimmerLayout.visibility = View.GONE
                 recyclerTuitionPosts.visibility = View.GONE
                 emptyText.visibility = View.VISIBLE
-                emptyText.text = "Failed to load tuitions. Try again."
+                emptyText.text = "Failed to load tuitions. Try again.\n" + "Pull to reload."
             }
         })
     }

@@ -18,11 +18,16 @@ import android.graphics.Color
 
 class MyHomeTuitionsAdapter(
     private val items: List<TuitionPost>,
+    private val showViewAll: Boolean = false,   // 👈 default = false
     private val onApplyClick: (TuitionPost) -> Unit,
-    private val onFavouriteClick: (TuitionPost) -> Unit
-) : RecyclerView.Adapter<MyHomeTuitionsAdapter.ViewHolder>() {
+    private val onFavouriteClick: (TuitionPost) -> Unit,
+    private val onViewAllClick: (() -> Unit)? = null   // 👈 optional now
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    private val VIEW_TYPE_TUITION = 0
+    private val VIEW_TYPE_VIEW_ALL = 1
+
+    inner class TuitionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val postingDate: TextView = itemView.findViewById(R.id.posting_date)
         val tuitionStatus: TextView = itemView.findViewById(R.id.tuition_status)
         val tuitionCode: TextView = itemView.findViewById(R.id.tuition_Code)
@@ -47,20 +52,47 @@ class MyHomeTuitionsAdapter(
         val favouriteBtn: ImageButton = itemView.findViewById(R.id.favourite_btn)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_tuition_card, parent, false)
-        return ViewHolder(view)
+    inner class ViewAllViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val btnViewAll: ImageButton = itemView.findViewById(R.id.btnViewAll)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val post = items[position]
+    override fun getItemViewType(position: Int): Int {
+        return if (showViewAll && position == items.size) VIEW_TYPE_VIEW_ALL else VIEW_TYPE_TUITION
+    }
 
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return if (viewType == VIEW_TYPE_TUITION) {
+            val view = LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_tuition_card, parent, false)
+            TuitionViewHolder(view)
+        } else {
+            val view = LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_view_all_button, parent, false)
+            ViewAllViewHolder(view)
+        }
+    }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        if (holder is TuitionViewHolder && position < items.size) {
+            val post = items[position]
+            bindTuition(holder, post)
+        } else if (holder is ViewAllViewHolder) {
+            holder.btnViewAll.setOnClickListener {
+                onViewAllClick?.invoke()
+            }
+        }
+    }
+
+    override fun getItemCount(): Int {
+        return if (showViewAll) items.size + 1 else items.size
+    }
+
+    private fun bindTuition(holder: TuitionViewHolder, post: TuitionPost) {
         val inputFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
         val outputFormat = SimpleDateFormat("dd-MMM-yy", Locale.getDefault())
 
-        val date = inputFormat.parse(post.postedDate) // parse the original string
-        val formattedDate = outputFormat.format(date) // format to desired string
+        val date = inputFormat.parse(post.postedDate)
+        val formattedDate = outputFormat.format(date)
 
         holder.postingDate.text = setBoldLabel("Posting date: ", formattedDate)
         holder.tuitionStatus.text = setBoldLabel("Status: ", post.status)
@@ -71,10 +103,7 @@ class MyHomeTuitionsAdapter(
         holder.feeDetails.text = setBoldLabel("Expected Fee: ", post.fee ?: "N/A")
         holder.classTiming.text = setBoldLabel("Time: ", post.classTiming)
         holder.classSchedule.text = setBoldLabel("Schedule: ", post.classSchedule)
-        holder.locationDetails.text = setBoldLabel(
-            "Address: ",
-            "${post.sublocality}, ${post.area}, ${post.city}"
-        )
+        holder.locationDetails.text = setBoldLabel("Address: ", "${post.sublocality}, ${post.area}, ${post.city}")
         holder.genderPreference.text = setBoldLabel("Gender Preference: ", post.gender)
         holder.minQualification.text = setBoldLabel("Min. Qualification: ", post.qualification)
         holder.modeOfClass.text = setBoldLabel("Mode: ", post.modeOfClass)
@@ -84,13 +113,13 @@ class MyHomeTuitionsAdapter(
         holder.distanceDetails.text = post.distanceInKm?.let { km ->
             if (km < 1) {
                 val meters = (km * 1000).roundToInt()
-                setBoldLabel("Distance: ", "$meters m", Color.parseColor("#4CAF50")) // green
+                setBoldLabel("Distance: ", "$meters m", Color.parseColor("#4CAF50"))
             } else {
-                setBoldLabel("Distance: ", "${"%.2f".format(km)} km", Color.parseColor("#FFC107")) // material amber
+                setBoldLabel("Distance: ", "${"%.2f".format(km)} km", Color.parseColor("#FFC107"))
             }
         } ?: run {
             post.distanceInMeters?.let { meters ->
-                setBoldLabel("Distance: ", "${meters.roundToInt()} m", Color.parseColor("#4CAF50")) // green
+                setBoldLabel("Distance: ", "${meters.roundToInt()} m", Color.parseColor("#4CAF50"))
             } ?: setBoldLabel("Distance: ", "N/A", Color.GRAY)
         }
 
@@ -120,11 +149,7 @@ class MyHomeTuitionsAdapter(
             }
         }
 
-
-        // Handle button clicks
         holder.applyBtn.setOnClickListener { onApplyClick(post) }
         holder.favouriteBtn.setOnClickListener { onFavouriteClick(post) }
     }
-
-    override fun getItemCount() = items.size
 }

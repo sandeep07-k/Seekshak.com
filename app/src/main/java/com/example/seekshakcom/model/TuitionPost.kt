@@ -1,5 +1,9 @@
 package com.example.seekshakcom.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class TuitionPost(
     val _id: String,
     val userId: String,
@@ -25,5 +29,5 @@ data class TuitionPost(
     val tuitionCode: Int?,
     val distanceInKm: Double?,
     val distanceInMeters: Double?
-)
+) : Parcelable
 

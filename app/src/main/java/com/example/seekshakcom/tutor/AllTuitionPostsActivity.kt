@@ -25,13 +25,13 @@ import retrofit2.Response
 
 class AllTuitionPostsActivity : AppCompatActivity() {
 
-
-
     private lateinit var swipeRefresh: SwipeRefreshLayout
     private lateinit var shimmerLayout: ShimmerFrameLayout
     private lateinit var recyclerTuitionPosts: RecyclerView
     private lateinit var emptyText: TextView
     private lateinit var backArrow: ImageView
+
+    private var tuitionPosts: ArrayList<TuitionPost>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,18 +47,56 @@ class AllTuitionPostsActivity : AppCompatActivity() {
         emptyText = findViewById(R.id.emptyText)
         backArrow = findViewById(R.id.backArrow)
 
-        recyclerTuitionPosts.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        recyclerTuitionPosts.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         recyclerTuitionPosts.itemAnimator = DefaultItemAnimator()
 
-        swipeRefresh.setOnRefreshListener { loadTuitionPosts() }
+        // ✅ Check if posts were passed via Intent
+        tuitionPosts = intent.getParcelableArrayListExtra("ALL_TUITION_POSTS")
+        val passedPosts = intent.getParcelableArrayListExtra<TuitionPost>("all_tuitions")
 
-        loadTuitionPosts()
-
-        backArrow.setOnClickListener {
-            finish()
+        when {
+            !tuitionPosts.isNullOrEmpty() -> setupRecyclerView(tuitionPosts!!)
+            !passedPosts.isNullOrEmpty() -> setupRecyclerView(passedPosts, showViewAll = false)
+            else -> loadTuitionPosts()
         }
+
+        swipeRefresh.setOnRefreshListener {
+            loadTuitionPosts()
+        }
+
+        backArrow.setOnClickListener { finish() }
     }
 
+    /** 🔄 Common sorting + adapter setup */
+    private fun setupRecyclerView(posts: List<TuitionPost>, showViewAll: Boolean = false) {
+        val sortedPosts = sortPosts(posts)
+
+        val tuitionAdapter = MyHomeTuitionsAdapter(
+            items = sortedPosts,
+            showViewAll = showViewAll,
+            onApplyClick = { post ->
+                Toast.makeText(this, "Apply clicked: ${post.tuitionCode}", Toast.LENGTH_SHORT).show()
+            },
+            onFavouriteClick = { post ->
+                Toast.makeText(this, "Favourite clicked: ${post.tuitionCode}", Toast.LENGTH_SHORT).show()
+            }
+        )
+
+        recyclerTuitionPosts.adapter = tuitionAdapter
+        recyclerTuitionPosts.visibility = View.VISIBLE
+        shimmerLayout.visibility = View.GONE
+        emptyText.visibility = View.GONE
+    }
+
+    /** 🔄 Sort active first */
+    private fun sortPosts(posts: List<TuitionPost>): List<TuitionPost> {
+        val activePosts = posts.filter { it.status == "active" }
+        val inactivePosts = posts.filter { it.status != "active" }
+        return activePosts + inactivePosts
+    }
+
+    /** 🔄 API call */
     private fun loadTuitionPosts() {
         swipeRefresh.isRefreshing = true
         shimmerLayout.visibility = View.VISIBLE
@@ -71,54 +109,41 @@ class AllTuitionPostsActivity : AppCompatActivity() {
         val lon = prefs.getString("lon", null)?.toDoubleOrNull()
 
         if (lat == null || lon == null) {
-            Toast.makeText(this, "Location not set", Toast.LENGTH_SHORT).show()
-            swipeRefresh.isRefreshing = false
-            shimmerLayout.stopShimmer()
-            shimmerLayout.visibility = View.GONE
+            showError("Location not set")
             return
         }
 
-        val api = RetrofitInstance.instance
-        val call = api.getNearbyPosts(lat, lon)
+        RetrofitInstance.instance.getNearbyPosts(lat, lon)
+            .enqueue(object : Callback<List<TuitionPost>> {
+                override fun onResponse(
+                    call: Call<List<TuitionPost>>,
+                    response: Response<List<TuitionPost>>
+                ) {
+                    swipeRefresh.isRefreshing = false
+                    shimmerLayout.stopShimmer()
+                    shimmerLayout.visibility = View.GONE
 
-        call.enqueue(object : Callback<List<TuitionPost>> {
-            override fun onResponse(
-                call: Call<List<TuitionPost>>,
-                response: Response<List<TuitionPost>>
-            ) {
-                swipeRefresh.isRefreshing = false
-                shimmerLayout.stopShimmer()
-                shimmerLayout.visibility = View.GONE
-
-                val tuitionPosts = response.body()
-                if (response.isSuccessful && !tuitionPosts.isNullOrEmpty()) {
-                    val tuitionAdapter = MyHomeTuitionsAdapter(
-                        items = tuitionPosts,
-                        onApplyClick = { post ->
-                            Toast.makeText(this@AllTuitionPostsActivity, "Apply clicked: ${post.tuitionCode}", Toast.LENGTH_SHORT).show()
-                        },
-                        onFavouriteClick = { post ->
-                            Toast.makeText(this@AllTuitionPostsActivity, "Favourite clicked: ${post.tuitionCode}", Toast.LENGTH_SHORT).show()
-                        }
-                    )
-                    recyclerTuitionPosts.adapter = tuitionAdapter
-                    recyclerTuitionPosts.visibility = View.VISIBLE
-                    emptyText.visibility = View.GONE
-                } else {
-                    recyclerTuitionPosts.visibility = View.GONE
-                    emptyText.visibility = View.VISIBLE
-                    emptyText.text = "Tuitions are not available near you.\nPull to refresh."
+                    val tuitionPosts = response.body()
+                    if (response.isSuccessful && !tuitionPosts.isNullOrEmpty()) {
+                        setupRecyclerView(tuitionPosts)
+                    } else {
+                        showError("Tuitions are not available near you.\nPull to refresh.")
+                    }
                 }
-            }
 
-            override fun onFailure(call: Call<List<TuitionPost>>, t: Throwable) {
-                swipeRefresh.isRefreshing = false
-                shimmerLayout.stopShimmer()
-                shimmerLayout.visibility = View.GONE
-                recyclerTuitionPosts.visibility = View.GONE
-                emptyText.visibility = View.VISIBLE
-                emptyText.text = "Failed to load tuitions. Try again.\n" + "Pull to refresh."
-            }
-        })
+                override fun onFailure(call: Call<List<TuitionPost>>, t: Throwable) {
+                    swipeRefresh.isRefreshing = false
+                    shimmerLayout.stopShimmer()
+                    shimmerLayout.visibility = View.GONE
+                    showError("Failed to load tuitions. Try again.\nPull to refresh.")
+                }
+            })
+    }
+
+    /** 🔄 Show error message */
+    private fun showError(message: String) {
+        recyclerTuitionPosts.visibility = View.GONE
+        emptyText.visibility = View.VISIBLE
+        emptyText.text = message
     }
 }
