@@ -21,9 +21,10 @@
         <item name="android:focusable">true</item>
         <item name="android:clickable">true</item>
     </style>
-
-
-
+    <style name="SpinnerPopupTheme" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:dropDownWidth">match_parent</item>
+        <item name="android:dropDownHeight">300dp</item>
+    </style>
 
     <style name="e_connect_w">
         <item name="android:textSize">24sp</item>

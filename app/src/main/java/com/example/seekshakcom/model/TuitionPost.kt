@@ -29,5 +29,6 @@ data class TuitionPost(
     val tuitionCode: Int?,
     val distanceInKm: Double?,
     val distanceInMeters: Double?
+
 ) : Parcelable
 

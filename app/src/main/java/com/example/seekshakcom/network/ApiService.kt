@@ -92,14 +92,24 @@ interface ApiService {
     @PUT("api/user/update")
     fun updateUserProfilePartial(@Body updates: Map<String, String>): Call<UpdateProfileResponse>
 
-
     interface TuitionApiService {
         @GET("/api/tuitions/nearby-posts")
         fun getNearbyPosts(
             @Query("lat") lat: Double,
-            @Query("lon") lon: Double
+            @Query("lon") lon: Double,
+            @Query("page") page: Int? = null,
+            @Query("limit") limit: Int? = null   // pass pageSize
         ): Call<List<TuitionPost>>
     }
+
+
+//    interface TuitionApiService {
+//        @GET("/api/tuitions/nearby-posts")
+//        fun getNearbyPosts(
+//            @Query("lat") lat: Double,
+//            @Query("lon") lon: Double
+//        ): Call<List<TuitionPost>>
+//    }
 
 
 
