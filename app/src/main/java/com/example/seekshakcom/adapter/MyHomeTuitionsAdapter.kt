@@ -184,4 +184,5 @@ class MyHomeTuitionsAdapter(
         holder.applyBtn.setOnClickListener { onApplyClick(post) }
         holder.favouriteBtn.setOnClickListener { onFavouriteClick(post) }
     }
+
 }

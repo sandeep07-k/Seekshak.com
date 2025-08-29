@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -29,6 +30,8 @@ import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.Locale
 
+
+
 class AllTuitionPostsActivity : AppCompatActivity() {
 
     private lateinit var swipeRefresh: SwipeRefreshLayout
@@ -42,9 +45,11 @@ class AllTuitionPostsActivity : AppCompatActivity() {
     private lateinit var tuitionAdapter: MyHomeTuitionsAdapter
     private lateinit var filterSortRow: LinearLayout
 
+
     private var isLoading = false
     private var currentPage = 1
     private val pageSize = 20
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,6 +85,8 @@ class AllTuitionPostsActivity : AppCompatActivity() {
 
         if (tuitionPosts.isEmpty()) loadTuitionPosts() else updateRecyclerView(tuitionPosts)
 
+
+
         setupSortSpinner()
         setupPagination()
 
@@ -92,7 +99,9 @@ class AllTuitionPostsActivity : AppCompatActivity() {
 
 
         backArrow.setOnClickListener { finish() }
-        
+
+
+
 
     }
 
@@ -116,38 +125,49 @@ class AllTuitionPostsActivity : AppCompatActivity() {
         }
         spinnerSort.adapter = adapter
 
-        spinnerSort.setOnItemSelectedListener(object : android.widget.AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: android.widget.AdapterView<*>?, view: View?, position: Int, id: Long) {
+        spinnerSort.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 if (tuitionPosts.isEmpty()) return
                 val selectedSort = parent?.getItemAtPosition(position).toString()
                 updateRecyclerView(tuitionPosts, selectedSort)
+
             }
-            override fun onNothingSelected(parent: android.widget.AdapterView<*>?) {}
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
         })
+
+
     }
 
     /** Always keep active first, then inactive */
+    /** Update RecyclerView with optional sorting (no active/inactive split) */
     private fun updateRecyclerView(posts: List<TuitionPost>, sortType: String? = null) {
-        val active = posts.filter { it.status == "active" }
-        val inactive = posts.filter { it.status != "active" }
-
-        val sortedActive = sortType?.let { applySort(active, it) } ?: active
-        val sortedInactive = sortType?.let { applySort(inactive, it) } ?: inactive
-
-        val finalList = sortedActive + sortedInactive
+        val finalList = when (sortType) {
+            null, "Default" -> posts.toList()           // keep API order; make a COPY
+            else -> applySort(posts, sortType)
+        }
         setupRecyclerView(finalList)
     }
 
+
+
+
+
+
     /** Setup RecyclerView with posts */
     private fun setupRecyclerView(posts: List<TuitionPost>) {
+        val safeCopy = posts.toList()                   // avoid aliasing with tuitionPosts
         tuitionPosts.clear()
-        tuitionPosts.addAll(posts)
+        tuitionPosts.addAll(safeCopy)
         tuitionAdapter.notifyDataSetChanged()
 
         recyclerTuitionPosts.visibility = View.VISIBLE
         shimmerLayout.visibility = View.GONE
         emptyText.visibility = View.GONE
     }
+
+
+
+
 
     /** Sorting helpers */
     private fun applySort(posts: List<TuitionPost>, sortType: String): List<TuitionPost> {
@@ -207,11 +227,14 @@ class AllTuitionPostsActivity : AppCompatActivity() {
                     isLoading = false
                     tuitionAdapter.showLoadingFooter(false)
                     val posts = response.body()
+                    // loadNextPage
                     if (!posts.isNullOrEmpty()) {
+
                         tuitionPosts.addAll(posts)
                         updateRecyclerView(tuitionPosts, spinnerSort.selectedItem?.toString())
                         currentPage++
                     }
+
                 }
 
                 override fun onFailure(call: Call<List<TuitionPost>>, t: Throwable) {
@@ -249,6 +272,7 @@ class AllTuitionPostsActivity : AppCompatActivity() {
                     }
                     val posts = response.body()
                     if (!posts.isNullOrEmpty()) {
+
                         tuitionPosts.addAll(posts)
                         updateRecyclerView(tuitionPosts, spinnerSort.selectedItem?.toString())
                     } else if (currentPage == 1) {
