@@ -1,6 +1,6 @@
-# SeekShak
+# SeekShak.com
 
-SeekShak is a location-based tutoring mobile application built with **Android (Kotlin)** and **Node.js + MongoDB** backend.  
+SeekShak.com is a location-based tutoring mobile application built with **Android (Kotlin)** and **Node.js + MongoDB** backend.  
 It helps students find nearby tutors using real-time location and allows tutors to create, edit, and manage posts easily.
 
 ---
