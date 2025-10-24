@@ -16,7 +16,7 @@ object LocationHelper {
     data class LocationData(
         val lat: Double,
         val lon: Double,
-        val sublocality: String?,  // ⬅ New
+        val sublocality: String?,  // village/subLocality
         val area: String,
         val city: String,
         val state: String,
@@ -47,7 +47,6 @@ object LocationHelper {
                 val errorDesc = json.optString("error_description", "Unknown error")
                 Log.e("MapplsAPI", "Error: $errorCode - $errorDesc")
 
-                // Handle expired credentials
                 if (errorCode == "CLIENT_CREDENTIAL_EXPIRED") {
                     return@withContext null
                 }
@@ -56,18 +55,28 @@ object LocationHelper {
             val result = json.optJSONArray("results")?.optJSONObject(0)
                 ?: return@withContext null
 
-            val poi = result.optString("poi")
-            val area = if (poi.isNotBlank()) poi
-            else result.optString("locality", result.optString("street", "Unknown Area"))
-
+            // ✅ Updated fallback for free API
             val sublocality = result.optString("subLocality").takeIf { it.isNotBlank() }
-            val city = result.optString("city", "Unknown City")
+                ?: result.optString("village").takeIf { it.isNotBlank() }
+//                ?: result.optString("locality").takeIf { it.isNotBlank() }
+
+            val poi = result.optString("poi")
+            val area = poi.takeIf { it.isNotBlank() }
+                ?: result.optString("locality").takeIf { it.isNotBlank() }
+                ?: sublocality
+                ?: result.optString("street").takeIf { it.isNotBlank() }
+                ?: "Unknown Area"
+
+            val city = result.optString("city").takeIf { it.isNotBlank() }
+                ?: result.optString("subDistrict").takeIf { it.isNotBlank() }
+                ?: result.optString("district").takeIf { it.isNotBlank() }
+                ?: "Unknown City"
+
             val state = result.optString("state", "Unknown State")
             val country = result.optString("country", "India")
 
             Log.d("LocationHelper", "Parsed Location → $sublocality | $area, $city, $state, $country")
 
-            // Save to SharedPreferences
             context.getSharedPreferences("LocationPrefs", Context.MODE_PRIVATE).edit()
                 .putString("selected_city", city)
                 .putString("selected_area", area)

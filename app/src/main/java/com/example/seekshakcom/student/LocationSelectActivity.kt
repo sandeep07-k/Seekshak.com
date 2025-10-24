@@ -28,8 +28,13 @@ import com.example.seekshakcom.model.LocationRequest
 import com.example.seekshakcom.utils.LocationHelper
 import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationAvailability
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.Priority
 import kotlinx.coroutines.*
+
 
 class LocationSelectActivity : AppCompatActivity() {
 
@@ -38,7 +43,6 @@ class LocationSelectActivity : AppCompatActivity() {
     private lateinit var shimmerLayout: ShimmerFrameLayout
     private lateinit var adapter: RecentLocationAdapter
     private lateinit var locationDialog: AlertDialog
-
 
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
     private val fetchCooldownMinutes = 10
@@ -65,7 +69,6 @@ class LocationSelectActivity : AppCompatActivity() {
         setupSwipeToDelete()
 
         binding.backIcon.setOnClickListener { finish() }
-
         binding.useCurrentLocation.setOnClickListener {
             showLocationDialog()
             fetchLocationAndReturn(true)
@@ -94,7 +97,6 @@ class LocationSelectActivity : AppCompatActivity() {
 
             val formatted = listOfNotNull(sublocality, area, city, state).joinToString(", ")
             binding.fetchingLocationText.text = formatted.ifEmpty { "Cached Location" }
-
             loadRecentLocations()
             return
         }
@@ -104,8 +106,7 @@ class LocationSelectActivity : AppCompatActivity() {
 
     private fun fetchLocationAndReturn(shouldFinish: Boolean) {
         if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
+                this, Manifest.permission.ACCESS_FINE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
             Toast.makeText(this, "Location permission not granted", Toast.LENGTH_SHORT).show()
@@ -114,51 +115,73 @@ class LocationSelectActivity : AppCompatActivity() {
 
         binding.fetchingLocationText.text = "Fetching Location..."
 
-        fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
-            if (location != null) {
-                handleLocation(location, shouldFinish)
-            } else {
-                // Fallback to current location if last known is null
-                fusedLocationClient.getCurrentLocation(
-                    com.google.android.gms.location.Priority.PRIORITY_HIGH_ACCURACY,
-                    null
-                ).addOnSuccessListener { freshLocation: Location? ->
-                    if (freshLocation != null) {
-                        handleLocation(freshLocation, shouldFinish)
-                    } else {
-                        dismissLocationDialog()
-                        binding.fetchingLocationText.text = "Unable to fetch location"
-                    }
-                }.addOnFailureListener {
-                    dismissLocationDialog()
-                    binding.fetchingLocationText.text = "Failed to fetch location"
+        // New Play Services LocationRequest
+        val locRequest = com.google.android.gms.location.LocationRequest.Builder(
+            Priority.PRIORITY_HIGH_ACCURACY, 2000L
+        ).apply {
+            setMinUpdateIntervalMillis(1000L)
+            setMaxUpdateDelayMillis(5000L)
+        }.build()
+
+        val locationCallback = object : LocationCallback() {
+            override fun onLocationResult(result: LocationResult) {
+                val location = result.lastLocation ?: return
+                if (location.accuracy <= 20f) {
+                    fusedLocationClient.removeLocationUpdates(this)
+                    handleLocation(location, shouldFinish)
                 }
             }
-        }.addOnFailureListener {
-            dismissLocationDialog()
-            binding.fetchingLocationText.text = "Failed to fetch location"
+
+            override fun onLocationAvailability(p0: LocationAvailability) {
+                if (!p0.isLocationAvailable) {
+                    binding.fetchingLocationText.text = "Searching for GPS signal..."
+                }
+            }
         }
+
+        fusedLocationClient.requestLocationUpdates(locRequest, locationCallback, Looper.getMainLooper())
+
+        // Safety fallback after 10 sec
+        Handler(Looper.getMainLooper()).postDelayed({
+            fusedLocationClient.removeLocationUpdates(locationCallback)
+            fusedLocationClient.lastLocation.addOnSuccessListener { lastLoc ->
+                if (lastLoc != null) handleLocation(lastLoc, shouldFinish)
+                else {
+                    fusedLocationClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, null)
+                        .addOnSuccessListener { fresh -> if (fresh != null) handleLocation(fresh, shouldFinish) else failedFetch() }
+                        .addOnFailureListener { failedFetch() }
+                }
+            }.addOnFailureListener { failedFetch() }
+        }, 10_000L)
     }
+
+    private fun failedFetch() {
+        dismissLocationDialog()
+        binding.fetchingLocationText.text = "Failed to fetch location"
+    }
+
     private fun handleLocation(location: Location, shouldFinish: Boolean) {
         coroutineScope.launch {
-            val locationData = LocationHelper.getApproxLocation(
-                applicationContext,
-                location.latitude,
-                location.longitude
-            )
+            var finalData = withContext(Dispatchers.IO) {
+                try {
+                    LocationHelper.getApproxLocation(applicationContext, location.latitude, location.longitude)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    null
+                }
+            }
 
-            if (locationData != null) {
-                // ✅ This sends updated location to backend!
-                LocationHelper.sendLocationToBackend(applicationContext, locationData)
+            if (finalData != null) {
+                LocationHelper.sendLocationToBackend(applicationContext, finalData)
 
                 val locationRequest = LocationRequest(
-                    latitude = locationData.lat,
-                    longitude = locationData.lon,
-                    sublocality = locationData.sublocality,
-                    area = locationData.area,
-                    city = locationData.city,
-                    state = locationData.state,
-                    country = locationData.country
+                    latitude = finalData.lat,
+                    longitude = finalData.lon,
+                    sublocality = finalData.sublocality,
+                    area = finalData.area,
+                    city = finalData.city,
+                    state = finalData.state,
+                    country = finalData.country
                 )
 
                 val formatted = listOfNotNull(
@@ -167,13 +190,16 @@ class LocationSelectActivity : AppCompatActivity() {
                     locationRequest.city,
                     locationRequest.state
                 ).joinToString(", ")
-                binding.fetchingLocationText.text = formatted
+
+                binding.fetchingLocationText.text = formatted.ifEmpty { "Selected location" }
 
                 saveToRecent(locationRequest)
                 saveToPreferences(locationRequest)
-
                 getSharedPreferences("LocationPrefs", Context.MODE_PRIVATE).edit()
-                    .putLong("last_fetched_time", System.currentTimeMillis()).apply()
+                    .putLong("last_fetched_time", System.currentTimeMillis())
+                    .apply()
+
+                dismissLocationDialog()
 
                 if (shouldFinish) {
                     val intent = Intent().apply {
@@ -187,19 +213,12 @@ class LocationSelectActivity : AppCompatActivity() {
                     }
                     setResult(Activity.RESULT_OK, intent)
                     finish()
-                } else {
-                    loadRecentLocations()
-                }
-            } else {
-                dismissLocationDialog()
-                binding.fetchingLocationText.text = "Failed to get location details"
-            }
+                } else loadRecentLocations()
+            } else failedFetch()
         }
     }
 
-
-
-
+    // --- Preferences & recent locations (same as before) ---
     private fun saveToPreferences(location: LocationRequest) {
         val prefs = getSharedPreferences("LocationPrefs", Context.MODE_PRIVATE)
         prefs.edit()
@@ -216,22 +235,19 @@ class LocationSelectActivity : AppCompatActivity() {
     private fun saveToRecent(location: LocationRequest) {
         val prefs = getSharedPreferences("RecentLocations", Context.MODE_PRIVATE)
         val list = getRecentLocationList().toMutableList()
-
         list.removeAll { it.latitude == location.latitude && it.longitude == location.longitude }
         list.add(0, location)
-        if (list.size > 5) list.removeAt(list.size - 1)
+        if (list.size > 10) list.removeAt(list.size - 1)
 
         val json = list.joinToString("|||") {
             listOf(it.latitude, it.longitude, it.sublocality, it.area, it.city, it.state, it.country).joinToString("~~")
         }
-
         prefs.edit().putString("recent_location_list", json).apply()
     }
 
     private fun getRecentLocationList(): List<LocationRequest> {
         val prefs = getSharedPreferences("RecentLocations", Context.MODE_PRIVATE)
         val raw = prefs.getString("recent_location_list", null) ?: return emptyList()
-
         return raw.split("|||").mapNotNull {
             val parts = it.split("~~")
             if (parts.size != 7) return@mapNotNull null
@@ -250,14 +266,15 @@ class LocationSelectActivity : AppCompatActivity() {
     private fun setupRecyclerView() {
         adapter = RecentLocationAdapter { locationRequest ->
             saveToPreferences(locationRequest)
-            val intent = Intent()
-            intent.putExtra("selected_sublocality", locationRequest.sublocality)
-            intent.putExtra("selected_area", locationRequest.area)
-            intent.putExtra("selected_city", locationRequest.city)
-            intent.putExtra("selected_state", locationRequest.state)
-            intent.putExtra("selected_country", locationRequest.country)
-            intent.putExtra("lat", locationRequest.latitude.toString())
-            intent.putExtra("lon", locationRequest.longitude.toString())
+            val intent = Intent().apply {
+                putExtra("selected_sublocality", locationRequest.sublocality)
+                putExtra("selected_area", locationRequest.area)
+                putExtra("selected_city", locationRequest.city)
+                putExtra("selected_state", locationRequest.state)
+                putExtra("selected_country", locationRequest.country)
+                putExtra("lat", locationRequest.latitude.toString())
+                putExtra("lon", locationRequest.longitude.toString())
+            }
             setResult(Activity.RESULT_OK, intent)
             finish()
         }
@@ -267,10 +284,7 @@ class LocationSelectActivity : AppCompatActivity() {
 
         shimmerLayout.visibility = View.VISIBLE
         shimmerLayout.startShimmer()
-
-        Handler(Looper.getMainLooper()).postDelayed({
-            loadRecentLocations()
-        }, 1200)
+        Handler(Looper.getMainLooper()).postDelayed({ loadRecentLocations() }, 1200)
     }
 
     private fun loadRecentLocations() {
@@ -281,11 +295,9 @@ class LocationSelectActivity : AppCompatActivity() {
     }
 
     private fun setupSwipeToDelete() {
-        val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
-            0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
-        ) {
+        val itemTouchHelper = ItemTouchHelper(object :
+            ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
             override fun onMove(rv: RecyclerView, vh: RecyclerView.ViewHolder, t: RecyclerView.ViewHolder) = false
-
             override fun onSwiped(holder: RecyclerView.ViewHolder, direction: Int) {
                 val position = holder.bindingAdapterPosition
                 adapter.removeLocation(position)
@@ -302,21 +314,15 @@ class LocationSelectActivity : AppCompatActivity() {
         }
         prefs.edit().putString("recent_location_list", json).apply()
     }
+
     private fun showLocationDialog() {
         val dialogView = layoutInflater.inflate(R.layout.dialog_fetching_location, null)
-
-        val builder = AlertDialog.Builder(this)
-            .setView(dialogView)
-            .setCancelable(false)
-
-        locationDialog = builder.create()
+        locationDialog = AlertDialog.Builder(this).setView(dialogView).setCancelable(false).create()
         locationDialog.show()
     }
 
     private fun dismissLocationDialog() {
-        if (::locationDialog.isInitialized && locationDialog.isShowing) {
-            locationDialog.dismiss()
-        }
+        if (::locationDialog.isInitialized && locationDialog.isShowing) locationDialog.dismiss()
     }
 
     override fun onDestroy() {

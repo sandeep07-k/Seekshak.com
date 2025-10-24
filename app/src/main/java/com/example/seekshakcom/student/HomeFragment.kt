@@ -32,15 +32,15 @@ class HomeFragment : Fragment() {
         ) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val data = result.data
-                val selectedCity = data?.getStringExtra("selected_city") ?: ""
-                val selectedArea = data?.getStringExtra("selected_area") ?: ""
-                val selectedSublocality = data?.getStringExtra("selected_sublocality") ?: ""
+                val selectedCity = data?.getStringExtra("selected_city") ?: "unknown"
+                val selectedArea = data?.getStringExtra("selected_area") ?: "unknown"
+                val selectedSublocality = data?.getStringExtra("selected_sublocality") ?: "unknown"
 
                 // 🆕 Prefer showing sublocality if available
-                locationText.text = if (selectedSublocality.isNotEmpty())
+                locationText.text = if (selectedArea.isNotEmpty())
                     "$selectedArea, $selectedCity"
                 else
-                    "$selectedArea, $selectedCity"
+                    "$selectedSublocality, $selectedCity"
             }
         }
     }
@@ -76,13 +76,13 @@ class HomeFragment : Fragment() {
             Toast.makeText(requireContext(), "Notifications", Toast.LENGTH_SHORT).show()
         }
 
-        creditCoin.setOnClickListener {
-            Toast.makeText(
-                requireContext(),
-                "Credits: ${creditBalance.text}",
-                Toast.LENGTH_SHORT
-            ).show()
-        }
+//        creditCoin.setOnClickListener {
+//            Toast.makeText(
+//                requireContext(),
+//                "Credits: ${creditBalance.text}",
+//                Toast.LENGTH_SHORT
+//            ).show()
+//        }
 
         // ✅ Load cached location
         loadCachedLocation()
@@ -101,14 +101,14 @@ class HomeFragment : Fragment() {
 
         if (!city.isNullOrEmpty() && !area.isNullOrEmpty() && lat != null && lon != null) {
             // 🆕 Prefer showing sublocality if available
-            locationText.text = if (!sublocality.isNullOrEmpty())
+            locationText.text = if (!area.isNullOrEmpty())
                 "$area, $city"
             else
-                "$area, $city"
+                "$sublocality, $city"
 
             val location = LocationHelper.LocationData(
                 lat, lon,
-                sublocality ?: "",
+                sublocality ?: "Unknown",
                 area,
                 city,
                 state ?: "Unknown State",

@@ -49,7 +49,7 @@ class RecentLocationAdapter(
         private val locationText: TextView = itemView.findViewById(R.id.recentLocationText)
 
         fun bind(location: LocationRequest) {
-            locationText.text = listOfNotNull(location.sublocality,location.area, location.city)
+            locationText.text = listOfNotNull(location.sublocality,location.area, location.city, location.state)
                 .joinToString(", ")
         }
     }

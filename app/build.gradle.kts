@@ -83,6 +83,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.play.services.identity)
+    implementation(libs.androidx.espresso.core)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
@@ -109,6 +110,7 @@ dependencies {
     implementation(libs.place.widget)
 
     // Google services
+//    implementation(libs.play.services.location)
     implementation(libs.play.services.location)
     implementation(libs.places)
     implementation("com.google.android.gms:play-services-auth-api-phone:18.0.1")

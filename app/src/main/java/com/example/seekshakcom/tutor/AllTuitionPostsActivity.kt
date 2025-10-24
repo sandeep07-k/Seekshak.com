@@ -6,8 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.RadioGroup
+import android.widget.SeekBar
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
@@ -96,6 +100,13 @@ class AllTuitionPostsActivity : AppCompatActivity() {
             tuitionAdapter.notifyDataSetChanged()
             loadTuitionPosts()
         }
+        
+
+
+        filterSortRow.findViewById<Button>(R.id.btnFilter).setOnClickListener {
+            showFilterBottomSheet()
+        }
+
 
 
         backArrow.setOnClickListener { finish() }
@@ -138,7 +149,6 @@ class AllTuitionPostsActivity : AppCompatActivity() {
 
     }
 
-    /** Always keep active first, then inactive */
     /** Update RecyclerView with optional sorting (no active/inactive split) */
     private fun updateRecyclerView(posts: List<TuitionPost>, sortType: String? = null) {
         val finalList = when (sortType) {
@@ -147,11 +157,6 @@ class AllTuitionPostsActivity : AppCompatActivity() {
         }
         setupRecyclerView(finalList)
     }
-
-
-
-
-
 
     /** Setup RecyclerView with posts */
     private fun setupRecyclerView(posts: List<TuitionPost>) {
@@ -290,6 +295,85 @@ class AllTuitionPostsActivity : AppCompatActivity() {
                 }
             })
     }
+
+    private fun showFilterBottomSheet() {
+        val bottomSheetView = layoutInflater.inflate(R.layout.bottomsheet_filters, null)
+        val bottomSheetDialog = com.google.android.material.bottomsheet.BottomSheetDialog(this)
+        bottomSheetDialog.setContentView(bottomSheetView)
+        bottomSheetDialog.show()
+
+        val btnApply = bottomSheetView.findViewById<Button>(R.id.btnApply)
+        val btnReset = bottomSheetView.findViewById<Button>(R.id.btnReset)
+
+        btnApply.setOnClickListener {
+            applyFilters(bottomSheetView)
+            bottomSheetDialog.dismiss()
+        }
+
+        btnReset.setOnClickListener {
+            resetFilters(bottomSheetView)
+        }
+    }
+
+    private fun applyFilters(view: View) {
+        val selectedClass = view.findViewById<Spinner>(R.id.spinnerClass).selectedItem.toString()
+        val selectedSubject = view.findViewById<Spinner>(R.id.spinnerSubject).selectedItem.toString()
+        val selectedMode = when(view.findViewById<RadioGroup>(R.id.rgMode).checkedRadioButtonId) {
+            R.id.rbOnline -> "Online"
+            R.id.rbOffline -> "Offline"
+            else -> null
+        }
+        val maxFee = view.findViewById<SeekBar>(R.id.seekBarFee).progress
+        val selectedGender = view.findViewById<Spinner>(R.id.spinnerGender).selectedItem.toString()
+        val postedDateFilter = view.findViewById<Spinner>(R.id.spinnerPostedDate).selectedItem.toString()
+        val status = when(view.findViewById<RadioGroup>(R.id.rgStatus).checkedRadioButtonId) {
+            R.id.rbActive -> "active"
+            R.id.rbInactive -> "inactive"
+            else -> null
+        }
+
+        val filteredPosts = tuitionPosts.filter { post ->
+            (selectedClass == "All" || post.className == selectedClass) &&
+                    (selectedSubject == "All" || post.subject == selectedSubject) &&
+                    (selectedMode == null || post.modeOfClass?.contains(selectedMode, true) == true) &&
+                    (post.fee?.extractFeeForSort(lowest = true) ?: 0.0 <= maxFee) &&
+                    (selectedGender == "Any" || post.gender?.contains(selectedGender, true) == true) &&
+                    (status == null || post.status == status) &&
+                    filterByPostedDate(post.postedDate, postedDateFilter)
+        }
+
+        updateRecyclerView(filteredPosts, spinnerSort.selectedItem?.toString())
+    }
+
+    private fun resetFilters(view: View) {
+        view.findViewById<Spinner>(R.id.spinnerClass).setSelection(0)
+        view.findViewById<Spinner>(R.id.spinnerSubject).setSelection(0)
+        view.findViewById<RadioGroup>(R.id.rgMode).clearCheck()
+        view.findViewById<SeekBar>(R.id.seekBarFee).progress = view.findViewById<SeekBar>(R.id.seekBarFee).max
+        view.findViewById<Spinner>(R.id.spinnerGender).setSelection(0)
+        view.findViewById<Spinner>(R.id.spinnerPostedDate).setSelection(0)
+        view.findViewById<RadioGroup>(R.id.rgStatus).clearCheck()
+    }
+
+    private fun filterByPostedDate(postedDate: String?, filter: String): Boolean {
+        if (postedDate.isNullOrEmpty() || filter == "All") return true
+
+        val sdf = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
+        val postDate = try { sdf.parse(postedDate) } catch (e: Exception) { null } ?: return true
+        val now = System.currentTimeMillis()
+
+        return when(filter) {
+            "Last 24 hrs" -> now - postDate.time <= 24 * 60 * 60 * 1000
+            "Last 7 days" -> now - postDate.time <= 7 * 24 * 60 * 60 * 1000
+            "Last 30 days" -> now - postDate.time <= 30 * 24 * 60 * 60 * 1000
+            else -> true
+        }
+    }
+
+
+
+
+
 
     private fun showError(message: String) {
         recyclerTuitionPosts.visibility = View.GONE

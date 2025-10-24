@@ -7,4 +7,34 @@
         <item>Lowest Fee</item>
         <item>Highest Fee</item>
     </string-array>
+
+    <string-array name="class_list">
+        <item>All Classes</item>
+        <item>Class 1</item>
+        <item>Class 2</item>
+        <item>Class 3</item>
+        <item>Class 10</item>
+    </string-array>
+
+    <string-array name="subject_list">
+        <item>All Subjects</item>
+        <item>Mathematics</item>
+        <item>English</item>
+        <item>Science</item>
+    </string-array>
+
+    <string-array name="gender_list">
+        <item>Any</item>
+        <item>Male Tutor Only</item>
+        <item>Female Tutor Only</item>
+    </string-array>
+
+    <string-array name="date_filter_list">
+        <item>Anytime</item>
+        <item>Last 24 hrs</item>
+        <item>Last 7 days</item>
+        <item>Last 30 days</item>
+    </string-array>
 </resources>
+
+
